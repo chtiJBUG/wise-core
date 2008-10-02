@@ -6,7 +6,7 @@
 <project name="HelloWorld" basedir=".">
 
 
-	<property name="MainClass" value="it.javalinux.wise.samples.HelloWorldClientJDK6">
+	<property name="MainClass" value="org.jboss.wise.samples.HelloWorldClientJDK6">
 	</property>
 	<property file="${basedir}/build.properties" />
 	
