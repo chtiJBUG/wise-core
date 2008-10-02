@@ -16,9 +16,10 @@ package it.javalinux.wise.core.client.impl.reflection;
 import static org.hamcrest.collection.IsCollectionContaining.hasItem;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
-import it.javalinux.wise.core.client.WSMethod;
 import java.util.Map;
 import javax.jws.WebMethod;
+import org.jboss.wise.core.client.WSMethod;
+import org.jboss.wise.core.client.impl.reflection.WSEndpointImpl;
 import org.junit.Test;
 
 /**

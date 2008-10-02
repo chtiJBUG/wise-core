@@ -1,11 +1,11 @@
 package it.javalinux.wise.test.integraton.basic;
 
+import org.jboss.wise.core.client.InvocationResult;
+import org.jboss.wise.core.client.WSDynamicClient;
+import org.jboss.wise.core.client.WSMethod;
+import org.jboss.wise.core.client.factories.WSDynamicClientFactory;
+import org.jboss.wise.core.test.WiseTest;
 import org.junit.Assert;
-import it.javalinux.wise.core.client.InvocationResult;
-import it.javalinux.wise.core.client.WSDynamicClient;
-import it.javalinux.wise.core.client.WSMethod;
-import it.javalinux.wise.core.client.factories.WSDynamicClientFactory;
-import it.javalinux.wise.core.test.WiseTest;
 import java.net.URL;
 import java.util.Map;
 import org.junit.After;

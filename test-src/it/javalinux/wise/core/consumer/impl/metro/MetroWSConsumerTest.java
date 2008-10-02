@@ -1,8 +1,9 @@
 package it.javalinux.wise.core.consumer.impl.metro;
 
-import it.javalinux.wise.core.exception.WiseRuntimeException;
 import java.io.File;
 import java.net.URL;
+import org.jboss.wise.core.consumer.impl.metro.MetroWSConsumer;
+import org.jboss.wise.core.exception.WiseRuntimeException;
 import org.junit.Test;
 
 public class MetroWSConsumerTest {

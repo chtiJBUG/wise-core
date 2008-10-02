@@ -19,9 +19,10 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.stub;
-import it.javalinux.wise.core.mapper.WiseMapper;
 import java.util.HashMap;
 import java.util.Map;
+import org.jboss.wise.core.client.impl.reflection.InvocationResultImpl;
+import org.jboss.wise.core.mapper.WiseMapper;
 import org.junit.Test;
 
 /**

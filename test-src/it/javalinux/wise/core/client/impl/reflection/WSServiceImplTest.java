@@ -17,13 +17,15 @@ import static org.hamcrest.collection.IsCollectionContaining.hasItem;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
-import it.javalinux.wise.core.client.WSEndpoint;
-import it.javalinux.wise.core.client.WSService;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Map;
 import javax.xml.ws.WebEndpoint;
 import net.jcip.annotations.Immutable;
+import org.jboss.wise.core.client.WSEndpoint;
+import org.jboss.wise.core.client.WSService;
+import org.jboss.wise.core.client.impl.reflection.WSEndpointImpl;
+import org.jboss.wise.core.client.impl.reflection.WSServiceImpl;
 import org.junit.Test;
 
 /**

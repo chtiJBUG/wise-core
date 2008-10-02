@@ -17,11 +17,11 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.matchers.JUnitMatchers.hasItem;
-import it.javalinux.wise.core.consumer.impl.jbosswsnative.WSImportImpl;
-import it.javalinux.wise.core.exception.WiseRuntimeException;
 import java.io.File;
 import java.net.URL;
 import java.util.List;
+import org.jboss.wise.core.consumer.impl.jbosswsnative.WSImportImpl;
+import org.jboss.wise.core.exception.WiseRuntimeException;
 import org.junit.Test;
 
 /**

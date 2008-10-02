@@ -13,11 +13,11 @@
  */
 package it.javalinux.wise.core.jbossmc.beans;
 
-import it.javalinux.wise.core.client.builder.WSDynamicClientBuilder;
-import it.javalinux.wise.core.client.factories.WSDynamicClientFactory;
-import it.javalinux.wise.core.client.impl.reflection.builder.ReflectionBasedWSDynamicClientBuilder;
-import it.javalinux.wise.core.jbossmc.BeansNames;
-import it.javalinux.wise.core.jbossmc.MicroContainerSpi;
+import org.jboss.wise.core.client.builder.WSDynamicClientBuilder;
+import org.jboss.wise.core.client.factories.WSDynamicClientFactory;
+import org.jboss.wise.core.client.impl.reflection.builder.ReflectionBasedWSDynamicClientBuilder;
+import org.jboss.wise.core.jbossmc.BeansNames;
+import org.jboss.wise.core.jbossmc.MicroContainerSpi;
 import org.junit.Before;
 import org.junit.Test;
 

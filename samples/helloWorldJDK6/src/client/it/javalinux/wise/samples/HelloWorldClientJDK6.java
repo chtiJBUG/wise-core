@@ -21,19 +21,19 @@
  */
 package it.javalinux.wise.samples;
 
-import it.javalinux.wise.core.client.InvocationResult;
-import it.javalinux.wise.core.client.WSDynamicClient;
-import it.javalinux.wise.core.client.WSEndpoint;
-import it.javalinux.wise.core.client.WSMethod;
-import it.javalinux.wise.core.client.WSService;
-import it.javalinux.wise.core.client.factories.WSDynamicClientFactory;
-import it.javalinux.wise.core.exception.InvocationException;
-import it.javalinux.wise.core.exception.MCKernelUnavailableException;
-import it.javalinux.wise.core.exception.MappingException;
-import it.javalinux.wise.core.exception.WiseConnectionException;
-import it.javalinux.wise.core.exception.WiseRuntimeException;
 import java.util.HashMap;
 import java.util.Map;
+import org.jboss.wise.core.client.InvocationResult;
+import org.jboss.wise.core.client.WSDynamicClient;
+import org.jboss.wise.core.client.WSEndpoint;
+import org.jboss.wise.core.client.WSMethod;
+import org.jboss.wise.core.client.WSService;
+import org.jboss.wise.core.client.factories.WSDynamicClientFactory;
+import org.jboss.wise.core.exception.InvocationException;
+import org.jboss.wise.core.exception.MCKernelUnavailableException;
+import org.jboss.wise.core.exception.MappingException;
+import org.jboss.wise.core.exception.WiseConnectionException;
+import org.jboss.wise.core.exception.WiseRuntimeException;
 
 /**
  * @author oracle

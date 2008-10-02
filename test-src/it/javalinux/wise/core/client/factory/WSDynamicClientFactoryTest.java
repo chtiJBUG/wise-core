@@ -2,9 +2,9 @@ package it.javalinux.wise.core.client.factory;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
-import it.javalinux.wise.core.client.factories.WSDynamicClientFactory;
 import org.apache.log4j.Logger;
 import org.apache.log4j.helpers.NullEnumeration;
+import org.jboss.wise.core.client.factories.WSDynamicClientFactory;
 import org.junit.Test;
 
 public class WSDynamicClientFactoryTest {
