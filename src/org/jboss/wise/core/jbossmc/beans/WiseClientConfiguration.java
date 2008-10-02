@@ -22,7 +22,7 @@ public class WiseClientConfiguration {
 
     private String defaultTmpDeployDir = "/tmp";
 
-    private String defaultTargetPackage = "it.javalinux.wise";
+    private String defaultTargetPackage = "org.jboss.wise";
 
     private String defaultUserName;
 
