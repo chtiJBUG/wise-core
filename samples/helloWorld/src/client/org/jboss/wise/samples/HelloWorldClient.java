@@ -22,12 +22,9 @@
 package org.jboss.wise.samples;
 
 import java.util.HashMap;
-import java.util.Map;
 import org.jboss.wise.core.client.InvocationResult;
 import org.jboss.wise.core.client.WSDynamicClient;
-import org.jboss.wise.core.client.WSEndpoint;
 import org.jboss.wise.core.client.WSMethod;
-import org.jboss.wise.core.client.WSService;
 import org.jboss.wise.core.client.factories.WSDynamicClientFactory;
 import org.jboss.wise.core.exception.InvocationException;
 import org.jboss.wise.core.exception.MCKernelUnavailableException;
@@ -45,7 +42,7 @@ public class HelloWorldClient {
      */
     public static void main( String[] args ) {
         try {
-            WSDynamicClient client = WSDynamicClientFactory.getInstance().getClient("http://127.0.0.1:8080/HelloWorld/HelloWorldWSJDK6?wsdl");
+            WSDynamicClient client = WSDynamicClientFactory.getInstance().getClient("http://127.0.0.1:8080/HelloWorld/HelloWorldWS?wsdl");
             WSMethod method = client.getWSMethod("HelloWorldWSService", "HelloWorldPort", "sayHello");
             HashMap<String, Object> requestMap = new HashMap<String, Object>();
             requestMap.put("toWhom", "SpiderMan");

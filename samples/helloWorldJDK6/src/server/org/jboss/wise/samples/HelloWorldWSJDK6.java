@@ -5,7 +5,7 @@ import javax.jws.WebParam;
 import javax.jws.WebResult;
 import javax.jws.WebService;
 
-@WebService( name = "HelloWorld", targetNamespace = "http://wise_samples/helloworld" )
+@WebService( name = "HelloWorldJDK6", targetNamespace = "http://wise_samples/helloworld" )
 public class HelloWorldWSJDK6 {
     @WebMethod
     @WebResult( name = "result" )
