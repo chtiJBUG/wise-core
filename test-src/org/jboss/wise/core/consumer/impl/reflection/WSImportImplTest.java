@@ -69,7 +69,7 @@ public class WSImportImplTest {
         File file = new File(url.getFile());
         List<String> list = importer.getClassNames(file);
         assertThat(list.size(), is(1));
-        assertThat(list, hasItem("it.javalinux.foo.Foo"));
+        assertThat(list, hasItem("org.jboss.foo.Foo"));
 
     }
 }
