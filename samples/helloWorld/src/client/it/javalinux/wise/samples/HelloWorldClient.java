@@ -45,7 +45,7 @@ public class HelloWorldClient {
      */
     public static void main( String[] args ) {
         try {
-            WSDynamicClient client = WSDynamicClientFactory.getInstance().getClient("http://127.0.0.1:8080/HelloWorld/HelloWorldWS?wsdl");
+            WSDynamicClient client = WSDynamicClientFactory.getInstance().getClient("http://127.0.0.1:8080/HelloWorld/HelloWorldWSJDK6?wsdl");
             WSMethod method = client.getWSMethod("HelloWorldWSService", "HelloWorldPort", "sayHello");
             HashMap<String, Object> requestMap = new HashMap<String, Object>();
             requestMap.put("toWhom", "SpiderMan");
