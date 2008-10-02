@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<project basedir="../..">
+
+
+	<!-- Give user a chance to override without editing this file or typing -D -->
+	<property file="${basedir}/build.properties" />
+
+	<!-- set global properties for this build -->
+	<property name="build.dir" value="build" />
+	<property name="main.builder" value="builder/main/build.xml" />
+	<property name="test.builder" value="builder/test/build.xml" />
+	<property name="classes.dir" value="${build.dir}/classes" />
+	<property name="test.classes.dir" value="${build.dir}/test-classes"/>
+	<property name="test.resources.dir" value="${basedir}/test-resources"/>
+	<property name="test.output.dir" value="${basedir}/test-output" />
+	<property name="src.java.dir" value="src" />
+	<property name="src.test.dir" value="test-src" />
+	<property name="lib.dir" value="lib" />
+	<property name="smooks.lib.dir" value="${basedir}/lib/smooks" />
+	<property name="test.lib.dir" value="${basedir}/lib/test" />
+	<property name="prj.tempdir" value="temp" />
+	<property name="javac.debug" value="true" />
+	<property name="javac.deprecation" value="true" />
+	<property name="coverage.dir" location="test-output/coverage" />
+	
+        <path id="build.classpath">
+		<fileset dir="${lib.dir}">
+			<include name="*.jar" />
+		</fileset>
+		<fileset dir="${smooks.lib.dir}">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<path id="test.build.classpath">
+		<fileset dir="${test.lib.dir}">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<patternset id="meta.files">
+		<include name="**/*.dtd" />
+		<include name="**/*.xml" />
+		<include name="**/*.xslt" />
+		<include name="**/*.properties" />
+	</patternset>
+
+	<patternset id="src.files">
+		<!-- include everything we want in the src directory that we didn't want in the jar itself -->
+		<include name="**/*.java" />
+	</patternset>
+
+	<path id="emma.lib">
+		<pathelement location="${test.lib.dir}/emma.jar" />
+		<pathelement location="${test.lib.dir}/emma_ant.jar" />
+	</path>
+
+	<!-- this loads <emma> and <emmajava> custom tasks: -->
+	<taskdef resource="emma_ant.properties" classpathref="emma.lib" />
+
+
+
+
+
+
+</project>

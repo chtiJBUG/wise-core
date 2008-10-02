@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="test-src"/>
+	<classpathentry kind="src" path="samples/euler/src/client"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/jboss-microcontainer.jar"/>
+	<classpathentry kind="lib" path="lib/smooks/milyn-smooks-core-1.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/smooks/milyn-smooks-javabean-1.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-lang-2.3.jar"/>
+	<classpathentry kind="lib" path="lib/smooks/milyn-commons-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/jaxb-api.jar"/>
+	<classpathentry kind="lib" path="lib/jaxb-xjc.jar"/>
+	<classpathentry kind="lib" path="lib/jaxws-rt.jar"/>
+	<classpathentry kind="lib" path="lib/jaxws-tools.jar"/>
+	<classpathentry kind="lib" path="lib/jboss-common.jar"/>
+	<classpathentry kind="lib" path="lib/jboss-dependency.jar"/>
+	<classpathentry kind="lib" path="lib/jboss-saaj.jar"/>
+	<classpathentry kind="lib" path="lib/jbossws-common.jar"/>
+	<classpathentry kind="lib" path="lib/jbossws-spi.jar" sourcepath="/dati/project/jbossws-native/modules/core/src/main/java"/>
+	<classpathentry kind="lib" path="lib/jcip-annotations.jar"/>
+	<classpathentry kind="lib" path="lib/test/hamcrest-all-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/test/junit-4.4.jar"/>
+	<classpathentry kind="lib" path="lib/test/mockito-all-1.5.jar"/>
+	<classpathentry kind="lib" path="lib/log4j.jar"/>
+	<classpathentry kind="lib" path="lib/commons-codec-1.3.jar"/>
+	<classpathentry kind="lib" path="lib/jbossws-native-jaxws.jar"/>
+	<classpathentry kind="var" path="AGITAR_TEST_LIB"/>
+	<classpathentry kind="var" path="AGITAR_MOCK_OBJECTS5"/>
+	<classpathentry kind="output" path="classes"/>
+</classpath>

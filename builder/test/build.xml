@@ -1,0 +1,92 @@
+<?xml version="1.0"?>
+
+<project name="Wise-JAXWS" default="allTest" basedir="../../">
+
+	<import file="${basedir}/builder/ant-import/build-setup.xml" />
+        <import file="${basedir}/builder/test/build-test-wars.xml"/>
+
+	<path id="test.execution.classpath">
+		<pathelement location="${coverage.dir}/instrumentedClasses" />
+		<pathelement location="${basedir}/${classes.dir}" />
+		<pathelement location="${basedir}/${test.classes.dir}" />
+		<pathelement location="${test.resources.dir}" />
+		<pathelement location="${test.output.dir}" />
+		<path refid="build.classpath" />
+		<path refid="test.build.classpath" />
+                <pathelement location="${env.JAVA_HOME}/lib/tools.jar" />
+		<pathelement location="${lib.dir}" />
+		<pathelement location="${test.lib.dir}" />
+	</path>
+
+	<target name="clean" description="Cleans up the build directory">
+		<delete dir="${test.classes.dir}" />
+	</target>
+
+	<target name="init" description="Initialize the build">
+		<mkdir dir="${test.classes.dir}" />
+		<deltree dir="${test.output.dir}" />
+		<mkdir dir="${test.output.dir}" />
+		
+	</target>
+
+	<target name="compileTest" depends="init">
+		<ant antfile="${main.builder}" target="compile" />
+		<javac destdir="${test.classes.dir}" classpathref="test.execution.classpath" debug="${javac.debug}" deprecation="${javac.deprecation}" nowarn="on" target="1.5" >
+			<src path="${src.test.dir}" />
+		</javac>
+                <antcall target="build-test-wars"/>
+	</target>
+
+	<target name="oneTest" depends="compileTest">
+		<junit printsummary="yes" haltonfailure="no">
+			<classpath refid="test.execution.classpath" />
+			<test fork="yes" name="${classToTest}" haltonfailure="no" todir="${test.output.dir}">
+				<formatter type="plain" />
+			</test>
+		</junit>
+	</target>
+
+	<target name="allTest" depends="compileTest">
+		<junit printsummary="yes" haltonfailure="yes">
+			<classpath refid="test.execution.classpath" />
+			<batchtest fork="yes" todir="${test.output.dir}">
+				<formatter type="plain" />
+				<fileset dir="${src.test.dir}">
+					<include name="**/*Test.java" />
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
+
+	<target name="coverage" depends="compileTest">
+		<delete dir="${coverage.dir}" />
+		<mkdir dir="${coverage.dir}" />
+		<emma>
+			<instr instrpath="${classes.dir}" destdir="${coverage.dir}/instrumentedClasses" metadatafile="${coverage.dir}/coverage.emma" />
+		</emma>
+		<junit printsummary="yes" haltonfailure="no">
+			<jvmarg value="-Demma.coverage.out.file=${coverage.dir}/coverage.emma" />
+			<classpath refid="test.execution.classpath" />
+			<batchtest fork="yes" todir="${test.output.dir}">
+				<formatter type="plain" />
+				<fileset dir="${src.test.dir}">
+					<include name="**/*Test.java" />
+				</fileset>
+			</batchtest>
+		</junit>
+		<emma>
+			<report sort="+block,+name,+method,+class" metrics="method:70,block:80,line:80,class:100">
+				<fileset dir="${coverage.dir}">
+					<include name="**/*.emma" />
+				</fileset>
+				<sourcepath>
+					<dirset dir="${src.java.dir}" />
+				</sourcepath>
+				<txt outfile="${coverage.dir}/coverage.txt" />
+				<xml outfile="${coverage.dir}/coverage.xml" />
+				<html outfile="${coverage.dir}/coverage.html" />
+			</report>
+		</emma>
+
+	</target>
+</project>

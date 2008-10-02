@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<project name="wise-core" default="dist" basedir=".">
+
+	<import file="${basedir}/builder/ant-import/build-setup.xml" />
+
+	<target name="clean" description="Cleans up the build directory">
+		<delete dir="${build.dir}" />
+	</target>
+
+	<target name="cleanAll" description="Cleans up the build directory">
+		<ant antfile="${main.builder}" target="clean" />
+		<ant antfile="${test.builder}" target="clean" />
+		<delete dir="${prj.tempdir}" />
+		<delete dir="release" />
+	</target>
+
+	<target name="dist" depends="clean" description="Generates jar archive">
+		<ant antfile="${main.builder}" target="jar" />
+	</target>
+
+	
+	<target name="allTest" description="Runs regression tests">
+		<ant antfile="${test.builder}" target="allTest" />
+	</target>
+	
+	<target name="coverage" description="Generate coverage report using Emma">
+	        <ant antfile="${test.builder}" target="coverage" />
+	    </target>
+
+	<target name="oneTest" description="Runs fine level tests">
+		<ant antfile="${test.builder}" target="oneTest" />
+	</target>
+</project>
