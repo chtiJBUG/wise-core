@@ -20,7 +20,7 @@
  * site: http://www.fsf.org.
  */
 
-package org.jboss.wise.test.integraton.basic;
+package org.jboss.wise.test.integration.basic;
 
 import org.jboss.wise.core.client.InvocationResult;
 import org.jboss.wise.core.client.WSDynamicClient;

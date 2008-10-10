@@ -33,6 +33,7 @@
 		<ant antfile="${main.builder}" target="compile" />
 		<javac destdir="${test.classes.dir}" classpathref="test.execution.classpath" debug="${javac.debug}" deprecation="${javac.deprecation}" nowarn="on" target="1.5" >
 			<src path="${src.test.dir}" />
+			
 		</javac>
                 <antcall target="build-test-wars"/>
 	</target>

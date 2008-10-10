@@ -20,7 +20,7 @@
  * site: http://www.fsf.org.
  */
 
-package org.jboss.wise.test.integraton.basic;
+package org.jboss.wise.test.integration.basic;
 
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
