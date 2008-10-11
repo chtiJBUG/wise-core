@@ -47,7 +47,7 @@
 
 	<target name="integrationTest" depends="compileTest">
 		<input
-		    message="Have you a JBss instance up and running? Press Enter to continue..."
+		    message="Have you a JBoss instance up and running? Press Enter to continue..."
 		  />
 		<junit printsummary="yes" haltonfailure="yes">
 			<classpath refid="test.execution.classpath" />
