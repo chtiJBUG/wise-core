@@ -4,7 +4,7 @@
 	debug="false">
 
    <appender name="FILE" class="org.apache.log4j.RollingFileAppender">
-      <!-- TODO: revisit the log file location -->
+      <!-- Here we use a relative location from where you run your test. In other situation you may prefer to use absolute path  -->
       <param name="File" value="./log/wise.log"/>
       <param name="MaxFileSize" value="1024KB"/>
       <layout class="org.apache.log4j.PatternLayout">
