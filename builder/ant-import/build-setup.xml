@@ -10,10 +10,11 @@
 	<!-- set global properties for this build -->
 	<property name="build.dir" value="build" />
 	<property name="main.builder" value="builder/main/build.xml" />
-	<property name="test.builder" value="builder/test/build.xml" />
+	<property name="test.builder" value="builder/test/build-unit-tests.xml" />
+	<property name="integration.test.builder" value="builder/test/build-integration-tests.xml" />
 	<property name="classes.dir" value="${build.dir}/classes" />
-	<property name="test.classes.dir" value="${build.dir}/test-classes"/>
-	<property name="test.resources.dir" value="${basedir}/test-resources"/>
+	<property name="test.classes.dir" value="${build.dir}/test-classes" />
+	<property name="test.resources.dir" value="${basedir}/test-resources" />
 	<property name="test.output.dir" value="${basedir}/test-output" />
 	<property name="src.java.dir" value="src" />
 	<property name="src.test.dir" value="test-src" />
@@ -24,8 +25,8 @@
 	<property name="javac.debug" value="true" />
 	<property name="javac.deprecation" value="true" />
 	<property name="coverage.dir" location="test-output/coverage" />
-	
-        <path id="build.classpath">
+
+	<path id="build.classpath">
 		<fileset dir="${lib.dir}">
 			<include name="*.jar" />
 		</fileset>

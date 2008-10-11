@@ -1,10 +1,9 @@
 <?xml version="1.0"?>
 
-<project name="Wise-JAXWS" default="allTest" basedir="../../">
+<project name="Wise-core" default="allTest" basedir="../../">
 
 	<import file="${basedir}/builder/ant-import/build-setup.xml" />
-        <import file="${basedir}/builder/test/build-test-wars.xml"/>
-
+    
 	<path id="test.execution.classpath">
 		<pathelement location="${coverage.dir}/instrumentedClasses" />
 		<pathelement location="${basedir}/${classes.dir}" />
@@ -33,9 +32,8 @@
 		<ant antfile="${main.builder}" target="compile" />
 		<javac destdir="${test.classes.dir}" classpathref="test.execution.classpath" debug="${javac.debug}" deprecation="${javac.deprecation}" nowarn="on" target="1.5" >
 			<src path="${src.test.dir}" />
-			
+			<exclude name="**/integration/**"/>
 		</javac>
-                <antcall target="build-test-wars"/>
 	</target>
 
 	<target name="oneTest" depends="compileTest">
@@ -54,6 +52,7 @@
 				<formatter type="plain" />
 				<fileset dir="${src.test.dir}">
 					<include name="**/*Test.java" />
+					<exclude name="**/integration/**" />
 				</fileset>
 			</batchtest>
 		</junit>
@@ -72,6 +71,7 @@
 				<formatter type="plain" />
 				<fileset dir="${src.test.dir}">
 					<include name="**/*Test.java" />
+					<exclude name="**/integration/**" />
 				</fileset>
 			</batchtest>
 		</junit>

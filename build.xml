@@ -18,16 +18,20 @@
 		<ant antfile="${main.builder}" target="jar" />
 	</target>
 
-	
+
 	<target name="allTest" description="Runs regression tests">
 		<ant antfile="${test.builder}" target="allTest" />
 	</target>
-	
+
 	<target name="coverage" description="Generate coverage report using Emma">
-	        <ant antfile="${test.builder}" target="coverage" />
-	    </target>
+		<ant antfile="${test.builder}" target="coverage" />
+	</target>
 
 	<target name="oneTest" description="Runs fine level tests">
 		<ant antfile="${test.builder}" target="oneTest" />
+	</target>
+
+	<target name="integrationTest" description="Runs regression tests">
+		<ant antfile="${integration.test.builder}" target="integrationTest" />
 	</target>
 </project>
