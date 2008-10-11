@@ -32,8 +32,8 @@
 		<mkdir dir="${wswar.output.dir}" />
 		<war warfile="${wswar.output.dir}/basic.war" webxml="${test.resources.dir}/integration/test/basic/WEB-INF/web.xml">
 			<classes dir="${test.classes.dir}">
-				<include name="it/javalinux/wise/test/integraton/basic/**/*.class" />
-				<include name="it/javalinux/wise/test/integraton/basic/**/*.xml" />
+				<include name="org/jboss/wise/test/integration/basic/**/*.class" />
+				<include name="org/jboss/wise/test/integration/basic/**/*.xml" />
 			</classes>
 		</war>
 	</target>
