@@ -20,13 +20,13 @@
  * site: http://www.fsf.org.
  */
 
-package org.jboss.wise.core.impl.reflection.mapper;
+package org.jboss.wise.core.mapper;
 
 import java.io.IOException;
 import java.util.Map;
 import javax.xml.transform.Source;
+import org.apache.log4j.Logger;
 import org.jboss.wise.core.exception.MappingException;
-import org.jboss.wise.core.mapper.WiseMapper;
 import org.jboss.wise.core.utils.SmooksCache;
 import org.milyn.Smooks;
 import org.milyn.container.ExecutionContext;
@@ -46,6 +46,8 @@ public class SmooksMapper implements WiseMapper {
     private String smooksResource;
 
     private String smooksReport = null;
+
+    private final Logger log = Logger.getLogger(SmooksMapper.class);
 
     /**
      * Create this mapper using passed resource
@@ -102,19 +104,20 @@ public class SmooksMapper implements WiseMapper {
             try {
                 executionContext.setEventListener(new HtmlReportGenerator(this.getSmooksReport()));
             } catch (IOException e) {
-                // TODO: add logging here!
-                // we ignore this excepetion and go on without HtmlReportGenerator
-                // nut at least we need to log it
+                if (log.isDebugEnabled()) {
+                    log.debug("Error during loading/instanciating Html report generator (" + this.getSmooksReport()
+                              + ") with exception message: " + e.getMessage());
+                    log.info("Wise will continue without it");
+
+                }
             }
         }
         org.milyn.container.plugin.PayloadProcessor payloadProcessor = new PayloadProcessor(
                                                                                             smooks,
                                                                                             org.milyn.container.plugin.ResultType.JAVA);
-        // smooks should return a map
-        // TODO: verify with some unit tests
         Map<String, Object> returnMap = (Map<String, Object>)payloadProcessor.process(originalObjects, executionContext);
         // workaround when we would to use smooks to extract a single value
-        // TODO: provide an example/unitTest of real use (take from Stefano's real world dwh application)
+        // Have a lok to SmooksMapperTest.shouldMapToSingleInput() for an example of use
         if (returnMap.size() == 1 && returnMap.get("singleInput") != null) {
             returnMap = (Map<String, Object>)returnMap.get("singleInput");
         }
