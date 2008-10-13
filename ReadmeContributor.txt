@@ -1,7 +1,7 @@
 Would you contribute? 
 Great!
 Have a look here please:
-http://wiki.jboss.org/auth/wiki/Wise/ContributorGuideLine?action=e&windowstate=normal&mode=view
+https://www.jboss.org/community/docs/DOC-12754
 
-and here too
-http://wiki.jboss.org/wiki/Wise
+and for more general information here too
+https://www.jboss.org/community/docs/DOC-12753
