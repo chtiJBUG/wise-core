@@ -222,10 +222,6 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      */
     public WSDynamicClientBuilder tmpDir( String tmpDir ) {
         this.tmpDir = tmpDir;
-        File tmp = new File(tmpDir);
-        if (!tmp.exists()) {
-            tmp.mkdirs();
-        }
         return this;
     }
 

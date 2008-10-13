@@ -23,9 +23,11 @@
 package org.jboss.wise.core.client.factories;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import net.jcip.annotations.ThreadSafe;
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.apache.log4j.helpers.NullEnumeration;
@@ -95,6 +97,18 @@ public abstract class WSDynamicClientFactory {
                 log = Logger.getLogger(WSDynamicClientFactory.class);
             }
 
+        }
+        File tmp = new File(factory.config.getDefaultTmpDeployDir());
+        if (tmp.exists()) {
+            try {
+                FileUtils.cleanDirectory(tmp);
+            } catch (IOException e) {
+                throw new IllegalStateException("Failed to clean existing temporary directory");
+            }
+        } else {
+            if (!tmp.mkdirs()) {
+                throw new IllegalStateException("Failed to create temporary directory");
+            }
         }
         return factory;
     }

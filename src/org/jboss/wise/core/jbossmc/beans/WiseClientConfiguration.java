@@ -22,21 +22,20 @@
 
 package org.jboss.wise.core.jbossmc.beans;
 
-
 /**
  * @author stefano.maestri@javalinux.it
  */
 
 public class WiseClientConfiguration {
 
-    private String defaultTmpDeployDir = "/tmp";
+    private String defaultTmpDeployDir = "tmp";
 
     private String defaultTargetPackage = "org.jboss.wise";
 
     private String defaultUserName;
 
     private String defaultPassword;
-    
+
     private String logConfig;
 
     public final String getDefaultUserName() {
@@ -74,15 +73,16 @@ public class WiseClientConfiguration {
     public final void setDefaultTargetPackage( String defaultTargetPackage ) {
         this.defaultTargetPackage = defaultTargetPackage;
     }
-    
+
     /**
      * Set the log4j configuraton file url
-     * @param url log4j configuraiton url 
+     * 
+     * @param url log4j configuraiton url
      */
-    public final void setLogConfig(String url) {
+    public final void setLogConfig( String url ) {
         this.logConfig = url;
     }
-    
+
     /**
      * @return log4j configuration url
      */
