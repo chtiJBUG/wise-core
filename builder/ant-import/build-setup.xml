@@ -25,6 +25,7 @@
 	<property name="javac.debug" value="true" />
 	<property name="javac.deprecation" value="true" />
 	<property name="coverage.dir" location="test-output/coverage" />
+	<property name="samples.lib.dir" location="samples/lib" />
 
 	<path id="build.classpath">
 		<fileset dir="${lib.dir}">

@@ -11,6 +11,7 @@
 		<ant antfile="${main.builder}" target="clean" />
 		<ant antfile="${test.builder}" target="clean" />
 		<delete dir="${prj.tempdir}" />
+		<delete dir="${samples.lib.dir}" />
 		<delete dir="release" />
 	</target>
 
@@ -18,6 +19,10 @@
 		<ant antfile="${main.builder}" target="jar" />
 	</target>
 
+	<target name="release" depends="cleanAll,dist" description="prepare inary distribution">
+		<ant antfile="${main.builder}" target="copyLibForSample" />
+
+	</target>
 
 	<target name="allTest" description="Runs regression tests">
 		<ant antfile="${test.builder}" target="allTest" />

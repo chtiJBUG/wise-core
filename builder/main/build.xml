@@ -18,7 +18,7 @@
 	</target>
 
 	<target name="compile" depends="init" description="Compile the Java source code">
-		<javac destdir="${classes.dir}" classpathref="build.classpath" debug="${javac.debug}" deprecation="${javac.deprecation}" target="1.5" >
+		<javac destdir="${classes.dir}" classpathref="build.classpath" debug="${javac.debug}" deprecation="${javac.deprecation}" target="1.5">
 			<src path="${src.java.dir}" />
 		</javac>
 	</target>
@@ -30,5 +30,55 @@
 		</jar>
 	</target>
 
+	<target name="copyLibForSample">
+		<copy todir="${samples.lib.dir}" flatten="true">
+			<fileset dir="${lib.dir}">
+				<include name="**/stax-api.jar" />
+				<include name="**/jaxb-xjc.jar" />
+				<include name="**/wstx.jar" />
+				<include name="**/tools.jar" />
+				<include name="**/stax-ex.jar" />
+				<include name="**/jaxb-impl.jar" />
+				<include name="**/jboss-microcontainer.jar" />
+				<include name="**/jboss-dependency.jar" />
+				<include name="**/xercesImpl.jar" />
+				<include name="**/jbossws-native-core.jar" />
+				<include name="**/jbossws-spi.jar" />
+				<include name="**/log4j.jar" />
+				<include name="**/jboss-xml-binding.jar" />
+				<include name="**/jboss-container.jar" />
+				<include name="**/jbossall-client.jar" />
+				<include name="**/commons-lang-2.3.jar" />
+				<include name="**/streambuffer.jar" />
+				<include name="**/commons-codec-1.3.jar" />
+			</fileset>
+		</copy>
+		<copy todir="${samples.lib.dir}/JDK5" flatten="true">
+			<fileset dir="${lib.dir}">
+				<include name="**/wsdl4j.jar" />
+				<include name="**/activation.jar" />
+				<include name="**/thirdparty-all.jar" />
+				<include name="**/jbossws-native-jaxrpc.jar" />
+				<include name="**/mail.jar" />
+				<include name="**/jaxws-tools.jar" />
+				<include name="**/jaxws-rt.jar" />
+				<include name="**/jbossws-native-jaxws-ext.jar" />
+				<include name="**/jbossws-common.jar" />
+				<include name="**/jbossws-native-jaxws.jar" />
+				<include name="**/jbossws-native-client.jar" />
+				<include name="**/jaxb-api.jar" />
+				<include name="**/policy.jar" />
+				<include name="**/jbossws-native-saaj.jar" />
+			</fileset>
+		</copy>
+		<copy tofile="${samples.lib.dir}/tools/jaxws-tools.jar"  file="${lib.dir}/jaxws-tools.jar" />
+		<copy tofile="${samples.lib.dir}/tools/jaxws-rt.jar" file="${lib.dir}/jaxws-rt-orig.jar" />
+
+		<copy todir="${samples.lib.dir}/groovy" flatten="true">
+			<fileset dir="${lib.dir}">
+				<include name="**/groovy-all-1.5.6.jar" />
+			</fileset>
+		</copy>
+	</target>
 
 </project>
