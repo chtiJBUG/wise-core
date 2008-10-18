@@ -22,8 +22,8 @@
 
 package org.jboss.wise.core.utils;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import org.milyn.Smooks;
 
 /**
@@ -35,7 +35,7 @@ public class SmooksCache {
 
     private static SmooksCache me;
 
-    private final Map<String, Smooks> cache = new HashMap<String, Smooks>();
+    private final Map<String, Smooks> cache = new ConcurrentHashMap<String, Smooks>();
 
     public Smooks get( Object key ) {
         return cache.get(key);
