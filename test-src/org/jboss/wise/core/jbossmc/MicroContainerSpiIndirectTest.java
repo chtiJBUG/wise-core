@@ -26,8 +26,6 @@ import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 import org.jboss.wise.core.client.builder.WSDynamicClientBuilder;
 import org.jboss.wise.core.client.factories.WSDynamicClientFactory;
-import org.jboss.wise.core.jbossmc.BeansNames;
-import org.jboss.wise.core.jbossmc.MicroContainerSpi;
 import org.jboss.wise.core.jbossmc.beans.WiseClientConfiguration;
 import org.junit.Before;
 import org.junit.Test;

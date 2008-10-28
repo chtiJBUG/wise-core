@@ -19,15 +19,25 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-
 package org.jboss.wise.core.jbossmc;
+
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
+import static org.junit.matchers.JUnitMatchers.hasItems;
+import java.util.Arrays;
+import org.junit.Test;
 
 /**
  * @author stefano.maestri@javalinux.it
  */
-public enum BeansNames {
-    WSDynamicClientFactory,
-    WiseClientConfiguration,
-    WSConsumer
+public class BeansNameTest {
+
+    @Test
+    public void shouldHaveValidValues() {
+        assertThat(BeansNames.values().length, is(3));
+        assertThat(Arrays.asList(BeansNames.values()), hasItems(BeansNames.WiseClientConfiguration,
+                                                                BeansNames.WSConsumer,
+                                                                BeansNames.WiseClientConfiguration));
+    }
 
 }

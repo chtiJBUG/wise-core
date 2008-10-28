@@ -29,9 +29,13 @@ import org.jboss.kernel.spi.registry.KernelRegistryEntry;
 import org.jboss.wise.core.exception.MCKernelUnavailableException;
 
 /**
- * @author oracle
+ * @author stefano.maestri@javalinux.it
  */
-public class MicroContainerSpi {
+public final class MicroContainerSpi {
+
+    private MicroContainerSpi() {
+    }
+
     public static <T> T getKernelProvidedImplementation( String beanName,
                                                          Class<T> clazz ) throws MCKernelUnavailableException {
         Kernel kernel = KernelUtil.getKernel();
