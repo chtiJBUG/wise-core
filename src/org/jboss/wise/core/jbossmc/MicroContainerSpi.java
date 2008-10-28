@@ -48,7 +48,7 @@ public final class MicroContainerSpi {
             }
         }
         if (kernel == null) {
-            throw new MCKernelUnavailableException("Kernl is null");
+            throw new MCKernelUnavailableException("Kernel is null");
         }
         KernelRegistry registry = kernel.getRegistry();
         KernelRegistryEntry entry = registry.getEntry(beanName);
