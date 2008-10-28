@@ -72,7 +72,11 @@
 				<include name="**/jbossws-native-saaj.jar" />
 			</fileset>
 		</copy>
-		<copy tofile="${samples.lib.dir}/tools/jaxws-tools.jar"  file="${lib.dir}/jaxws-tools.jar" />
+		<copy todir="${samples.lib.dir}/smooks" flatten="true">
+			<fileset dir="${lib.dir}/smooks">
+			</fileset>
+		</copy>
+		<copy tofile="${samples.lib.dir}/tools/jaxws-tools.jar" file="${lib.dir}/jaxws-tools.jar" />
 		<copy tofile="${samples.lib.dir}/tools/jaxws-rt.jar" file="${lib.dir}/jaxws-rt-orig.jar" />
 
 		<copy todir="${samples.lib.dir}/groovy" flatten="true">

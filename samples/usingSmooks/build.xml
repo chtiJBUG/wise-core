@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== 
+     29 Sep 2008 16:36:29                                                        
+                                                          
+     ====================================================================== -->
+<project name="usingSmooks" basedir=".">
+
+	<property name="MainClass" value="org.jboss.wise.samples.HelloWorldSmooks">
+	</property>
+	<property file="${basedir}/build.properties" />
+	
+	<path id="additional.run.classpath">
+		<fileset dir="../lib/JDK5">
+			<include name="*.jar" />
+		</fileset>
+		<fileset dir="../lib/smooks">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+	
+	<import file="${basedir}/../ant/build.xml" />
+</project>
