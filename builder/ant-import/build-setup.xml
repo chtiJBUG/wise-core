@@ -26,6 +26,7 @@
 	<property name="javac.deprecation" value="true" />
 	<property name="coverage.dir" location="test-output/coverage" />
 	<property name="samples.lib.dir" location="samples/lib" />
+	<property name="cobertura.dir" location="${lib.dir}/cobertura-1.9"/>
 
 	<path id="build.classpath">
 		<fileset dir="${lib.dir}">
@@ -62,6 +63,14 @@
 	<!-- this loads <emma> and <emmajava> custom tasks: -->
 	<taskdef resource="emma_ant.properties" classpathref="emma.lib" />
 
+	<path id="cobertura.classpath">
+	    <fileset dir="${cobertura.dir}">
+	        <include name="cobertura.jar" />
+	        <include name="lib/**/*.jar" />
+	    </fileset>
+	</path>
+
+	<taskdef classpathref="cobertura.classpath" resource="tasks.properties" />
 
 
 

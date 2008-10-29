@@ -3,7 +3,7 @@
 <project name="Wise-core" default="allTest" basedir="../../">
 
 	<import file="${basedir}/builder/ant-import/build-setup.xml" />
-    
+
 	<path id="test.execution.classpath">
 		<pathelement location="${coverage.dir}/instrumentedClasses" />
 		<pathelement location="${basedir}/${classes.dir}" />
@@ -12,7 +12,7 @@
 		<pathelement location="${test.output.dir}" />
 		<path refid="build.classpath" />
 		<path refid="test.build.classpath" />
-                <pathelement location="${env.JAVA_HOME}/lib/tools.jar" />
+		<pathelement location="${env.JAVA_HOME}/lib/tools.jar" />
 		<pathelement location="${lib.dir}" />
 		<pathelement location="${test.lib.dir}" />
 	</path>
@@ -25,14 +25,14 @@
 		<mkdir dir="${test.classes.dir}" />
 		<deltree dir="${test.output.dir}" />
 		<mkdir dir="${test.output.dir}" />
-		
+
 	</target>
 
 	<target name="compileTest" depends="init">
 		<ant antfile="${main.builder}" target="compile" />
-		<javac destdir="${test.classes.dir}" classpathref="test.execution.classpath" debug="${javac.debug}" deprecation="${javac.deprecation}" nowarn="on" target="1.5" >
+		<javac destdir="${test.classes.dir}" classpathref="test.execution.classpath" debug="${javac.debug}" deprecation="${javac.deprecation}" nowarn="on" target="1.5">
 			<src path="${src.test.dir}" />
-			<exclude name="**/integration/**"/>
+			<exclude name="**/integration/**" />
 		</javac>
 	</target>
 
@@ -58,7 +58,7 @@
 		</junit>
 	</target>
 
-	<target name="coverage" depends="compileTest">
+	<!-- <target name="coverage" depends="compileTest">
 		<delete dir="${coverage.dir}" />
 		<mkdir dir="${coverage.dir}" />
 		<emma>
@@ -88,6 +88,55 @@
 				<html outfile="${coverage.dir}/coverage.html" />
 			</report>
 		</emma>
+
+	</target>-->
+	<target name="coverage" depends="compileTest">
+		<delete dir="${coverage.dir}" />
+		<mkdir dir="${coverage.dir}" />
+		<delete file="cobertura.ser" />
+
+		<cobertura-instrument todir="${coverage.dir}">
+			<ignore regex="org.apache.log4j.*" />
+			<fileset dir="${classes.dir}">
+				<include name="**/*.class" />
+			</fileset>
+		</cobertura-instrument>
+		<junit fork="yes" dir="${basedir}" failureProperty="test.failed">
+		    <!--
+		        Specify the name of the coverage data file to use.
+		        The value specified below is the default.
+		    -->
+		    <sysproperty key="net.sourceforge.cobertura.datafile"
+		        file="${basedir}/cobertura.ser" />
+
+		    <!--
+		        Note the classpath order: instrumented classes are before the
+		        original (uninstrumented) classes.  This is important.
+		    -->
+		    <classpath location="${coverage.dir}" />
+			<classpath refid="test.execution.classpath" />
+			            
+		    <!--
+		        The instrumented classes reference classes used by the
+		        Cobertura runtime, so Cobertura and its dependencies
+		        must be on your classpath.
+		    -->
+		    <classpath refid="cobertura.classpath" />
+
+			<batchtest fork="yes" todir="${test.output.dir}">
+			                <formatter type="plain" />
+			                <fileset dir="${src.test.dir}">
+			                    <include name="**/*Test.java" />
+			                    <exclude name="**/integration/**" />
+			                </fileset>
+			            </batchtest>
+		</junit>
+		<cobertura-report format="html" destdir="${coverage.dir}" srcdir="${src.java.dir}" />
+		<cobertura-check branchrate="30" totalbranchrate="60" totallinerate="80">
+		    <!-- <regex pattern="com.example.reallyimportant.*" branchrate="80" linerate="90"/>
+		    <regex pattern="com.example.boringcode.*" branchrate="40" linerate="30"/>-->
+		</cobertura-check>
+		
 
 	</target>
 </project>
