@@ -5,6 +5,7 @@
 
 	<target name="clean" description="Cleans up the build directory">
 		<delete dir="${classes.dir}" />
+		<delete dir="${api.doc.dir}" />
 	</target>
 
 	<target name="init" description="Initialize the build">
@@ -85,5 +86,10 @@
 			</fileset>
 		</copy>
 	</target>
+	<target name="javadoc" description="Creates the JavaDoc output">
+	    <javadoc sourcepath="${src.java.dir}" destdir="docs/api" classpathref="build.classpath"/>
+	  </target>
+
+	
 
 </project>

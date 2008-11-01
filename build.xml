@@ -21,7 +21,8 @@
 
 	<target name="release" depends="cleanAll,dist" description="prepare inary distribution">
 		<ant antfile="${main.builder}" target="copyLibForSample" />
-
+		<ant antfile="${main.builder}" target="javadoc" />
+		        
 	</target>
 
 	<target name="allTest" description="Runs regression tests">

@@ -27,6 +27,8 @@
 	<property name="coverage.dir" location="test-output/coverage" />
 	<property name="samples.lib.dir" location="samples/lib" />
 	<property name="cobertura.dir" location="${lib.dir}/cobertura-1.9"/>
+	<property name="doc.dir" location="${basedir}/docs"/>
+	<property name="api.doc.dir" location="${doc.dir}/api"/>
 
 	<path id="build.classpath">
 		<fileset dir="${lib.dir}">
