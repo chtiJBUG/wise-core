@@ -8,6 +8,8 @@
 	<classpathentry kind="src" path="samples/helloWorldJDK6/src/server"/>
 	<classpathentry kind="src" path="samples/usingSmooks/src/client"/>
 	<classpathentry kind="src" path="samples/usingSmooks/src/server"/>
+	<classpathentry kind="src" path="samples/interactiveHelloWorldJDK6/src/client"/>
+	<classpathentry kind="src" path="samples/interactiveHelloWorldJDK6/src/server"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/jboss-microcontainer.jar"/>
 	<classpathentry kind="lib" path="lib/smooks/milyn-smooks-core-1.0.1.jar"/>

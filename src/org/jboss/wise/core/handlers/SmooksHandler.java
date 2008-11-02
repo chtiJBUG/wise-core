@@ -43,6 +43,7 @@ import org.milyn.resource.URIResourceLocator;
 /**
  * A SOAPHandler extension. It apply smooks transformation on soap message. Transformation can also use freemarker, using provided
  * javaBeans map to get values It can apply transformation only on inbound message, outbound ones or both, depending on
+ * setInBoundHandlingEnabled(boolean) and setOutBoundHandlingEnabled(boolean) methods
  * 
  * @see #setInBoundHandlingEnabled(boolean)
  * @see #setOutBoundHandlingEnabled(boolean)
