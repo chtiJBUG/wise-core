@@ -23,9 +23,12 @@
 package org.jboss.wise.samples;
 
 import java.util.HashMap;
+import java.util.Map;
 import org.jboss.wise.core.client.InvocationResult;
 import org.jboss.wise.core.client.WSDynamicClient;
+import org.jboss.wise.core.client.WSEndpoint;
 import org.jboss.wise.core.client.WSMethod;
+import org.jboss.wise.core.client.WSService;
 import org.jboss.wise.core.client.factories.WSDynamicClientFactory;
 import org.jboss.wise.core.exception.InvocationException;
 import org.jboss.wise.core.exception.MCKernelUnavailableException;
@@ -36,15 +39,33 @@ import org.jboss.wise.core.exception.WiseRuntimeException;
 /**
  * @author oracle
  */
-public class HelloWorldClientJDK6 {
+public class InteractiveHelloWorldClientJDK6 {
 
     /**
      * @param args
      */
     public static void main( String[] args ) {
         try {
-            WSDynamicClient client = WSDynamicClientFactory.getInstance().getClient("http://127.0.0.1:8080/HelloWorldJDK6/HelloWorldWSJDK6?wsdl");
-            WSMethod method = client.getWSMethod("HelloWorldWSJDK6Service", "HelloWorldJDK6Port", "sayHello");
+            WSDynamicClient client = WSDynamicClientFactory.getInstance().getClient("http://127.0.0.1:8080/InteractiveHelloWorldJDK6/InteractiveHelloWorldWSJDK6?wsdl");
+            Map<String, WSService> services = client.processServices();
+            System.out.println("Available services are:");
+            for (String key : services.keySet()) {
+                System.out.println(key);
+            }
+            System.out.println("Selectting the first one");
+            Map<String, WSEndpoint> endpoints = services.values().iterator().next().processEndpoints();
+            System.out.println("Available endpoints are:");
+            for (String key : endpoints.keySet()) {
+                System.out.println(key);
+            }
+            System.out.println("Selectting the first one");
+            Map<String, WSMethod> methods = endpoints.values().iterator().next().getWSMethods();
+            System.out.println("Available methods are:");
+            for (String key : methods.keySet()) {
+                System.out.println(key);
+            }
+            System.out.println("Selectting the first one");
+            WSMethod method = methods.values().iterator().next();
             HashMap<String, Object> requestMap = new HashMap<String, Object>();
             requestMap.put("toWhom", "SpiderMan");
             InvocationResult result = method.invoke(requestMap, null);
