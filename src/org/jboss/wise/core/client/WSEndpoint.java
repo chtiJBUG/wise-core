@@ -28,7 +28,7 @@ import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
 
 /**
- * This represent a WebEndpoint and has utility methods to edit username, password, endpoint address, attach handlers
+ * This represent a Endpoint(Port) and has utility methods to edit username, password, endpoint address, attach handlers
  * 
  * @author Stefano Maestri, stefano.maestri@javalinux.it
  */

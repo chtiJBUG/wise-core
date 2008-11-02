@@ -23,13 +23,13 @@
 package org.jboss.wise.core.client;
 
 import java.util.Map;
+import net.jcip.annotations.ThreadSafe;
 import org.jboss.wise.core.exception.InvocationException;
 import org.jboss.wise.core.exception.MappingException;
 import org.jboss.wise.core.mapper.WiseMapper;
-import net.jcip.annotations.ThreadSafe;
 
 /**
- * Represent a webservice operation invocation attached to a specific endpoint.
+ * It Represents a webservice operation(action) invocation and it always refer to a specific endpoint.
  * 
  * @author stefano.maestri@javalinux.it
  * @since 23-Aug-2007
@@ -61,8 +61,8 @@ public interface WSMethod {
     /**
      * Gets the map of {@link WebParameter} for the webserice method represented by instance of this type
      * 
-     * @return a Map<String, Object> representing valid webparameters where keys contain symbolic names as defined by wsdl. It
-     *         may be null in case of selected operation haven't parameter.
+     * @return a Map<String, Object> representing valid webparameters where keys contain symbolic names as defined by wsdl. It may
+     *         be null in case of selected operation haven't parameter.
      */
     public Map<String, ? extends WebParameter> getWebParams();
 

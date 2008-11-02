@@ -27,7 +27,7 @@ import java.util.Map;
 import net.jcip.annotations.ThreadSafe;
 
 /**
- * This is the Wise core, i.e. the JAX-WS client that handles wsdl retrieval & parsing, invocations, etc.
+ * It represents a sigle service. I can be used to retrieve endpoints (Ports) of this services.
  * 
  * @author Stefano Maestri, stefano.maestri@javalinux.it
  */
@@ -41,6 +41,9 @@ public interface WSService {
      */
     public Map<String, WSEndpoint> processEndpoints();
 
+    /**
+     * @return The classLoader used to load generated class.
+     */
     public URLClassLoader getClassLoader();
 
 }

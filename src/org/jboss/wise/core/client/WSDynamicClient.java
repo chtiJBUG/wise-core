@@ -27,7 +27,8 @@ import java.util.Map;
 import net.jcip.annotations.ThreadSafe;
 
 /**
- * This is the Wise core, i.e. the JAX-WS client that handles wsdl retrieval & parsing, invocations, etc.
+ * This is the Wise core class responsible to invoke the JAX-WS tools that handles wsdl retrieval & parsing. It is used to build
+ * the list of WSService representing the serices availabe in parsed wsdl.
  * 
  * @author Stefano Maestri, stefano.maestri@javalinux.it
  */
@@ -35,13 +36,28 @@ import net.jcip.annotations.ThreadSafe;
 public interface WSDynamicClient {
 
     /**
-     * Create the endpoints' map and gives it back.
+     * Create the services' map and gives it back.
      * 
      * @return The Map of WSEndpoint with symbolic names as keys
      */
     public Map<String, WSService> processServices();
 
+    /**
+     * @return The classLoader used to load generated class.
+     */
     public URLClassLoader getClassLoader();
-    public WSMethod getWSMethod(String serviceName, String portName, String methodName);
+
+    /**
+     * It return directly the method to invoke the specified action on specified port of specified service. It is the base method
+     * for "one line of code invocation" (see "Wise-core Programmers guide" for more information)
+     * 
+     * @param serviceName
+     * @param portName
+     * @param actionName
+     * @return the WSMethod class to use for effective service invocation
+     */
+    public WSMethod getWSMethod( String serviceName,
+                                 String portName,
+                                 String actionName );
 
 }
