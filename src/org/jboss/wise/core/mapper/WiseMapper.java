@@ -23,11 +23,11 @@
 package org.jboss.wise.core.mapper;
 
 import java.util.Map;
-import org.jboss.wise.core.exception.MappingException;
 import net.jcip.annotations.ThreadSafe;
+import org.jboss.wise.core.exception.MappingException;
 
 /**
- * Interface must be implemented by any mapper defined to be used with wise-core
+ * It' a simple interface implemented by any mapper used within wise-core requiring a single method {@link #applyMapping(Object)}
  * 
  * @author stefano.maestri@javalinux.it
  */
