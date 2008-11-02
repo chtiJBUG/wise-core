@@ -37,7 +37,7 @@ public class BeansNameTest {
         assertThat(BeansNames.values().length, is(3));
         assertThat(Arrays.asList(BeansNames.values()), hasItems(BeansNames.WiseClientConfiguration,
                                                                 BeansNames.WSConsumer,
-                                                                BeansNames.WiseClientConfiguration));
+                                                                BeansNames.WSDynamicClientFactory));
     }
 
 }
