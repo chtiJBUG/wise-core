@@ -30,8 +30,6 @@ public class WiseClientConfiguration {
 
     private String defaultTmpDeployDir = "tmp";
 
-    private String defaultTargetPackage = "org.jboss.wise";
-
     private String defaultUserName;
 
     private String defaultPassword;
@@ -58,20 +56,12 @@ public class WiseClientConfiguration {
         return defaultTmpDeployDir;
     }
 
-    public final String getDefaultTargetPackage() {
-        return defaultTargetPackage;
-    }
-
     public WiseClientConfiguration() {
 
     }
 
     public final void setDefaultTmpDeployDir( String defaultTmpDeployDir ) {
         this.defaultTmpDeployDir = defaultTmpDeployDir;
-    }
-
-    public final void setDefaultTargetPackage( String defaultTargetPackage ) {
-        this.defaultTargetPackage = defaultTargetPackage;
     }
 
     /**
