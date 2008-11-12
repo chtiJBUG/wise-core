@@ -10,10 +10,14 @@
 	<property file="${basedir}/build.properties" />
 	
 	<path id="additional.run.classpath">
-		<fileset dir="../lib/JDK5">
-			<include name="*.jar" />
-		</fileset>
-	</path>
-	
+	        <fileset dir="../lib/tools">
+	            <include name="*.jar" />
+	        </fileset>
+	    </path>
+	<!--<path id="additional.run.classpath">
+	        <fileset dir="../lib/JDK5">
+	            <include name="*.jar" />
+	        </fileset>
+	    </path>-->
 	<import file="${basedir}/../ant/build.xml" />
 </project>
