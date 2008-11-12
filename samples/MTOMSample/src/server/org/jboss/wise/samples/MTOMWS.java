@@ -29,6 +29,7 @@ import javax.jws.WebResult;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.xml.ws.BindingType;
+import javax.xml.bind.annotation.XmlMimeType;
 
 @WebService( name = "MTOM", targetNamespace = "http://wise_samples/MTOM" )
 @SOAPBinding( style = SOAPBinding.Style.DOCUMENT, parameterStyle = SOAPBinding.ParameterStyle.BARE )
@@ -36,6 +37,7 @@ import javax.xml.ws.BindingType;
 public class MTOMWS {
     @WebMethod
     @WebResult( name = "result" )
+    @XmlMimeType("text/xml")
     public DataHandler sayHello( @WebParam( name = "toWhom" ) String toWhom ) {
 
         String greeting = "Hello World Greeting for '" + toWhom + "' on " + new java.util.Date();
