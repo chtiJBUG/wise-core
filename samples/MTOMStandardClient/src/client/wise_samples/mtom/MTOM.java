@@ -6,6 +6,7 @@ import javax.jws.WebParam;
 import javax.jws.WebResult;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
+import javax.xml.bind.annotation.XmlMimeType;
 
 
 /**
@@ -30,5 +31,17 @@ public interface MTOM {
     public byte[] sayHello(
         @WebParam(name = "toWhom", targetNamespace = "http://wise_samples/MTOM", partName = "toWhom")
         String toWhom);
+
+    /**
+     * 
+     * @param toWhomFoo
+     * @return
+     *     returns wise_samples.mtom.Foo
+     */
+    @WebMethod
+    @WebResult(name = "resultFoo", targetNamespace = "http://wise_samples/MTOM", partName = "resultFoo")
+    public Foo sayHelloFoo(
+        @WebParam(name = "toWhomFoo", targetNamespace = "http://wise_samples/MTOM", partName = "toWhomFoo")
+        String toWhomFoo);
 
 }

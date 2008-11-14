@@ -22,7 +22,9 @@
 
 package org.jboss.wise.samples;
 
+import java.net.URL;
 import java.util.List;
+import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.handler.Handler;
 import javax.xml.ws.soap.SOAPBinding;
@@ -38,20 +40,28 @@ public class MTOMStandardClient {
     /**
      * @param args
      */
-    public static void main( String[] args ) {
+    public static void main( String[] args ) throws Exception {
         try {
             // WSDynamicClient client =
             // WSDynamicClientFactory.getInstance().getClient("http://127.0.0.1:8080/MTOMSample/MTOMWS?wsdl");
             // WSMethod method = client.getWSMethod("MTOMWSService", "MTOMPort", "sayHello");
-            MTOMWSService service = new MTOMWSService();
+            MTOMWSService service = new MTOMWSService(new URL("http://127.0.0.1:8080/MTOMSample/MTOMWS?wsdl"), new QName("http://wise_samples/MTOM","MTOMWSService"));
             MTOM port = service.getMTOMPort();
             ((SOAPBinding)((BindingProvider)port).getBinding()).setMTOMEnabled(true);
             List<Handler> handlerChain = ((BindingProvider)port).getBinding().getHandlerChain();
             handlerChain.add(new LoggingHandler());
             ((BindingProvider)port).getBinding().setHandlerChain(handlerChain);
             byte[] bytes = port.sayHello("SpiderMan");
-            System.out.println(bytes.length);
-            System.out.println(bytes);
+            if (bytes != null ) {
+                System.out.println(bytes.length);
+                System.out.println(bytes);
+            } else {
+                System.out.println("RECEIVED NULL!!");
+            }
+            
+            wise_samples.mtom.Foo foo = port.sayHelloFoo("SuperMan");
+            
+            System.out.println(foo.getDataHandler());
 
         } catch (IllegalStateException e) {
             e.printStackTrace();

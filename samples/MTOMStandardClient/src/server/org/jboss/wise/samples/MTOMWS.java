@@ -45,4 +45,14 @@ public class MTOMWS {
         return new DataHandler("<?xml version=\"1.0\" encoding=\"UTF-8\"?><hello>" + greeting + "</hello>", "text/plain");
 
     }
+    
+    @WebMethod
+    @WebResult( name = "resultFoo" )
+    public Foo sayHelloFoo( @WebParam( name = "toWhomFoo" ) String toWhomFoo ) {
+
+        String greeting = "FOO Hello World Greeting for '" + toWhomFoo + "' on " + new java.util.Date();
+
+        return new Foo(new DataHandler("<?xml version=\"1.0\" encoding=\"UTF-8\"?><hello>" + greeting + "</hello>", "text/plain"));
+
+    }
 }
