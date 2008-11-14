@@ -1,0 +1,117 @@
+2008-11-12 22:09:53,772 DEBUG [org.jboss.kernel.KernelFactory] Starting JBoss Kernel construction...
+2008-11-12 22:09:53,825 DEBUG [org.jboss.kernel.KernelFactory] Completed JBoss Kernel construction.  Duration: 50 milliseconds
+2008-11-12 22:09:54,356 DEBUG [org.jboss.kernel.plugins.deployment.xml.BeanSchemaBinding] Reading xsd took 519 milliseconds
+2008-11-12 22:09:54,374 DEBUG [org.jboss.kernel.plugins.deployment.xml.BeanSchemaBinding] Creating schema binding took 537 milliseconds
+2008-11-12 22:09:54,375 DEBUG [org.jboss.kernel.plugins.bootstrap.standalone.StandaloneBootstrap] Deploying jar:file:/dati/project/wise-core/samples/MTOMSample/build/client/MTOMSample.jar!/META-INF/jboss-beans.xml
+2008-11-12 22:09:54,397 DEBUG [org.jboss.kernel.plugins.deployment.xml.BeanXMLDeployer] Parsing jar:file:/dati/project/wise-core/samples/MTOMSample/build/client/MTOMSample.jar!/META-INF/jboss-beans.xml took 22 milliseconds
+2008-11-12 22:09:54,417 DEBUG [org.jboss.kernel.plugins.deployment.xml.BeanXMLDeployer] Deploying jar:file:/dati/project/wise-core/samples/MTOMSample/build/client/MTOMSample.jar!/META-INF/jboss-beans.xml took 42 milliseconds
+2008-11-12 22:09:54,417 DEBUG [org.jboss.kernel.plugins.bootstrap.standalone.StandaloneBootstrap] Deployed jar:file:/dati/project/wise-core/samples/MTOMSample/build/client/MTOMSample.jar!/META-INF/jboss-beans.xml
+2008-11-12 22:09:54,497 DEBUG [org.jboss.wise.core.client.impl.reflection.builder.ReflectionBasedWSDynamicClientBuilder] Get usable WSDL :/home/oracle/temp/Wise0.xml
+2008-11-12 22:09:56,415 DEBUG [org.jboss.wise.core.client.factories.WSDynamicClientFactory] Create WSDynamicClient successfully
+2008-11-12 22:09:57,006 INFO  [org.jboss.kernel.plugins.bootstrap.standalone.StandaloneBootstrap] Shutting down
+2008-11-12 22:09:57,007 DEBUG [org.jboss.kernel.plugins.bootstrap.standalone.StandaloneBootstrap] Undeploying jar:file:/dati/project/wise-core/samples/MTOMSample/build/client/MTOMSample.jar!/META-INF/jboss-beans.xml
+2008-11-12 22:09:57,009 DEBUG [org.jboss.kernel.plugins.bootstrap.standalone.StandaloneBootstrap] Undeployed jar:file:/dati/project/wise-core/samples/MTOMSample/build/client/MTOMSample.jar!/META-INF/jboss-beans.xml
+2008-11-12 22:11:32,922 DEBUG [org.jboss.kernel.KernelFactory] Starting JBoss Kernel construction...
+2008-11-12 22:11:32,972 DEBUG [org.jboss.kernel.KernelFactory] Completed JBoss Kernel construction.  Duration: 48 milliseconds
+2008-11-12 22:11:33,346 DEBUG [org.jboss.kernel.plugins.deployment.xml.BeanSchemaBinding] Reading xsd took 362 milliseconds
+2008-11-12 22:11:33,365 DEBUG [org.jboss.kernel.plugins.deployment.xml.BeanSchemaBinding] Creating schema binding took 380 milliseconds
+2008-11-12 22:11:33,366 DEBUG [org.jboss.kernel.plugins.bootstrap.standalone.StandaloneBootstrap] Deploying jar:file:/dati/project/wise-core/samples/MTOMSample/build/client/MTOMSample.jar!/META-INF/jboss-beans.xml
+2008-11-12 22:11:33,389 DEBUG [org.jboss.kernel.plugins.deployment.xml.BeanXMLDeployer] Parsing jar:file:/dati/project/wise-core/samples/MTOMSample/build/client/MTOMSample.jar!/META-INF/jboss-beans.xml took 23 milliseconds
+2008-11-12 22:11:33,408 DEBUG [org.jboss.kernel.plugins.deployment.xml.BeanXMLDeployer] Deploying jar:file:/dati/project/wise-core/samples/MTOMSample/build/client/MTOMSample.jar!/META-INF/jboss-beans.xml took 42 milliseconds
+2008-11-12 22:11:33,408 DEBUG [org.jboss.kernel.plugins.bootstrap.standalone.StandaloneBootstrap] Deployed jar:file:/dati/project/wise-core/samples/MTOMSample/build/client/MTOMSample.jar!/META-INF/jboss-beans.xml
+2008-11-12 22:11:33,460 DEBUG [org.jboss.wise.core.client.impl.reflection.builder.ReflectionBasedWSDynamicClientBuilder] Get usable WSDL :/home/oracle/temp/Wise0.xml
+2008-11-12 22:11:34,900 DEBUG [org.jboss.wise.core.client.factories.WSDynamicClientFactory] Create WSDynamicClient successfully
+2008-11-12 22:11:35,275 INFO  [org.jboss.kernel.plugins.bootstrap.standalone.StandaloneBootstrap] Shutting down
+2008-11-12 22:11:35,275 DEBUG [org.jboss.kernel.plugins.bootstrap.standalone.StandaloneBootstrap] Undeploying jar:file:/dati/project/wise-core/samples/MTOMSample/build/client/MTOMSample.jar!/META-INF/jboss-beans.xml
+2008-11-12 22:11:35,277 DEBUG [org.jboss.kernel.plugins.bootstrap.standalone.StandaloneBootstrap] Undeployed jar:file:/dati/project/wise-core/samples/MTOMSample/build/client/MTOMSample.jar!/META-INF/jboss-beans.xml
+2008-11-12 22:13:10,979 DEBUG [org.jboss.kernel.KernelFactory] Starting JBoss Kernel construction...
+2008-11-12 22:13:11,029 DEBUG [org.jboss.kernel.KernelFactory] Completed JBoss Kernel construction.  Duration: 49 milliseconds
+2008-11-12 22:13:11,438 DEBUG [org.jboss.kernel.plugins.deployment.xml.BeanSchemaBinding] Reading xsd took 397 milliseconds
+2008-11-12 22:13:11,456 DEBUG [org.jboss.kernel.plugins.deployment.xml.BeanSchemaBinding] Creating schema binding took 415 milliseconds
+2008-11-12 22:13:11,457 DEBUG [org.jboss.kernel.plugins.bootstrap.standalone.StandaloneBootstrap] Deploying jar:file:/dati/project/wise-core/samples/MTOMSample/build/client/MTOMSample.jar!/META-INF/jboss-beans.xml
+2008-11-12 22:13:11,480 DEBUG [org.jboss.kernel.plugins.deployment.xml.BeanXMLDeployer] Parsing jar:file:/dati/project/wise-core/samples/MTOMSample/build/client/MTOMSample.jar!/META-INF/jboss-beans.xml took 23 milliseconds
+2008-11-12 22:13:11,499 DEBUG [org.jboss.kernel.plugins.deployment.xml.BeanXMLDeployer] Deploying jar:file:/dati/project/wise-core/samples/MTOMSample/build/client/MTOMSample.jar!/META-INF/jboss-beans.xml took 42 milliseconds
+2008-11-12 22:13:11,499 DEBUG [org.jboss.kernel.plugins.bootstrap.standalone.StandaloneBootstrap] Deployed jar:file:/dati/project/wise-core/samples/MTOMSample/build/client/MTOMSample.jar!/META-INF/jboss-beans.xml
+2008-11-12 22:13:11,561 DEBUG [org.jboss.wise.core.client.impl.reflection.builder.ReflectionBasedWSDynamicClientBuilder] Get usable WSDL :/home/oracle/temp/Wise0.xml
+2008-11-12 22:13:13,021 DEBUG [org.jboss.wise.core.client.factories.WSDynamicClientFactory] Create WSDynamicClient successfully
+2008-11-12 22:13:13,464 INFO  [org.jboss.kernel.plugins.bootstrap.standalone.StandaloneBootstrap] Shutting down
+2008-11-12 22:13:13,464 DEBUG [org.jboss.kernel.plugins.bootstrap.standalone.StandaloneBootstrap] Undeploying jar:file:/dati/project/wise-core/samples/MTOMSample/build/client/MTOMSample.jar!/META-INF/jboss-beans.xml
+2008-11-12 22:13:13,467 DEBUG [org.jboss.kernel.plugins.bootstrap.standalone.StandaloneBootstrap] Undeployed jar:file:/dati/project/wise-core/samples/MTOMSample/build/client/MTOMSample.jar!/META-INF/jboss-beans.xml
+2008-11-12 22:17:11,430 DEBUG [org.jboss.kernel.KernelFactory] Starting JBoss Kernel construction...
+2008-11-12 22:17:11,482 DEBUG [org.jboss.kernel.KernelFactory] Completed JBoss Kernel construction.  Duration: 51 milliseconds
+2008-11-12 22:17:11,918 DEBUG [org.jboss.kernel.plugins.deployment.xml.BeanSchemaBinding] Reading xsd took 425 milliseconds
+2008-11-12 22:17:11,936 DEBUG [org.jboss.kernel.plugins.deployment.xml.BeanSchemaBinding] Creating schema binding took 443 milliseconds
+2008-11-12 22:17:11,937 DEBUG [org.jboss.kernel.plugins.bootstrap.standalone.StandaloneBootstrap] Deploying jar:file:/dati/project/wise-core/samples/MTOMSample/build/client/MTOMSample.jar!/META-INF/jboss-beans.xml
+2008-11-12 22:17:11,960 DEBUG [org.jboss.kernel.plugins.deployment.xml.BeanXMLDeployer] Parsing jar:file:/dati/project/wise-core/samples/MTOMSample/build/client/MTOMSample.jar!/META-INF/jboss-beans.xml took 22 milliseconds
+2008-11-12 22:17:11,980 DEBUG [org.jboss.kernel.plugins.deployment.xml.BeanXMLDeployer] Deploying jar:file:/dati/project/wise-core/samples/MTOMSample/build/client/MTOMSample.jar!/META-INF/jboss-beans.xml took 42 milliseconds
+2008-11-12 22:17:11,980 DEBUG [org.jboss.kernel.plugins.bootstrap.standalone.StandaloneBootstrap] Deployed jar:file:/dati/project/wise-core/samples/MTOMSample/build/client/MTOMSample.jar!/META-INF/jboss-beans.xml
+2008-11-12 22:17:12,044 DEBUG [org.jboss.wise.core.client.impl.reflection.builder.ReflectionBasedWSDynamicClientBuilder] Get usable WSDL :/home/oracle/temp/Wise0.xml
+2008-11-12 22:17:13,637 DEBUG [org.jboss.wise.core.client.factories.WSDynamicClientFactory] Create WSDynamicClient successfully
+2008-11-12 22:17:14,143 INFO  [org.jboss.kernel.plugins.bootstrap.standalone.StandaloneBootstrap] Shutting down
+2008-11-12 22:17:14,144 DEBUG [org.jboss.kernel.plugins.bootstrap.standalone.StandaloneBootstrap] Undeploying jar:file:/dati/project/wise-core/samples/MTOMSample/build/client/MTOMSample.jar!/META-INF/jboss-beans.xml
+2008-11-12 22:17:14,146 DEBUG [org.jboss.kernel.plugins.bootstrap.standalone.StandaloneBootstrap] Undeployed jar:file:/dati/project/wise-core/samples/MTOMSample/build/client/MTOMSample.jar!/META-INF/jboss-beans.xml
+2008-11-13 16:15:40,846 DEBUG [org.jboss.kernel.KernelFactory] Starting JBoss Kernel construction...
+2008-11-13 16:15:40,922 DEBUG [org.jboss.kernel.KernelFactory] Completed JBoss Kernel construction.  Duration: 65 milliseconds
+2008-11-13 16:15:41,391 DEBUG [org.jboss.kernel.plugins.deployment.xml.BeanSchemaBinding] Reading xsd took 443 milliseconds
+2008-11-13 16:15:41,409 DEBUG [org.jboss.kernel.plugins.deployment.xml.BeanSchemaBinding] Creating schema binding took 461 milliseconds
+2008-11-13 16:15:41,410 DEBUG [org.jboss.kernel.plugins.bootstrap.standalone.StandaloneBootstrap] Deploying jar:file:/dati/project/wise-core/samples/MTOMSample/build/client/MTOMSample.jar!/META-INF/jboss-beans.xml
+2008-11-13 16:15:41,445 DEBUG [org.jboss.kernel.plugins.deployment.xml.BeanXMLDeployer] Parsing jar:file:/dati/project/wise-core/samples/MTOMSample/build/client/MTOMSample.jar!/META-INF/jboss-beans.xml took 35 milliseconds
+2008-11-13 16:15:41,471 DEBUG [org.jboss.kernel.plugins.deployment.xml.BeanXMLDeployer] Deploying jar:file:/dati/project/wise-core/samples/MTOMSample/build/client/MTOMSample.jar!/META-INF/jboss-beans.xml took 61 milliseconds
+2008-11-13 16:15:41,471 DEBUG [org.jboss.kernel.plugins.bootstrap.standalone.StandaloneBootstrap] Deployed jar:file:/dati/project/wise-core/samples/MTOMSample/build/client/MTOMSample.jar!/META-INF/jboss-beans.xml
+2008-11-13 16:15:41,753 DEBUG [org.jboss.wise.core.client.impl.reflection.builder.ReflectionBasedWSDynamicClientBuilder] Get usable WSDL :/home/oracle/temp/Wise0.xml
+2008-11-13 16:15:44,031 DEBUG [org.jboss.wise.core.client.factories.WSDynamicClientFactory] Create WSDynamicClient successfully
+2008-11-13 16:15:44,727 INFO  [org.jboss.kernel.plugins.bootstrap.standalone.StandaloneBootstrap] Shutting down
+2008-11-13 16:15:44,727 DEBUG [org.jboss.kernel.plugins.bootstrap.standalone.StandaloneBootstrap] Undeploying jar:file:/dati/project/wise-core/samples/MTOMSample/build/client/MTOMSample.jar!/META-INF/jboss-beans.xml
+2008-11-13 16:15:44,729 DEBUG [org.jboss.kernel.plugins.bootstrap.standalone.StandaloneBootstrap] Undeployed jar:file:/dati/project/wise-core/samples/MTOMSample/build/client/MTOMSample.jar!/META-INF/jboss-beans.xml
+2008-11-13 16:16:35,215 DEBUG [org.jboss.kernel.KernelFactory] Starting JBoss Kernel construction...
+2008-11-13 16:16:35,264 DEBUG [org.jboss.kernel.KernelFactory] Completed JBoss Kernel construction.  Duration: 47 milliseconds
+2008-11-13 16:16:35,655 DEBUG [org.jboss.kernel.plugins.deployment.xml.BeanSchemaBinding] Reading xsd took 380 milliseconds
+2008-11-13 16:16:35,674 DEBUG [org.jboss.kernel.plugins.deployment.xml.BeanSchemaBinding] Creating schema binding took 399 milliseconds
+2008-11-13 16:16:35,676 DEBUG [org.jboss.kernel.plugins.bootstrap.standalone.StandaloneBootstrap] Deploying jar:file:/dati/project/wise-core/samples/MTOMSample/build/client/MTOMSample.jar!/META-INF/jboss-beans.xml
+2008-11-13 16:16:35,698 DEBUG [org.jboss.kernel.plugins.deployment.xml.BeanXMLDeployer] Parsing jar:file:/dati/project/wise-core/samples/MTOMSample/build/client/MTOMSample.jar!/META-INF/jboss-beans.xml took 22 milliseconds
+2008-11-13 16:16:35,717 DEBUG [org.jboss.kernel.plugins.deployment.xml.BeanXMLDeployer] Deploying jar:file:/dati/project/wise-core/samples/MTOMSample/build/client/MTOMSample.jar!/META-INF/jboss-beans.xml took 41 milliseconds
+2008-11-13 16:16:35,717 DEBUG [org.jboss.kernel.plugins.bootstrap.standalone.StandaloneBootstrap] Deployed jar:file:/dati/project/wise-core/samples/MTOMSample/build/client/MTOMSample.jar!/META-INF/jboss-beans.xml
+2008-11-13 16:16:35,855 DEBUG [org.jboss.wise.core.client.impl.reflection.builder.ReflectionBasedWSDynamicClientBuilder] Get usable WSDL :/home/oracle/temp/Wise0.xml
+2008-11-13 16:16:37,352 DEBUG [org.jboss.wise.core.client.factories.WSDynamicClientFactory] Create WSDynamicClient successfully
+2008-11-13 16:16:38,122 INFO  [org.jboss.kernel.plugins.bootstrap.standalone.StandaloneBootstrap] Shutting down
+2008-11-13 16:16:38,123 DEBUG [org.jboss.kernel.plugins.bootstrap.standalone.StandaloneBootstrap] Undeploying jar:file:/dati/project/wise-core/samples/MTOMSample/build/client/MTOMSample.jar!/META-INF/jboss-beans.xml
+2008-11-13 16:16:38,125 DEBUG [org.jboss.kernel.plugins.bootstrap.standalone.StandaloneBootstrap] Undeployed jar:file:/dati/project/wise-core/samples/MTOMSample/build/client/MTOMSample.jar!/META-INF/jboss-beans.xml
+2008-11-13 16:22:50,767 DEBUG [org.jboss.kernel.KernelFactory] Starting JBoss Kernel construction...
+2008-11-13 16:22:50,818 DEBUG [org.jboss.kernel.KernelFactory] Completed JBoss Kernel construction.  Duration: 50 milliseconds
+2008-11-13 16:22:51,251 DEBUG [org.jboss.kernel.plugins.deployment.xml.BeanSchemaBinding] Reading xsd took 422 milliseconds
+2008-11-13 16:22:51,269 DEBUG [org.jboss.kernel.plugins.deployment.xml.BeanSchemaBinding] Creating schema binding took 440 milliseconds
+2008-11-13 16:22:51,270 DEBUG [org.jboss.kernel.plugins.bootstrap.standalone.StandaloneBootstrap] Deploying jar:file:/dati/project/wise-core/samples/MTOMSample/build/client/MTOMSample.jar!/META-INF/jboss-beans.xml
+2008-11-13 16:22:51,293 DEBUG [org.jboss.kernel.plugins.deployment.xml.BeanXMLDeployer] Parsing jar:file:/dati/project/wise-core/samples/MTOMSample/build/client/MTOMSample.jar!/META-INF/jboss-beans.xml took 22 milliseconds
+2008-11-13 16:22:51,312 DEBUG [org.jboss.kernel.plugins.deployment.xml.BeanXMLDeployer] Deploying jar:file:/dati/project/wise-core/samples/MTOMSample/build/client/MTOMSample.jar!/META-INF/jboss-beans.xml took 41 milliseconds
+2008-11-13 16:22:51,312 DEBUG [org.jboss.kernel.plugins.bootstrap.standalone.StandaloneBootstrap] Deployed jar:file:/dati/project/wise-core/samples/MTOMSample/build/client/MTOMSample.jar!/META-INF/jboss-beans.xml
+2008-11-13 16:22:51,366 DEBUG [org.jboss.wise.core.client.impl.reflection.builder.ReflectionBasedWSDynamicClientBuilder] Get usable WSDL :/home/oracle/temp/Wise0.xml
+2008-11-13 16:22:52,981 DEBUG [org.jboss.wise.core.client.factories.WSDynamicClientFactory] Create WSDynamicClient successfully
+2008-11-13 16:22:53,431 INFO  [org.jboss.kernel.plugins.bootstrap.standalone.StandaloneBootstrap] Shutting down
+2008-11-13 16:22:53,431 DEBUG [org.jboss.kernel.plugins.bootstrap.standalone.StandaloneBootstrap] Undeploying jar:file:/dati/project/wise-core/samples/MTOMSample/build/client/MTOMSample.jar!/META-INF/jboss-beans.xml
+2008-11-13 16:22:53,433 DEBUG [org.jboss.kernel.plugins.bootstrap.standalone.StandaloneBootstrap] Undeployed jar:file:/dati/project/wise-core/samples/MTOMSample/build/client/MTOMSample.jar!/META-INF/jboss-beans.xml
+2008-11-13 16:25:15,631 DEBUG [org.jboss.kernel.KernelFactory] Starting JBoss Kernel construction...
+2008-11-13 16:25:15,684 DEBUG [org.jboss.kernel.KernelFactory] Completed JBoss Kernel construction.  Duration: 51 milliseconds
+2008-11-13 16:25:16,198 DEBUG [org.jboss.kernel.plugins.deployment.xml.BeanSchemaBinding] Reading xsd took 503 milliseconds
+2008-11-13 16:25:16,216 DEBUG [org.jboss.kernel.plugins.deployment.xml.BeanSchemaBinding] Creating schema binding took 521 milliseconds
+2008-11-13 16:25:16,217 DEBUG [org.jboss.kernel.plugins.bootstrap.standalone.StandaloneBootstrap] Deploying jar:file:/dati/project/wise-core/samples/MTOMSample/build/client/MTOMSample.jar!/META-INF/jboss-beans.xml
+2008-11-13 16:25:16,240 DEBUG [org.jboss.kernel.plugins.deployment.xml.BeanXMLDeployer] Parsing jar:file:/dati/project/wise-core/samples/MTOMSample/build/client/MTOMSample.jar!/META-INF/jboss-beans.xml took 22 milliseconds
+2008-11-13 16:25:16,259 DEBUG [org.jboss.kernel.plugins.deployment.xml.BeanXMLDeployer] Deploying jar:file:/dati/project/wise-core/samples/MTOMSample/build/client/MTOMSample.jar!/META-INF/jboss-beans.xml took 41 milliseconds
+2008-11-13 16:25:16,259 DEBUG [org.jboss.kernel.plugins.bootstrap.standalone.StandaloneBootstrap] Deployed jar:file:/dati/project/wise-core/samples/MTOMSample/build/client/MTOMSample.jar!/META-INF/jboss-beans.xml
+2008-11-13 16:25:16,289 DEBUG [org.jboss.wise.core.client.impl.reflection.builder.ReflectionBasedWSDynamicClientBuilder] Get usable WSDL :https://tds2.tradelinksig.com/tds/services/tds_client_xchgSOAP?wsdl
+2008-11-13 16:25:20,837 DEBUG [org.jboss.wise.core.client.factories.WSDynamicClientFactory] Create WSDynamicClient successfully
+2008-11-13 16:25:21,438 INFO  [org.jboss.kernel.plugins.bootstrap.standalone.StandaloneBootstrap] Shutting down
+2008-11-13 16:25:21,439 DEBUG [org.jboss.kernel.plugins.bootstrap.standalone.StandaloneBootstrap] Undeploying jar:file:/dati/project/wise-core/samples/MTOMSample/build/client/MTOMSample.jar!/META-INF/jboss-beans.xml
+2008-11-13 16:25:21,441 DEBUG [org.jboss.kernel.plugins.bootstrap.standalone.StandaloneBootstrap] Undeployed jar:file:/dati/project/wise-core/samples/MTOMSample/build/client/MTOMSample.jar!/META-INF/jboss-beans.xml
+2008-11-13 16:54:39,761 DEBUG [org.jboss.kernel.KernelFactory] Starting JBoss Kernel construction...
+2008-11-13 16:54:39,813 DEBUG [org.jboss.kernel.KernelFactory] Completed JBoss Kernel construction.  Duration: 51 milliseconds
+2008-11-13 16:54:40,255 DEBUG [org.jboss.kernel.plugins.deployment.xml.BeanSchemaBinding] Reading xsd took 430 milliseconds
+2008-11-13 16:54:40,278 DEBUG [org.jboss.kernel.plugins.deployment.xml.BeanSchemaBinding] Creating schema binding took 453 milliseconds
+2008-11-13 16:54:40,280 DEBUG [org.jboss.kernel.plugins.bootstrap.standalone.StandaloneBootstrap] Deploying jar:file:/dati/project/wise-core/samples/MTOMSample/build/client/MTOMSample.jar!/META-INF/jboss-beans.xml
+2008-11-13 16:54:40,305 DEBUG [org.jboss.kernel.plugins.deployment.xml.BeanXMLDeployer] Parsing jar:file:/dati/project/wise-core/samples/MTOMSample/build/client/MTOMSample.jar!/META-INF/jboss-beans.xml took 25 milliseconds
+2008-11-13 16:54:40,324 DEBUG [org.jboss.kernel.plugins.deployment.xml.BeanXMLDeployer] Deploying jar:file:/dati/project/wise-core/samples/MTOMSample/build/client/MTOMSample.jar!/META-INF/jboss-beans.xml took 44 milliseconds
+2008-11-13 16:54:40,324 DEBUG [org.jboss.kernel.plugins.bootstrap.standalone.StandaloneBootstrap] Deployed jar:file:/dati/project/wise-core/samples/MTOMSample/build/client/MTOMSample.jar!/META-INF/jboss-beans.xml
+2008-11-13 16:54:40,390 DEBUG [org.jboss.wise.core.client.impl.reflection.builder.ReflectionBasedWSDynamicClientBuilder] Get usable WSDL :/home/oracle/temp/Wise0.xml
+2008-11-13 16:54:42,025 DEBUG [org.jboss.wise.core.client.factories.WSDynamicClientFactory] Create WSDynamicClient successfully
+2008-11-13 16:54:42,479 INFO  [org.jboss.kernel.plugins.bootstrap.standalone.StandaloneBootstrap] Shutting down
+2008-11-13 16:54:42,479 DEBUG [org.jboss.kernel.plugins.bootstrap.standalone.StandaloneBootstrap] Undeploying jar:file:/dati/project/wise-core/samples/MTOMSample/build/client/MTOMSample.jar!/META-INF/jboss-beans.xml
+2008-11-13 16:54:42,482 DEBUG [org.jboss.kernel.plugins.bootstrap.standalone.StandaloneBootstrap] Undeployed jar:file:/dati/project/wise-core/samples/MTOMSample/build/client/MTOMSample.jar!/META-INF/jboss-beans.xml
