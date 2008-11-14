@@ -91,6 +91,10 @@
 	<target name="deployTestWS" depends="jar" description="Deploys the server side archive of the current test">
 		<copy todir="${JBossHome}/server/${ServerConfig}/deploy/" file="${build.server.dir}/${ant.project.name}.war" />
 	</target>
+	
+    <target name="undeployTestWS" depends="jar" description="Undeploys the server side archive of the current test">
+    	<delete file="${JBossHome}/server/${ServerConfig}/deploy/${ant.project.name}.war"/>
+    </target>
 
 	<target name="runTest" depends="jar" description="Run the current test">
  		<java classpathref="run.classpath" classname="${MainClass}" fork="true" jvm="${JavaHome}/bin/java">
