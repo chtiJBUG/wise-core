@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="samples/MTOMSample/src/server"/>
-	<classpathentry kind="src" path="samples/MTOMSample/src/client"/>
 	<classpathentry kind="src" path="test-src"/>
 	<classpathentry kind="src" path="samples/helloWorld/src/client"/>
 	<classpathentry kind="src" path="samples/helloWorld/src/server"/>
@@ -12,6 +10,8 @@
 	<classpathentry kind="src" path="samples/usingSmooks/src/server"/>
 	<classpathentry kind="src" path="samples/interactiveHelloWorldJDK6/src/client"/>
 	<classpathentry kind="src" path="samples/interactiveHelloWorldJDK6/src/server"/>
+	<classpathentry kind="src" path="samples/MTOMSample/src/client"/>
+	<classpathentry kind="src" path="samples/MTOMSample/src/server"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/jboss-microcontainer.jar"/>
 	<classpathentry kind="lib" path="lib/smooks/milyn-smooks-core-1.0.1.jar"/>
@@ -36,5 +36,6 @@
 	<classpathentry kind="lib" path="lib/jbossws-native-jaxws.jar"/>
 	<classpathentry kind="lib" path="lib/commons-io-1.4.jar"/>
 	<classpathentry kind="lib" path="lib/activation.jar"/>
+	<classpathentry kind="lib" path="lib/dozer-4.2.1.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>

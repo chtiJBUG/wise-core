@@ -25,11 +25,11 @@ package org.jboss.wise.core.client.impl.reflection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import net.jcip.annotations.Immutable;
+import net.jcip.annotations.ThreadSafe;
 import org.jboss.wise.core.client.InvocationResult;
 import org.jboss.wise.core.exception.MappingException;
 import org.jboss.wise.core.mapper.WiseMapper;
-import net.jcip.annotations.Immutable;
-import net.jcip.annotations.ThreadSafe;
 
 /**
  * Holds the webservice's invocation result's data. Can apply a mapping to custom object using a WiseMapper passed to
@@ -51,6 +51,7 @@ public class InvocationResultImpl implements InvocationResult {
     public InvocationResultImpl( String name,
                                  Object value,
                                  Map<String, Object> results ) {
+
         this.originalObjects = new HashMap<String, Object>();
         if (results == null) {
             results = Collections.EMPTY_MAP;
