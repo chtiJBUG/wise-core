@@ -33,6 +33,7 @@
 	<path id="build.classpath">
 		<fileset dir="${lib.dir}">
 			<include name="*.jar" />
+			<exclude name="jaxws-rt-orig.jar" />
 		</fileset>
 		<fileset dir="${smooks.lib.dir}">
 			<include name="*.jar" />
