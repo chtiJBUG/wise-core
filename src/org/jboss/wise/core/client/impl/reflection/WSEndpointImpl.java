@@ -33,6 +33,7 @@ import javax.xml.ws.handler.Handler;
 import javax.xml.ws.soap.SOAPBinding;
 import org.jboss.wise.core.client.WSEndpoint;
 import org.jboss.wise.core.client.WSMethod;
+import org.jboss.ws.core.StubExt;
 import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
 
@@ -189,4 +190,12 @@ public class WSEndpointImpl implements WSEndpoint {
         ((SOAPBinding)((BindingProvider)underlyingObjectInstance).getBinding()).setMTOMEnabled(true);
     }
 
+    //So far this method only supports jbossws native 
+    //TODO: Revisit to see how to support Metro
+    public void setSecurityConfig(String configFileUrl) {
+         if (getUnderlyingObjectInstance() instanceof StubExt)   {
+             ((StubExt)getUnderlyingObjectInstance()).setSecurityConfig(configFileUrl);
+             ((StubExt)getUnderlyingObjectInstance()).setConfigName("Standard WSSecurity Client");         
+         }
+    }
 }

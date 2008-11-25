@@ -30,10 +30,22 @@
 
 	<target name="build-test-wars" description="Build the test war for deployments">
 		<mkdir dir="${wswar.output.dir}" />
+                <!--Integration test for basic--> 
 		<war warfile="${wswar.output.dir}/basic.war" webxml="${test.resources.dir}/integration/test/basic/WEB-INF/web.xml">
 			<classes dir="${test.classes.dir}">
 				<include name="org/jboss/wise/test/integration/basic/**/*.class" />
 				<include name="org/jboss/wise/test/integration/basic/**/*.xml" />
+			</classes>
+		</war>
+
+                <!--Integration test for WSSE--> 
+                <war warfile="${wswar.output.dir}/wsse.war" webxml="${test.resources.dir}/integration/test/wsse/WEB-INF/web.xml">
+                        <webinf dir="${test.resources.dir}/integration/test/wsse/WEB-INF/">
+                              <include name="*"/>                             
+                       </webinf>
+
+                        <classes dir="${test.classes.dir}">
+				<include name="org/jboss/wise/test/integration/wsse/**/*.class" />
 			</classes>
 		</war>
 	</target>

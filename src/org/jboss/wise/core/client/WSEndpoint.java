@@ -31,6 +31,7 @@ import net.jcip.annotations.ThreadSafe;
  * This represent a Endpoint(Port) and has utility methods to edit username, password, endpoint address, attach handlers
  * 
  * @author Stefano Maestri, stefano.maestri@javalinux.it
+ * @author <a href="ema@redhat.com">Jim Ma</a> 
  */
 @ThreadSafe
 public interface WSEndpoint {
@@ -70,5 +71,12 @@ public interface WSEndpoint {
 
     @GuardedBy( "this" )
     public void enableMTOM();
+    
+    
+    /**
+     * Set the security configuration file name to enable WS-Security
+     * @param configFileURL Configure file URL
+     */
+    public void setSecurityConfig(String configFileURL);
 
 }
