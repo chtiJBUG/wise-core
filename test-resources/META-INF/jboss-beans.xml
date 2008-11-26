@@ -14,7 +14,7 @@
 	<bean name="WiseClientConfiguration" class="org.jboss.wise.core.jbossmc.beans.WiseClientConfiguration" >
         <property name="defaultUserName">foo</property>
         <property name="defaultPassword">pwd</property>
-        <property name="defaultTmpDeployDir">/home/oracle/temp</property>
+        <property name="defaultTmpDeployDir">temp</property>
         <property name="logConfig">./test-resources/META-INF/wise-log4j.xml</property>
     </bean>
     

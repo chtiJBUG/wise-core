@@ -50,7 +50,7 @@ public class MicroContainerSpiIndirectTest {
 
     @Test
     public void shouldGetTmpDirByIOCFromWiseConfiguration() throws Exception {
-        assertThat(config.getDefaultTmpDeployDir(), equalTo("/home/oracle/temp"));
+        assertThat(config.getDefaultTmpDeployDir(), equalTo("temp"));
     }
 
     @Test
