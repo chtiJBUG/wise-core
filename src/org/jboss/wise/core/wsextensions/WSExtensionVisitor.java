@@ -19,16 +19,20 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
+package org.jboss.wise.core.wsextensions;
 
-package org.jboss.wise.core.jbossmc;
+import org.jboss.wise.core.client.WSEndpoint;
 
 /**
  * @author stefano.maestri@javalinux.it
  */
-public enum BeansNames {
-    WSDynamicClientFactory,
-    WiseClientConfiguration,
-    WSConsumer,
-    WSExtensionVisitor
+public interface WSExtensionVisitor {
 
+    public void visitWSSecurity( WSEndpoint endpoint ) throws UnsupportedOperationException;
+
+    public void visitWSRM( WSEndpoint endpoint ) throws UnsupportedOperationException;
+
+    public void visitWSAddressing( WSEndpoint endpoint ) throws UnsupportedOperationException;
+
+    public void visitMTOM( WSEndpoint endpoint ) throws UnsupportedOperationException;
 }

@@ -26,12 +26,13 @@ import java.util.Map;
 import javax.xml.ws.handler.Handler;
 import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
+import org.jboss.wise.core.wsextensions.WSExtensionEnabler;
 
 /**
  * This represent a Endpoint(Port) and has utility methods to edit username, password, endpoint address, attach handlers
  * 
  * @author Stefano Maestri, stefano.maestri@javalinux.it
- * @author <a href="ema@redhat.com">Jim Ma</a> 
+ * @author <a href="ema@redhat.com">Jim Ma</a>
  */
 @ThreadSafe
 public interface WSEndpoint {
@@ -70,13 +71,6 @@ public interface WSEndpoint {
     public ClassLoader getClassLoader();
 
     @GuardedBy( "this" )
-    public void enableMTOM();
-    
-    
-    /**
-     * Set the security configuration file name to enable WS-Security
-     * @param configFileURL Configure file URL
-     */
-    public void setSecurityConfig(String configFileURL);
+    public void addWSExtension( WSExtensionEnabler enabler );
 
 }

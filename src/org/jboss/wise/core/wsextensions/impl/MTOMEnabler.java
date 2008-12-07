@@ -19,16 +19,24 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
+package org.jboss.wise.core.wsextensions.impl;
 
-package org.jboss.wise.core.jbossmc;
+import org.jboss.wise.core.client.WSEndpoint;
+import org.jboss.wise.core.wsextensions.WSExtensionEnabler;
 
 /**
  * @author stefano.maestri@javalinux.it
  */
-public enum BeansNames {
-    WSDynamicClientFactory,
-    WiseClientConfiguration,
-    WSConsumer,
-    WSExtensionVisitor
+public class MTOMEnabler extends WSExtensionEnabler {
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see org.jboss.wise.core.wsextensions.WSExtensionEnabler#enable(WSEndpoint)
+     */
+    @Override
+    public void enable( WSEndpoint endpoint ) throws UnsupportedOperationException {
+        visitor.visitMTOM(endpoint);
+    }
 
 }

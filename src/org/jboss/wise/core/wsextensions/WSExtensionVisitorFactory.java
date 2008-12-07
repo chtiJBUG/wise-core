@@ -19,16 +19,24 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
+package org.jboss.wise.core.wsextensions;
 
-package org.jboss.wise.core.jbossmc;
+import org.jboss.wise.core.exception.MCKernelUnavailableException;
+import org.jboss.wise.core.jbossmc.BeansNames;
+import org.jboss.wise.core.jbossmc.MicroContainerSpi;
 
 /**
  * @author stefano.maestri@javalinux.it
  */
-public enum BeansNames {
-    WSDynamicClientFactory,
-    WiseClientConfiguration,
-    WSConsumer,
-    WSExtensionVisitor
+public class WSExtensionVisitorFactory {
+    /**
+     * Just return right instance from MC
+     * 
+     * @return an instance of concrete class implementing @see {@link WSExtensionVisitor}
+     * @throws MCKernelUnavailableException
+     */
+    public static synchronized WSExtensionVisitor getWSExtensionVisitorInstance() throws MCKernelUnavailableException {
+        return MicroContainerSpi.getKernelProvidedImplementation(BeansNames.WSExtensionVisitor.name(), WSExtensionVisitor.class);
+    }
 
 }

@@ -30,12 +30,11 @@ import java.util.TreeMap;
 import javax.jws.WebMethod;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.handler.Handler;
-import javax.xml.ws.soap.SOAPBinding;
-import org.jboss.wise.core.client.WSEndpoint;
-import org.jboss.wise.core.client.WSMethod;
-import org.jboss.ws.core.StubExt;
 import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
+import org.jboss.wise.core.client.WSEndpoint;
+import org.jboss.wise.core.client.WSMethod;
+import org.jboss.wise.core.wsextensions.WSExtensionEnabler;
 
 /**
  * This represent a WebEndpoint and has utility methods to edit username, password, endpoint address, attach handlers
@@ -60,8 +59,8 @@ public class WSEndpointImpl implements WSEndpoint {
 
     @GuardedBy( "this" )
     ClassLoader classLoader;
-    
-    private Map<String, WSMethod> wsMethods = Collections.synchronizedMap(new TreeMap<String, WSMethod>());
+
+    private final Map<String, WSMethod> wsMethods = Collections.synchronizedMap(new TreeMap<String, WSMethod>());
 
     public WSEndpointImpl() {
         this.wsMethods.clear();
@@ -186,16 +185,13 @@ public class WSEndpointImpl implements WSEndpoint {
         this.classLoader = classLoader;
     }
 
-    public synchronized void enableMTOM() {
-        ((SOAPBinding)((BindingProvider)underlyingObjectInstance).getBinding()).setMTOMEnabled(true);
+    /**
+     * {@inheritDoc}
+     * 
+     * @see org.jboss.wise.core.client.WSEndpoint#addWSExtension(org.jboss.wise.core.wsextensions.WSExtensionEnabler)
+     */
+    public void addWSExtension( WSExtensionEnabler enabler ) {
+        enabler.enable(this);
     }
 
-    //So far this method only supports jbossws native 
-    //TODO: Revisit to see how to support Metro
-    public void setSecurityConfig(String configFileUrl) {
-         if (getUnderlyingObjectInstance() instanceof StubExt)   {
-             ((StubExt)getUnderlyingObjectInstance()).setSecurityConfig(configFileUrl);
-             ((StubExt)getUnderlyingObjectInstance()).setConfigName("Standard WSSecurity Client");         
-         }
-    }
 }
