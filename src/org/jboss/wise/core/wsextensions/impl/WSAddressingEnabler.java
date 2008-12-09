@@ -25,11 +25,11 @@ import org.jboss.wise.core.client.WSEndpoint;
 import org.jboss.wise.core.wsextensions.WSExtensionEnabler;
 
 /**
- * It is the enabler for MTOM extension
+ * It is the enabler for WS-Addressing extension
  * 
  * @author stefano.maestri@javalinux.it
  */
-public class MTOMEnabler extends WSExtensionEnabler {
+public class WSAddressingEnabler extends WSExtensionEnabler {
 
     /**
      * {@inheritDoc}
@@ -38,7 +38,7 @@ public class MTOMEnabler extends WSExtensionEnabler {
      */
     @Override
     public void enable( WSEndpoint endpoint ) throws UnsupportedOperationException {
-        visitor.visitMTOM(endpoint);
+        visitor.visitWSAddressing(endpoint);
     }
 
 }

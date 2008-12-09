@@ -30,6 +30,9 @@ import org.jboss.wise.core.wsextensions.WSExtensionVisitor;
 import org.jboss.ws.core.StubExt;
 
 /**
+ * It is an implementation of {@link WSExtensionVisitor} providing operation needed to enable extension on jbossws-native stack
+ * using reflection to access generated classes.
+ * 
  * @author stefano.maestri@javalinux.it
  */
 public class ReflectionWSExtensionVisitor implements WSExtensionVisitor {
@@ -67,7 +70,10 @@ public class ReflectionWSExtensionVisitor implements WSExtensionVisitor {
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritDoc} Note it uses {@link NativeSecurityConfig} associated to passed endpoint with {@link #getSecurityConfigMap()}.
+     * If there isn't specific configuration associated to this endpoint {@link #getDefaultSecurityConfig()} is used. Note also if
+     * specific configuration doesn't define keystoreLocation or truststoreLocation they are taken form
+     * {@link #defaultSecurityConfig}.
      * 
      * @see org.jboss.wise.core.wsextensions.WSExtensionVisitor#visitWSSecurity(org.jboss.wise.core.client.WSEndpoint)
      */
@@ -93,7 +99,6 @@ public class ReflectionWSExtensionVisitor implements WSExtensionVisitor {
         System.setProperty("org.jboss.ws.wsse.trustStoreType", "jks");
 
         if (endpoint.getUnderlyingObjectInstance() instanceof StubExt) {
-            System.out.println("AAAAAAAAAAAAAAAAAAAAAAAA+" + securityConfig.getConfigFileURL());
             URL configFile = getClass().getClassLoader().getResource(securityConfig.getConfigFileURL());
             ((StubExt)endpoint.getUnderlyingObjectInstance()).setSecurityConfig(configFile.toExternalForm());
             ((StubExt)endpoint.getUnderlyingObjectInstance()).setConfigName(securityConfig.getConfigName());
@@ -102,6 +107,9 @@ public class ReflectionWSExtensionVisitor implements WSExtensionVisitor {
     }
 
     /**
+     * get security config Map<String, {@link NativeSecurityConfig}> where keys are {@link WSEndpoint} names. Intended to be used
+     * for IOC (jboss-beans.xml)
+     * 
      * @return securityConfigMap
      */
     public final Map<String, NativeSecurityConfig> getSecurityConfigMap() {
@@ -109,6 +117,9 @@ public class ReflectionWSExtensionVisitor implements WSExtensionVisitor {
     }
 
     /**
+     * set security config Map<String, {@link NativeSecurityConfig}> where keys are {@link WSEndpoint} names. Intended to be used
+     * for IOC (jboss-beans.xml)
+     * 
      * @param securityConfigMap Sets securityConfigMap to the specified value.
      */
     public final void setSecurityConfigMap( Map<String, NativeSecurityConfig> securityConfigMap ) {
@@ -116,6 +127,9 @@ public class ReflectionWSExtensionVisitor implements WSExtensionVisitor {
     }
 
     /**
+     * get default s {@link NativeSecurityConfig} used when {@link WSEndpoint} on which this visitor is enabling extensions isn't
+     * find in {@link #getSecurityConfigMap()} Intended to be used for IOC (jboss-beans.xml)
+     * 
      * @return defaultSecurityConfig
      */
     public final NativeSecurityConfig getDefaultSecurityConfig() {
@@ -123,6 +137,9 @@ public class ReflectionWSExtensionVisitor implements WSExtensionVisitor {
     }
 
     /**
+     * set default s {@link NativeSecurityConfig} used when {@link WSEndpoint} on which this visitor is enabling extensions isn't
+     * find in {@link #getSecurityConfigMap()} Intended to be used for IOC (jboss-beans.xml)
+     * 
      * @param defaultSecurityConfig Sets defaultSecurityConfig to the specified value.
      */
     public final void setDefaultSecurityConfig( NativeSecurityConfig defaultSecurityConfig ) {

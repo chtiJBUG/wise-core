@@ -25,6 +25,8 @@ import org.jboss.wise.core.client.WSEndpoint;
 import org.jboss.wise.core.wsextensions.WSExtensionEnabler;
 
 /**
+ * It is the enabler for WS-Security extension
+ * 
  * @author stefano.maestri@javalinux.it
  */
 public class WSSecurityEnabler extends WSExtensionEnabler {

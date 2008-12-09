@@ -68,8 +68,19 @@ public interface WSEndpoint {
      */
     public Map<String, WSMethod> getWSMethods();
 
+    /**
+     * @return classLoader used to load JAXWS generated object see also {@link #getUnderlyingObjectInstance()} and
+     *         {@link #getUnderlyingObjectClass()}
+     */
     public ClassLoader getClassLoader();
 
+    /**
+     * Use this method to add WSExtension you would enable on this endpoint. Of course extension have to be enabled before you cal
+     * method associated to action you are going to invoke. Not necessary before you build WSMethods object associated to this
+     * endpoint {@link #getWSMethods()} see also {@link WSExtensionEnabler} for more information on how to enable WSExtensions
+     * 
+     * @param enabler it is an implementation of {@link WSExtensionEnabler}
+     */
     @GuardedBy( "this" )
     public void addWSExtension( WSExtensionEnabler enabler );
 
