@@ -36,8 +36,8 @@ import org.jboss.wise.core.jbossmc.MicroContainerSpi;
  */
 public abstract class WSExtensionEnabler {
 
-    protected final WSExtensionVisitor visitor = MicroContainerSpi.getKernelProvidedImplementation(BeansNames.WSExtensionVisitor.name(),
-                                                                                                   WSExtensionVisitor.class);
+    protected WSExtensionVisitor visitor = MicroContainerSpi.getKernelProvidedImplementation(BeansNames.WSExtensionVisitor.name(),
+                                                                                             WSExtensionVisitor.class);
 
     /**
      * This is the call back method invoked by {@link WSEndpoint} to ask this extension to enable itself. Implementer should
@@ -52,8 +52,15 @@ public abstract class WSExtensionEnabler {
      * 
      * @return visitor
      */
-    final WSExtensionVisitor getVisitor() {
+    public final WSExtensionVisitor getVisitor() {
         return visitor;
+    }
+
+    /**
+     * @param visitor
+     */
+    public final void setVisitor( WSExtensionVisitor visitor ) {
+        this.visitor = visitor;
     }
 
 }
