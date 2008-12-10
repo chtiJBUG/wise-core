@@ -26,16 +26,16 @@ import java.util.Map;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.soap.SOAPBinding;
 import org.jboss.wise.core.client.WSEndpoint;
-import org.jboss.wise.core.wsextensions.WSExtensionVisitor;
+import org.jboss.wise.core.wsextensions.EnablerDelegate;
 import org.jboss.ws.core.StubExt;
 
 /**
- * It is an implementation of {@link WSExtensionVisitor} providing operation needed to enable extension on jbossws-native stack
+ * It is an implementation of {@link EnablerDelegate} providing operation needed to enable extension on jbossws-native stack
  * using reflection to access generated classes.
  * 
  * @author stefano.maestri@javalinux.it
  */
-public class ReflectionWSExtensionVisitor implements WSExtensionVisitor {
+public class ReflectionEnablerDelegate implements EnablerDelegate {
 
     Map<String, NativeSecurityConfig> securityConfigMap;
 
@@ -44,7 +44,7 @@ public class ReflectionWSExtensionVisitor implements WSExtensionVisitor {
     /**
      * {@inheritDoc}
      * 
-     * @see org.jboss.wise.core.wsextensions.WSExtensionVisitor#visitMTOM(org.jboss.wise.core.client.WSEndpoint)
+     * @see org.jboss.wise.core.wsextensions.EnablerDelegate#visitMTOM(org.jboss.wise.core.client.WSEndpoint)
      */
     public void visitMTOM( WSEndpoint endpoint ) throws UnsupportedOperationException {
         ((SOAPBinding)((BindingProvider)endpoint.getUnderlyingObjectInstance()).getBinding()).setMTOMEnabled(true);
@@ -54,7 +54,7 @@ public class ReflectionWSExtensionVisitor implements WSExtensionVisitor {
     /**
      * {@inheritDoc}
      * 
-     * @see org.jboss.wise.core.wsextensions.WSExtensionVisitor#visitWSAddressing(org.jboss.wise.core.client.WSEndpoint)
+     * @see org.jboss.wise.core.wsextensions.EnablerDelegate#visitWSAddressing(org.jboss.wise.core.client.WSEndpoint)
      */
     public void visitWSAddressing( WSEndpoint endpoint ) throws UnsupportedOperationException {
         throw new UnsupportedOperationException("Not yet implemented");
@@ -63,7 +63,7 @@ public class ReflectionWSExtensionVisitor implements WSExtensionVisitor {
     /**
      * {@inheritDoc}
      * 
-     * @see org.jboss.wise.core.wsextensions.WSExtensionVisitor#visitWSRM(org.jboss.wise.core.client.WSEndpoint)
+     * @see org.jboss.wise.core.wsextensions.EnablerDelegate#visitWSRM(org.jboss.wise.core.client.WSEndpoint)
      */
     public void visitWSRM( WSEndpoint endpoint ) throws UnsupportedOperationException {
         throw new UnsupportedOperationException("Not yet implemented");
@@ -75,7 +75,7 @@ public class ReflectionWSExtensionVisitor implements WSExtensionVisitor {
      * specific configuration doesn't define keystoreLocation or truststoreLocation they are taken form
      * {@link #defaultSecurityConfig}.
      * 
-     * @see org.jboss.wise.core.wsextensions.WSExtensionVisitor#visitWSSecurity(org.jboss.wise.core.client.WSEndpoint)
+     * @see org.jboss.wise.core.wsextensions.EnablerDelegate#visitWSSecurity(org.jboss.wise.core.client.WSEndpoint)
      */
     public void visitWSSecurity( WSEndpoint endpoint ) throws UnsupportedOperationException {
 

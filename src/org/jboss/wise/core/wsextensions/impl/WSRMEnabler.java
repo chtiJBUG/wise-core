@@ -38,6 +38,6 @@ public class WSRMEnabler extends WSExtensionEnabler {
      */
     @Override
     public void enable( WSEndpoint endpoint ) throws UnsupportedOperationException {
-        visitor.visitWSRM(endpoint);
+        delegate.visitWSRM(endpoint);
     }
 }

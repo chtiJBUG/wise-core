@@ -38,7 +38,7 @@ public class WSSecurityEnabler extends WSExtensionEnabler {
      */
     @Override
     public void enable( WSEndpoint endpoint ) throws UnsupportedOperationException {
-        visitor.visitWSSecurity(endpoint);
+        delegate.visitWSSecurity(endpoint);
     }
 
 }

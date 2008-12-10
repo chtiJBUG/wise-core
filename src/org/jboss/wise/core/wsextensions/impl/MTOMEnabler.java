@@ -38,7 +38,7 @@ public class MTOMEnabler extends WSExtensionEnabler {
      */
     @Override
     public void enable( WSEndpoint endpoint ) throws UnsupportedOperationException {
-        visitor.visitMTOM(endpoint);
+        delegate.visitMTOM(endpoint);
     }
 
 }

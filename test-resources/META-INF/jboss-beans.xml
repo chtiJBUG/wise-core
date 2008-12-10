@@ -49,8 +49,8 @@
 
 
 
-	<bean name="WSExtensionVisitor"
-		class="org.jboss.wise.core.wsextensions.impl.jbosswsnative.ReflectionWSExtensionVisitor">
+	<bean name="EnablerDelegate"
+		class="org.jboss.wise.core.wsextensions.impl.jbosswsnative.ReflectionEnablerDelegate">
 		<property name="securityConfigMap">
 			<map class="java.util.HashMap" keyClass="java.lang.String"
 				valueClass="java.lang.String">

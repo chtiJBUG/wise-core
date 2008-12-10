@@ -29,6 +29,6 @@ public enum BeansNames {
     WSDynamicClientFactory,
     WiseClientConfiguration,
     WSConsumer,
-    WSExtensionVisitor
+    EnablerDelegate
 
 }

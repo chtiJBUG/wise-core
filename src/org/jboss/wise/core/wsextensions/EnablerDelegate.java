@@ -25,15 +25,15 @@ import org.jboss.wise.core.client.WSEndpoint;
 
 /**
  * It is an interface defining a visitor pattern which is used by {@link WSExtensionEnabler} to delegate the effective work needed
- * to enable single extensions. The idea is to inject a {@link WSExtensionVisitor} implementations using IOC (aka jboss-beans.xml
+ * to enable single extensions. The idea is to inject a {@link EnablerDelegate} implementations using IOC (aka jboss-beans.xml
  * file) having the right implementation of extension enabling for current used JAX-WS stack and/or access type to generated
  * classes (reflection vs javassist). It is in fact the way used by wise-core to decouple enabling of extension and
- * operation/configurations needed to do so. You can always provide your own implementation of {@link WSExtensionVisitor} if you
+ * operation/configurations needed to do so. You can always provide your own implementation of {@link EnablerDelegate} if you
  * need something different during enabling of Extensions.
  * 
  * @author stefano.maestri@javalinux.it
  */
-public interface WSExtensionVisitor {
+public interface EnablerDelegate {
 
     public void visitWSSecurity( WSEndpoint endpoint ) throws UnsupportedOperationException;
 

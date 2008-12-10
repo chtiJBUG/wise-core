@@ -27,7 +27,7 @@ import net.jcip.annotations.ThreadSafe;
 
 /**
  * Contains configuration needed by jbossws-native to enable WS-Security Intended to be used by IOC (jboss-beans.xml) injected in
- * {@link ReflectionWSExtensionVisitor}
+ * {@link ReflectionEnablerDelegate}
  * 
  * @author stefano.maestri@javalinux.it
  */

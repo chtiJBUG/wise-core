@@ -38,6 +38,6 @@ public class BeansNameTest {
         assertThat(Arrays.asList(BeansNames.values()), hasItems(BeansNames.WiseClientConfiguration,
                                                                 BeansNames.WSConsumer,
                                                                 BeansNames.WSDynamicClientFactory,
-                                                                BeansNames.WSExtensionVisitor));
+                                                                BeansNames.EnablerDelegate));
     }
 }

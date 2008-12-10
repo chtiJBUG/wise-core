@@ -38,7 +38,7 @@ public class WSAddressingEnabler extends WSExtensionEnabler {
      */
     @Override
     public void enable( WSEndpoint endpoint ) throws UnsupportedOperationException {
-        visitor.visitWSAddressing(endpoint);
+        delegate.visitWSAddressing(endpoint);
     }
 
 }
