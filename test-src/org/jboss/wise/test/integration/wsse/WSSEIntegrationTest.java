@@ -29,7 +29,7 @@ public class WSSEIntegrationTest extends WiseTest {
     public void testDeploy() throws Exception {
         URL wsdURL = new URL(getServerHostAndPort() + "/wsse/HelloWorld?wsdl");
         WSDynamicClientFactory factory = WSDynamicClientFactory.getInstance();
-        WSDynamicClient client = factory.getClient(wsdURL.toString());
+        WSDynamicClient client = factory.getJAXWSClient(wsdURL.toString());
         WSMethod method = client.getWSMethod("HelloService", "HelloImplPort", "echoUserType");
         WSEndpoint wsEndpoint = method.getEndpoint();
 

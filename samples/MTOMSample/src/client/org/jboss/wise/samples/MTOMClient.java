@@ -46,7 +46,7 @@ public class MTOMClient {
      */
     public static void main( String[] args ) {
         try {
-            WSDynamicClient client = WSDynamicClientFactory.getInstance().getClient("http://127.0.0.1:8080/MTOMSample/MTOMWS?wsdl");
+            WSDynamicClient client = WSDynamicClientFactory.getInstance().getJAXWSClient("http://127.0.0.1:8080/MTOMSample/MTOMWS?wsdl");
             WSMethod method = client.getWSMethod("MTOMWSService", "MTOMPort", "sayHello");
             method.getEndpoint().addWSExtension(new MTOMEnabler());
             method.getEndpoint().addHandler(new LoggingHandler());

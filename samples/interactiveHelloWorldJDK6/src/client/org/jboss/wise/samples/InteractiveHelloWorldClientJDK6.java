@@ -46,7 +46,7 @@ public class InteractiveHelloWorldClientJDK6 {
      */
     public static void main( String[] args ) {
         try {
-            WSDynamicClient client = WSDynamicClientFactory.getInstance().getClient("http://127.0.0.1:8080/InteractiveHelloWorldJDK6/InteractiveHelloWorldWSJDK6?wsdl");
+            WSDynamicClient client = WSDynamicClientFactory.getInstance().getJAXWSClient("http://127.0.0.1:8080/InteractiveHelloWorldJDK6/InteractiveHelloWorldWSJDK6?wsdl");
             Map<String, WSService> services = client.processServices();
             System.out.println("Available services are:");
             for (String key : services.keySet()) {

@@ -113,9 +113,9 @@ public abstract class WSDynamicClientFactory {
         return factory;
     }
 
-    public WSDynamicClient getClient( String wsdlURL )
+    public WSDynamicClient getJAXWSClient( String wsdlURL )
         throws IllegalStateException, WiseConnectionException, WiseRuntimeException {
-        return this.getClient(wsdlURL, null, null, null, null, null);
+        return this.getJAXWSClient(wsdlURL, null, null, null, null, null);
     }
 
     /**
@@ -129,25 +129,27 @@ public abstract class WSDynamicClientFactory {
      * @throws WiseConnectionException thrown in case wsdl isn't accessible at given URL
      * @throws WiseRuntimeException
      */
-    public WSDynamicClient getClient( String wsdlURL,
-                                      String userName,
-                                      String password )
+    public WSDynamicClient getJAXWSClient( String wsdlURL,
+                                           String userName,
+                                           String password )
         throws IllegalStateException, WiseConnectionException, WiseRuntimeException {
-        return this.getClient(wsdlURL, userName, password, null, null, null);
+        return this.getJAXWSClient(wsdlURL, userName, password, null, null, null);
     }
 
-    public WSDynamicClient getClient( String wsdlURL,
-                                      List<File> bindings,
-                                      File catelog ) throws IllegalStateException, WiseConnectionException, WiseRuntimeException {
-        return this.getClient(wsdlURL, null, null, null, bindings, catelog);
+    public WSDynamicClient getJAXWSClient( String wsdlURL,
+                                           List<File> bindings,
+                                           File catelog )
+        throws IllegalStateException, WiseConnectionException, WiseRuntimeException {
+        return this.getJAXWSClient(wsdlURL, null, null, null, bindings, catelog);
     }
 
-    public WSDynamicClient getClient( String wsdlURL,
-                                      String userName,
-                                      String password,
-                                      String targetPackage,
-                                      List<File> bindings,
-                                      File catelog ) throws IllegalStateException, WiseConnectionException, WiseRuntimeException {
+    public WSDynamicClient getJAXWSClient( String wsdlURL,
+                                           String userName,
+                                           String password,
+                                           String targetPackage,
+                                           List<File> bindings,
+                                           File catelog )
+        throws IllegalStateException, WiseConnectionException, WiseRuntimeException {
         WSDynamicClientBuilder builder = this.createBuilder();
         builder.tmpDir(config.getDefaultTmpDeployDir()).bindingFiles(bindings).catelogFile(catelog).wsdlURL(wsdlURL);
         builder.targetPackage(targetPackage);
