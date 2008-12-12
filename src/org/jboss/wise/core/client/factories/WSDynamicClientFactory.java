@@ -182,7 +182,7 @@ public abstract class WSDynamicClientFactory {
      */
     public RSDynamicClient getJAXRSClient( String endpointURL,
                                            RSDynamicClient.HttpMethod httpMethod,
-                                           RSDynamicClient.ContentType contentType,
+                                           String contentType,
                                            String userName,
                                            String password ) {
         // to be implemented

@@ -39,31 +39,6 @@ import org.jboss.wise.core.mapper.WiseMapper;
 public interface RSDynamicClient {
 
     /**
-     * JAXRS content type supported by Wise
-     * 
-     * @author stefano.maestri@javalinux.it
-     */
-    public enum ContentType {
-        XML("application/xml"),
-        ATOM("application/atom+xml"),
-        JSON("text/x-json"),
-        FASTINFOSET("application/fastinfoset ");
-
-        private final String httpContentTypeString;
-
-        private ContentType( String s ) {
-            this.httpContentTypeString = s;
-        }
-
-        /**
-         * @return httpContentTypeString
-         */
-        final String getHttpContentTypeString() {
-            return httpContentTypeString;
-        }
-    }
-
-    /**
      * JAXRS HTTP Method supported by Wise
      * 
      * @author stefano.maestri@javalinux.it
