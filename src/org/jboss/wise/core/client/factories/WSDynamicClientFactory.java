@@ -32,6 +32,7 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.apache.log4j.helpers.NullEnumeration;
 import org.apache.log4j.xml.DOMConfigurator;
+import org.jboss.wise.core.client.RSDynamicClient;
 import org.jboss.wise.core.client.WSDynamicClient;
 import org.jboss.wise.core.client.WSDynamicClientCache;
 import org.jboss.wise.core.client.builder.WSDynamicClientBuilder;
@@ -167,6 +168,41 @@ public abstract class WSDynamicClientFactory {
         }
         log.debug("Create WSDynamicClient successfully");
         return client;
+    }
+
+    /**
+     * Return an instance of RSDynamicClient taken from cache if possible, generate and initialise if not.
+     * 
+     * @param endpointURL
+     * @param httpMethod
+     * @param contentType
+     * @param userName
+     * @param password
+     * @return an instance of {@link RSDynamicClient} already initialized, ready to be called
+     */
+    public RSDynamicClient getJAXRSClient( String endpointURL,
+                                           RSDynamicClient.HttpMethod httpMethod,
+                                           RSDynamicClient.ContentType contentType,
+                                           String userName,
+                                           String password ) {
+        // to be implemented
+        return null;
+
+    }
+
+    /**
+     * Return an instance of RSDynamicClient taken from cache if possible, generate and initialise if not.
+     * 
+     * @param endpointURL
+     * @param httpMethod
+     * @param contentType
+     * @return an instance of {@link RSDynamicClient} already initialized, ready to be called
+     */
+    public RSDynamicClient getJAXRSClient( String endpointURL,
+                                           RSDynamicClient.HttpMethod httpMethod,
+                                           RSDynamicClient.ContentType contentType ) {
+        return this.getJAXRSClient(endpointURL, httpMethod, contentType, null, null);
+
     }
 
     public final WiseClientConfiguration getConfig() {
