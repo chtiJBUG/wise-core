@@ -71,9 +71,9 @@ public interface RSDynamicClient {
     public HttpMethod getHttpMethod();
 
     /**
-     * @return {@link ContentType} used to call the resource ({@link #getResourceURI()})
+     * @return content type used to call the resource ({@link #getResourceURI()})
      */
-    public ContentType getContentType();
+    public String getContentType();
 
     /**
      * Invoke JAXRS service.
