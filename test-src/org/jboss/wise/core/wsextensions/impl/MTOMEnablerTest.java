@@ -19,29 +19,37 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
+package org.jboss.wise.core.wsextensions.impl;
 
-package org.jboss.wise.core.mapper;
-
-import java.util.Map;
-import net.jcip.annotations.ThreadSafe;
-import org.jboss.wise.core.exception.MappingException;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import org.jboss.wise.core.client.impl.reflection.WSEndpointImpl;
+import org.jboss.wise.core.wsextensions.EnablerDelegate;
+import org.jboss.wise.core.wsextensions.WSExtensionEnabler;
+import org.jboss.wise.core.wsextensions.impl.jbosswsnative.ReflectionEnablerDelegate;
+import org.junit.Test;
 
 /**
- * It' a simple interface implemented by any mapper used within wise-core requiring a single method {@link #applyMapping(Object)}
- * 
  * @author stefano.maestri@javalinux.it
  */
-@ThreadSafe
-public interface WiseMapper {
+public class MTOMEnablerTest {
 
-    /**
-     * apply this mapping to original object
-     * 
-     * @param originalObjects
-     * @return the mapped object in a Map<String,Object>. Keys of this map normally represent symbolic name of mapped Object. For
-     *         JAXRS conventional key used for standard key/value pairs are "ContentType" and "JAXRSStream"
-     * @throws MappingException
-     */
-    public Map<String, Object> applyMapping( Object originalObjects ) throws MappingException;
+    private final WSExtensionEnabler enabler = new MTOMEnabler();
 
+    @Test
+    public void shouldFindVisitorImplWithIOC() {
+        assertThat(enabler.getDelegate(), is(ReflectionEnablerDelegate.class));
+    }
+
+    @Test
+    public void shouldDelegateToVisitor() {
+        EnablerDelegate delegate = mock(EnablerDelegate.class);
+        WSEndpointImpl ep = mock(WSEndpointImpl.class);
+        enabler.setDelegate(delegate);
+        enabler.enable(ep);
+        verify(delegate).visitMTOM(ep);
+
+    }
 }

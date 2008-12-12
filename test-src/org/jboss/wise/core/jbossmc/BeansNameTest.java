@@ -34,10 +34,10 @@ public class BeansNameTest {
 
     @Test
     public void shouldHaveValidValues() {
-        assertThat(BeansNames.values().length, is(3));
+        assertThat(BeansNames.values().length, is(4));
         assertThat(Arrays.asList(BeansNames.values()), hasItems(BeansNames.WiseClientConfiguration,
                                                                 BeansNames.WSConsumer,
-                                                                BeansNames.WSDynamicClientFactory));
+                                                                BeansNames.WSDynamicClientFactory,
+                                                                BeansNames.EnablerDelegate));
     }
-
 }

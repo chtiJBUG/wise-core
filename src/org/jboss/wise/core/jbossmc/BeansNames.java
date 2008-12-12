@@ -28,6 +28,7 @@ package org.jboss.wise.core.jbossmc;
 public enum BeansNames {
     WSDynamicClientFactory,
     WiseClientConfiguration,
-    WSConsumer
+    WSConsumer,
+    EnablerDelegate
 
 }

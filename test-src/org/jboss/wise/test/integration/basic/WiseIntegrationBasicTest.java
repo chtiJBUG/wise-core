@@ -48,7 +48,7 @@ public class WiseIntegrationBasicTest extends WiseTest {
         URL wsdURL = new URL(getServerHostAndPort() + "/basic/HelloWorld?wsdl");
         
         WSDynamicClientFactory factory =  WSDynamicClientFactory.getInstance();
-        WSDynamicClient client = factory.getClient(wsdURL.toString());
+        WSDynamicClient client = factory.getJAXWSClient(wsdURL.toString());
         WSMethod method = client.getWSMethod("HelloService", "HelloWorldBeanPort", "echo");
         Map<String, Object> args = new java.util.HashMap<String, Object>();
         args.put("arg0", "from-wise-client");

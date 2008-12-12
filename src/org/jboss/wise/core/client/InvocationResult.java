@@ -23,14 +23,15 @@
 package org.jboss.wise.core.client;
 
 import java.util.Map;
+import net.jcip.annotations.Immutable;
 import org.jboss.wise.core.exception.MappingException;
 import org.jboss.wise.core.mapper.WiseMapper;
-import net.jcip.annotations.Immutable;
 
 /**
- * Holds the webservice's invocation result's data. Normally this data are kept in Map<String, Object>, but implementor are free
- * to change internal data structure. Anyway it return a Map<String, Object> with webservice's call results, eventually applying a
- * mapping to custom object using a WiseMapper passed to {@link #getMappedResult(WiseMapper, Map)} methods
+ * Holds the webservice's (JAXWS or JAXRS) invocation result's data. Normally this data are kept in Map<String, Object> for JAXWS
+ * and a Stream or String for JAXR, but implementor are free to change internal data structure. Anyway it return a Map<String,
+ * Object> with webservice's call results, eventually applying a mapping to custom object using a WiseMapper passed to
+ * {@link #getMappedResult(WiseMapper, Map)} methods
  * 
  * @author stefano.maestri@javalinux.it
  * @since 29-07-2007
@@ -40,7 +41,9 @@ public interface InvocationResult {
 
     /**
      * Apply WiseMapper provided with to returned Object as defined in wsdl/wiseconsume generated objects. If mapper parameter is
-     * null, no mapping are applied and original object are returned.
+     * null, no mapping are applied and original object are returned. When no mapping applied you will have this answer: For JAXWS
+     * the original object answer are returned into this map; For JAXRS a Map contains 2 key/valuepair with keys "ContentType" and
+     * "JAXRSStream"
      * 
      * @param mapper a WiseMapper used to map JAX-WS generated object returned by method call to arbitrary custom object model. It
      *        could be null to don't apply any kind of mappings

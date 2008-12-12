@@ -44,7 +44,7 @@ public class HelloWorldSmooks {
      */
     public static void main( String[] args ) {
         try {
-            WSDynamicClient client = WSDynamicClientFactory.getInstance().getClient("http://127.0.0.1:8080/usingSmooks/ComplexWS?wsdl");
+            WSDynamicClient client = WSDynamicClientFactory.getInstance().getJAXWSClient("http://127.0.0.1:8080/usingSmooks/ComplexWS?wsdl");
             WSMethod method = client.getWSMethod("ComplexWSService", "ComplexWSPort", "ping");
             InternalObject internal = new InternalObject();
             internal.setNumber(new Integer(1));

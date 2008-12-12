@@ -28,10 +28,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import javax.xml.ws.WebEndpoint;
+import net.jcip.annotations.Immutable;
 import org.jboss.wise.core.client.WSEndpoint;
 import org.jboss.wise.core.client.WSService;
 import org.jboss.wise.core.exception.WiseRuntimeException;
-import net.jcip.annotations.Immutable;
 
 /**
  * @author stefano.maestri@javalinux.it
@@ -44,8 +44,7 @@ public class WSServiceImpl implements WSService {
     private final Object service;
     private final String userName;
     private final String password;
-    private Map<String, WSEndpoint> endpoints = Collections.synchronizedMap(new HashMap<String, WSEndpoint>());
-    
+    private final Map<String, WSEndpoint> endpoints = Collections.synchronizedMap(new HashMap<String, WSEndpoint>());
 
     /**
      * @param serviceClass
@@ -74,16 +73,17 @@ public class WSServiceImpl implements WSService {
      * @return The Map of WSEndpoint with symbolic names as keys
      */
     public Map<String, WSEndpoint> processEndpoints() {
-        if (endpoints.size() > 0 ) {
+        if (endpoints.size() > 0) {
             return endpoints;
         }
-        
+
         for (Method method : this.getServiceClass().getMethods()) {
             WebEndpoint annotation = method.getAnnotation(WebEndpoint.class);
             if (annotation != null) {
                 WSEndpoint ep;
                 try {
-                    ep = this.getWiseEndpoint(method);
+                    ep = this.getWiseEndpoint(method, annotation.name());
+
                     endpoints.put(annotation.name(), ep);
                 } catch (WiseRuntimeException e) {
                     e.printStackTrace();
@@ -94,7 +94,8 @@ public class WSServiceImpl implements WSService {
         return endpoints;
     }
 
-    private WSEndpoint getWiseEndpoint( Method method ) throws WiseRuntimeException {
+    private WSEndpoint getWiseEndpoint( Method method,
+                                        String name ) throws WiseRuntimeException {
         ClassLoader oldLoader = Thread.currentThread().getContextClassLoader();
         WSEndpointImpl ep = new WSEndpointImpl();
         try {
@@ -102,6 +103,7 @@ public class WSServiceImpl implements WSService {
             ep.setClassLoader(this.getClassLoader());
             ep.setUnderlyingObjectInstance(this.getServiceClass().getMethod(method.getName(), method.getParameterTypes()).invoke(this.getService(),
                                                                                                                                  (Object[])null));
+            ep.setName(name);
             ep.setUnderlyingObjectClass(this.getServiceClass().getMethod(method.getName(), method.getParameterTypes()).getReturnType());
             if (userName != null && password != null) {
                 ep.setUsername(userName);

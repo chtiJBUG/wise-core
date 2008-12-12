@@ -38,7 +38,6 @@
 	<classpathentry kind="lib" path="lib/jbossws-native-jaxws.jar"/>
 	<classpathentry kind="lib" path="lib/commons-io-1.4.jar"/>
 	<classpathentry kind="lib" path="lib/activation.jar"/>
-	<classpathentry kind="lib" path="lib/dozer-4.2.1.jar"/>
 	<classpathentry kind="lib" path="lib/jbossws-native-core.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>
