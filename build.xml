@@ -20,7 +20,7 @@
 		<ant antfile="${main.builder}" target="jar" />
 	</target>
 
-	<target name="release" depends="cleanAll,dist" description="prepare inary distribution">
+	<target name="release" depends="cleanAll,dist" description="prepare binary distribution">
 		<ant antfile="${main.builder}" target="copyLibForSample" />
 		<ant antfile="${main.builder}" target="javadoc" />
 		        
@@ -41,11 +41,11 @@
 	<target name="integrationTest" description="Runs regression tests">
 		<ant antfile="${integration.test.builder}" target="integrationTest" />
 	</target>
-    <target name="binaryRelease" depends="release">
+    <target name="binaryRelease" depends="release" description="Creates the binary release archive">
     	<tar destfile="${ant.project.name}-${Version}.tgz" compression="gzip">
-    	<fileset dir="${basedir}">
-    	    <exclude name="**/.svn/**"/>
-    		<exclude name="**/test-output/**"/>
+            <fileset dir="${basedir}">
+                <exclude name="**/.svn/**"/>
+                <exclude name="**/test-output/**"/>
     	    </fileset>
     	</tar>
     </target>
