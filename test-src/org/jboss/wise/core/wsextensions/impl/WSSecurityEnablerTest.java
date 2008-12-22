@@ -25,9 +25,11 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import java.util.HashMap;
 import org.jboss.wise.core.client.impl.reflection.WSEndpointImpl;
-import org.jboss.wise.core.wsextensions.WSExtensionEnabler;
 import org.jboss.wise.core.wsextensions.EnablerDelegate;
+import org.jboss.wise.core.wsextensions.WSExtensionEnabler;
+import org.jboss.wise.core.wsextensions.impl.jbosswsnative.NativeSecurityConfig;
 import org.jboss.wise.core.wsextensions.impl.jbosswsnative.ReflectionEnablerDelegate;
 import org.junit.Test;
 
@@ -50,6 +52,17 @@ public class WSSecurityEnablerTest {
         enabler.setDelegate(delegate);
         enabler.enable(ep);
         verify(delegate).visitWSSecurity(ep);
+
+    }
+
+    @Test( expected = IllegalStateException.class )
+    public void shouldThrowIllegalStateExceptionIfNoConfigSet() {
+        ReflectionEnablerDelegate delegate = new ReflectionEnablerDelegate();
+        delegate.setSecurityConfigMap(new HashMap<String, NativeSecurityConfig>());
+        delegate.setDefaultSecurityConfig(null);
+        WSEndpointImpl ep = mock(WSEndpointImpl.class);
+        enabler.setDelegate(delegate);
+        enabler.enable(ep);
 
     }
 }

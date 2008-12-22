@@ -78,7 +78,7 @@ public class ReflectionEnablerDelegate implements EnablerDelegate {
      * 
      * @see org.jboss.wise.core.wsextensions.EnablerDelegate#visitWSSecurity(org.jboss.wise.core.client.WSEndpoint)
      */
-    public void visitWSSecurity( WSEndpoint endpoint ) throws UnsupportedOperationException {
+    public void visitWSSecurity( WSEndpoint endpoint ) throws UnsupportedOperationException, IllegalStateException {
 
         NativeSecurityConfig securityConfig = securityConfigMap.get(endpoint.getMethodName());
 
@@ -86,18 +86,9 @@ public class ReflectionEnablerDelegate implements EnablerDelegate {
             securityConfig = defaultSecurityConfig;
         }
 
-        String keystoreLocation = securityConfig.getKeystoreLocation() != null ? securityConfig.getKeystoreLocation() : defaultSecurityConfig.getKeystoreLocation();
-        String trustStoreLocation = securityConfig.getTrustStoreLocation() != null ? securityConfig.getTrustStoreLocation() : defaultSecurityConfig.getTrustStoreLocation();
-
-        URL keystore = getClass().getClassLoader().getResource(keystoreLocation);
-        URL trustStore = getClass().getClassLoader().getResource(trustStoreLocation);
-
-        System.setProperty("org.jboss.ws.wsse.keyStore", keystore.getFile());
-        System.setProperty("org.jboss.ws.wsse.trustStore", trustStore.getFile());
-        System.setProperty("org.jboss.ws.wsse.keyStorePassword", "jbossws");
-        System.setProperty("org.jboss.ws.wsse.trustStorePassword", "jbossws");
-        System.setProperty("org.jboss.ws.wsse.keyStoreType", "jks");
-        System.setProperty("org.jboss.ws.wsse.trustStoreType", "jks");
+        if (securityConfig == null) {
+            throw new IllegalStateException("Configure at least a default NativeSecurityConfig for WSSE in jboss-beans.xml");
+        }
 
         if (endpoint.getUnderlyingObjectInstance() instanceof StubExt) {
             URL configFile = getClass().getClassLoader().getResource(securityConfig.getConfigFileURL());

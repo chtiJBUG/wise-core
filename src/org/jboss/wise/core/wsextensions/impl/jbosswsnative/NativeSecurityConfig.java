@@ -38,10 +38,6 @@ public class NativeSecurityConfig implements Serializable {
     private String configFileURL;
     @GuardedBy( "this" )
     private String configName;
-    @GuardedBy( "this" )
-    private String keystoreLocation;
-    @GuardedBy( "this" )
-    private String trustStoreLocation;
 
     /**
      * @return configFileURL
@@ -69,34 +65,6 @@ public class NativeSecurityConfig implements Serializable {
      */
     public final synchronized void setConfigName( String configName ) {
         this.configName = configName;
-    }
-
-    /**
-     * @return keystoreLocation
-     */
-    public final String getKeystoreLocation() {
-        return keystoreLocation;
-    }
-
-    /**
-     * @param keystoreLocation Sets keystoreLocation to the specified value.
-     */
-    public final void setKeystoreLocation( String keystoreLocation ) {
-        this.keystoreLocation = keystoreLocation;
-    }
-
-    /**
-     * @return trustStoreLocation
-     */
-    public final String getTrustStoreLocation() {
-        return trustStoreLocation;
-    }
-
-    /**
-     * @param trustStoreLocation Sets trustStoreLocation to the specified value.
-     */
-    public final void setTrustStoreLocation( String trustStoreLocation ) {
-        this.trustStoreLocation = trustStoreLocation;
     }
 
 }

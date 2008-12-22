@@ -28,14 +28,14 @@ import org.jboss.wise.core.client.WSEndpoint;
  * to enable single extensions. The idea is to inject a {@link EnablerDelegate} implementations using IOC (aka jboss-beans.xml
  * file) having the right implementation of extension enabling for current used JAX-WS stack and/or access type to generated
  * classes (reflection vs javassist). It is in fact the way used by wise-core to decouple enabling of extension and
- * operation/configurations needed to do so. You can always provide your own implementation of {@link EnablerDelegate} if you
- * need something different during enabling of Extensions.
+ * operation/configurations needed to do so. You can always provide your own implementation of {@link EnablerDelegate} if you need
+ * something different during enabling of Extensions.
  * 
  * @author stefano.maestri@javalinux.it
  */
 public interface EnablerDelegate {
 
-    public void visitWSSecurity( WSEndpoint endpoint ) throws UnsupportedOperationException;
+    public void visitWSSecurity( WSEndpoint endpoint ) throws UnsupportedOperationException, IllegalStateException;
 
     public void visitWSRM( WSEndpoint endpoint ) throws UnsupportedOperationException;
 
