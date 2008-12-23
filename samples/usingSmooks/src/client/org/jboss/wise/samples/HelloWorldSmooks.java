@@ -35,7 +35,7 @@ import org.jboss.wise.core.exception.WiseRuntimeException;
 import org.jboss.wise.core.mapper.SmooksMapper;
 
 /**
- * @author oracle
+ * @author stefano.maestri@javalinux.it
  */
 public class HelloWorldSmooks {
 

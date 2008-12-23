@@ -34,7 +34,7 @@ import org.jboss.wise.core.exception.MappingException;
 import org.jboss.wise.core.exception.WiseRuntimeException;
 
 /**
- * @author oracle
+ * @author stefano.maestri@javalinux.it
  */
 public class HelloWorldClient {
 

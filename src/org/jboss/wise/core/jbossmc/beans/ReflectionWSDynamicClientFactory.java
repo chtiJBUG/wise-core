@@ -27,7 +27,7 @@ import org.jboss.wise.core.client.factories.WSDynamicClientFactory;
 import org.jboss.wise.core.client.impl.reflection.builder.ReflectionBasedWSDynamicClientBuilder;
 
 /**
- * @author oracle
+ * @author stefano.maestri@javalinux.it
  */
 public class ReflectionWSDynamicClientFactory extends WSDynamicClientFactory {
 
