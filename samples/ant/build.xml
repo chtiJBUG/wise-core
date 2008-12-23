@@ -97,6 +97,9 @@
 		<war webxml="./resources/WEB-INF/web.xml" jarfile="${build.server.dir}/${ant.project.name}.war">
 			<fileset dir="${classes.java.server.dir}">
 			</fileset>
+			<webinf dir="./resources/WEB-INF">
+			    <include name="*"/>
+			</webinf>
 		</war>
 	</target>
 
