@@ -28,13 +28,14 @@ import javax.xml.ws.soap.SOAPBinding;
 import org.jboss.wise.core.client.WSEndpoint;
 import org.jboss.wise.core.wsextensions.EnablerDelegate;
 import org.jboss.ws.core.StubExt;
-import org.jboss.ws.extensions.addressing.jaxws.WSAddressingServerHandler;
+import org.jboss.ws.extensions.addressing.jaxws.WSAddressingClientHandler;
 
 /**
  * It is an implementation of {@link EnablerDelegate} providing operation needed to enable extension on jbossws-native stack using
  * reflection to access generated classes.
  * 
  * @author stefano.maestri@javalinux.it
+ * @author alessio.soldano@jboss.com
  */
 public class ReflectionEnablerDelegate implements EnablerDelegate {
 
@@ -58,7 +59,7 @@ public class ReflectionEnablerDelegate implements EnablerDelegate {
      * @see org.jboss.wise.core.wsextensions.EnablerDelegate#visitWSAddressing(org.jboss.wise.core.client.WSEndpoint)
      */
     public void visitWSAddressing( WSEndpoint endpoint ) throws UnsupportedOperationException {
-        endpoint.addHandler(new WSAddressingServerHandler());
+        endpoint.addHandler(new WSAddressingClientHandler());
     }
 
     /**
