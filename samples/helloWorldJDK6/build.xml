@@ -3,7 +3,7 @@
      29 Sep 2008 16:36:29                                                        
                                                           
      ====================================================================== -->
-<project name="HelloWorldJDK6" basedir=".">
+<project name="HelloWorldJDK6" default="compile" basedir=".">
 
 
 	<property name="MainClass" value="org.jboss.wise.samples.HelloWorldClientJDK6">

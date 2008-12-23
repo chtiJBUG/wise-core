@@ -22,6 +22,7 @@
 
 package org.jboss.wise.samples;
 
+import java.net.ConnectException;
 import java.util.HashMap;
 import java.util.Map;
 import org.jboss.wise.core.client.InvocationResult;
@@ -33,11 +34,10 @@ import org.jboss.wise.core.client.factories.WSDynamicClientFactory;
 import org.jboss.wise.core.exception.InvocationException;
 import org.jboss.wise.core.exception.MCKernelUnavailableException;
 import org.jboss.wise.core.exception.MappingException;
-import org.jboss.wise.core.exception.WiseConnectionException;
 import org.jboss.wise.core.exception.WiseRuntimeException;
 
 /**
- * @author oracle
+ * @author stefano.maestri@javalinux.it
  */
 public class InteractiveHelloWorldClientJDK6 {
 
@@ -71,9 +71,7 @@ public class InteractiveHelloWorldClientJDK6 {
             InvocationResult result = method.invoke(requestMap, null);
             System.out.println(result.getMapRequestAndResult(null, null));
             System.out.println(result.getMapRequestAndResult(null, requestMap));
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-        } catch (WiseConnectionException e) {
+        } catch (ConnectException e) {
             e.printStackTrace();
         } catch (WiseRuntimeException e) {
             e.printStackTrace();
@@ -84,6 +82,8 @@ public class InteractiveHelloWorldClientJDK6 {
         } catch (InvocationException e) {
             e.printStackTrace();
         } catch (MappingException e) {
+            e.printStackTrace();
+        } catch (IllegalStateException e) {
             e.printStackTrace();
         }
     }
