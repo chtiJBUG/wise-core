@@ -13,6 +13,7 @@
 	<property name="build.server.dir" value="build/server" />
 	<property name="src.java.client.dir" value="src/client" />
 	<property name="src.java.server.dir" value="src/server" />
+	<property name="classes.dir" value="classes" />
 	<property name="classes.java.client.dir" value="classes/client" />
 	<property name="classes.java.server.dir" value="classes/server" />
 
@@ -65,8 +66,10 @@
 	<target name="clean">
 		<delete dir="${classes.java.client.dir}" />
 		<delete dir="${classes.java.server.dir}" />
+		<delete dir="${classes.dir}" />
 		<delete dir="${build.client.dir}" />
 		<delete dir="${build.server.dir}" />
+                <delete dir="${build.dir}" />
 	</target>
 
 	<target name="prepare">
