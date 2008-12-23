@@ -188,7 +188,7 @@ public class WSMethodImplTest {
         stub(endPointMock.getUnderlyingObjectInstance()).toReturn(this);
         WSMethodImpl wsMethod = new WSMethodImpl(method, endPointMock);
         InvocationResult invocationResults = wsMethod.invoke(Collections.EMPTY_MAP);
-        Map<String, Object> results = invocationResults.getMappedResult(null, null);
+        Map<String, Object> results = invocationResults.getMapRequestAndResult(null, null);
         assertThat(this.methodWorked, is(true));
         assertThat(results.size(), is(1));
         assertThat(((Map)results.get("results")).isEmpty(), is(true));
@@ -207,7 +207,7 @@ public class WSMethodImplTest {
         inputMap.put("annotaion1", Integer.valueOf(3));
         InvocationResult invocationResults = wsMethod.invoke(inputMap);
         assertThat(this.methodWorked, is(true));
-        Map<String, Object> results = (Map)invocationResults.getMappedResult(null, null).get("results");
+        Map<String, Object> results = (Map)invocationResults.getMapRequestAndResult(null, null).get("results");
         assertThat(results.size(), is(3));
         assertThat(results, hasEntry("result", (Object)"great"));
         assertThat(results, hasEntry("annotation2", (Object)"foo2"));
@@ -229,7 +229,7 @@ public class WSMethodImplTest {
         stub(mapper.applyMapping(anyObject())).toReturn(inputMap);
         InvocationResult invocationResults = wsMethod.invoke(inputMap, mapper);
         assertThat(this.methodWorked, is(true));
-        Map<String, Object> results = (Map)invocationResults.getMappedResult(null, null).get("results");
+        Map<String, Object> results = (Map)invocationResults.getMapRequestAndResult(null, null).get("results");
         assertThat(results.size(), is(3));
         assertThat(results, hasEntry("result", (Object)"great"));
         assertThat(results, hasEntry("annotation2", (Object)"foo2"));

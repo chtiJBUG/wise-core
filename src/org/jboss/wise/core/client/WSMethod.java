@@ -41,12 +41,7 @@ public interface WSMethod {
      * Invokes this method with the provided arguments applying provided mapper
      * 
      * @param args the arguments to call operation. It could be a generic Object to be passed to provided mapper. If mapper is
-     *        null args must be a Map<String, Object>. This Map have to contain entries for all needed parameters, keys have to
-     *        reflect operation parameter name as defined in wsdl. Keys which names are not defined in wsdls will be simply
-     *        ignored. Implementation will take care values nullability will reflect "nillable" properties defined in wsdl. order
-     *        isn't important since WSMethod implementation will take care of reorder parameters in right position to make
-     *        operation call. If it isn't a Map<String, Object> or keys don't contain all parameters name an
-     *        {@link IllegalArgumentException} is thrown.
+     *        null it works exactly like {@link #invoke(Object)}
      * @param mapper if null no mappings are applied method will be invoked using args directly. in this case the keys of the map
      *        gotta be the parameters names as defined in wsdl/wsconsume generated classes
      * @return return an {@link InvocationResult} object populated with returned values (implementation will process both directed
@@ -57,6 +52,23 @@ public interface WSMethod {
      */
     public InvocationResult invoke( Object args,
                                     WiseMapper mapper ) throws InvocationException, IllegalArgumentException, MappingException;
+
+    /**
+     * Invokes this method with the provided arguments
+     * 
+     * @param args the arguments to call operation. args must be a Map<String, Object>. This Map have to contain entries for all
+     *        needed parameters, keys have to reflect operation parameter name as defined in wsdl. Keys which names are not
+     *        defined in wsdls will be simply ignored. Implementation will take care values nullability will reflect "nillable"
+     *        properties defined in wsdl. order isn't important since WSMethod implementation will take care of reorder parameters
+     *        in right position to make operation call. If it isn't a Map<String, Object> or keys don't contain all parameters
+     *        name an {@link IllegalArgumentException} is thrown.
+     * @return return an {@link InvocationResult} object populated with returned values (implementation will process both directed
+     *         returned values and OUT parameters as defined in wsdl)
+     * @throws InvocationException
+     * @throws IllegalArgumentException
+     * @throws MappingException
+     */
+    public InvocationResult invoke( Object args ) throws InvocationException, IllegalArgumentException, MappingException;
 
     /**
      * Gets the map of {@link WebParameter} for the webserice method represented by instance of this type

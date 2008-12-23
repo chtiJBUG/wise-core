@@ -54,7 +54,7 @@ public class HelloWorldSmooks {
             external.setInternal(internal);
             // without smooks debug infos
             InvocationResult result = method.invoke(external, new SmooksMapper("./smooks-config-XMLGregorianCalendar.xml"));
-            System.out.println(result.getMappedResult(new SmooksMapper("./smooks-response-config.xml"), null));
+            System.out.println(result.getMapRequestAndResult(new SmooksMapper("./smooks-response-config.xml"), null));
             // with smooks debug infos
             // InvocationResult result = method.invoke(external, new SmooksMapper("./smooks-config-XMLGregorianCalendar.xml",
             // "./smooks-inputReport.html"));

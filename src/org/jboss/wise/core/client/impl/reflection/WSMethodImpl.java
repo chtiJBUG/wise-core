@@ -33,6 +33,7 @@ import java.util.Map;
 import javax.jws.Oneway;
 import javax.jws.WebParam;
 import net.jcip.annotations.ThreadSafe;
+import org.jboss.wise.core.client.InvocationResult;
 import org.jboss.wise.core.client.WSEndpoint;
 import org.jboss.wise.core.client.WSMethod;
 import org.jboss.wise.core.exception.InvocationException;
@@ -133,6 +134,15 @@ public class WSMethodImpl implements WSMethod {
         }
         return this.invoke(mappingResults);
 
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see org.jboss.wise.core.client.WSMethod#invoke(java.lang.Object)
+     */
+    public InvocationResult invoke( Object args ) throws InvocationException, IllegalArgumentException, MappingException {
+        return this.invoke(args, null);
     }
 
     /**

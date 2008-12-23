@@ -33,7 +33,7 @@ import org.jboss.wise.core.mapper.WiseMapper;
 
 /**
  * Holds the webservice's invocation result's data. Can apply a mapping to custom object using a WiseMapper passed to
- * {@link #getMappedResult(WiseMapper,Map)} methods
+ * {@link #getMapRequestAndResult(WiseMapper, Map)} methods
  * 
  * @author stefano.maestri@javalinux.it
  */
@@ -74,8 +74,8 @@ public class InvocationResultImpl implements InvocationResult {
      */
     // TODO: demostrate with unit test how it can be used for message enrichement in same class loader and
     // integrating input and output in same object model
-    public Map<String, Object> getMappedResult( WiseMapper mapper,
-                                                Map<String, Object> inputMap ) throws MappingException {
+    public Map<String, Object> getMapRequestAndResult( WiseMapper mapper,
+                                                       Map<String, Object> inputMap ) throws MappingException {
 
         if (inputMap == null) {
             inputMap = new HashMap<String, Object>();
@@ -89,6 +89,24 @@ public class InvocationResultImpl implements InvocationResult {
         }
         return mappedResult;
 
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see org.jboss.wise.core.client.InvocationResult#getMappedResult(org.jboss.wise.core.mapper.WiseMapper)
+     */
+    public Map<String, Object> getMappedResult( WiseMapper mapper ) throws MappingException {
+        return this.getMapRequestAndResult(mapper, null);
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see org.jboss.wise.core.client.InvocationResult#getResult()
+     */
+    public Map<String, Object> getResult() {
+        return originalObjects;
     }
 
 }

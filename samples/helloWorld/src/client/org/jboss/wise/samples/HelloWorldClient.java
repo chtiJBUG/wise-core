@@ -48,8 +48,8 @@ public class HelloWorldClient {
             HashMap<String, Object> requestMap = new HashMap<String, Object>();
             requestMap.put("toWhom", "SpiderMan");
             InvocationResult result = method.invoke(requestMap, null);
-            System.out.println(result.getMappedResult(null, null));
-            System.out.println(result.getMappedResult(null, requestMap));
+            System.out.println(result.getMapRequestAndResult(null, null));
+            System.out.println(result.getMapRequestAndResult(null, requestMap));
         } catch (IllegalStateException e) {
             e.printStackTrace();
         } catch (WiseConnectionException e) {

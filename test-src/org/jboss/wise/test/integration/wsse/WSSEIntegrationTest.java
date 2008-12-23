@@ -40,7 +40,7 @@ public class WSSEIntegrationTest extends WiseTest {
         Map<String, Object> args = new java.util.HashMap<String, Object>();
         args.put("user", "test");
         InvocationResult result = method.invoke(args, null);
-        Map<String, Object> results = (Map<String, Object>)result.getMappedResult(null, null).get("results");
+        Map<String, Object> results = (Map<String, Object>)result.getMapRequestAndResult(null, null).get("results");
         Assert.assertEquals("Hello WSSecurity", results.get("result"));
     }
 

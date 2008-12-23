@@ -53,7 +53,7 @@ public class WiseIntegrationBasicTest extends WiseTest {
         Map<String, Object> args = new java.util.HashMap<String, Object>();
         args.put("arg0", "from-wise-client");
         InvocationResult result = method.invoke(args, null);
-        Map<String, Object> res = result.getMappedResult(null, null);
+        Map<String, Object> res = result.getMapRequestAndResult(null, null);
         Map<String, Object> test = (Map<String, Object>)res.get("results");
         Assert.assertEquals("from-wise-client", test.get("result"));        
     }
