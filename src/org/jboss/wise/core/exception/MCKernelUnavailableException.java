@@ -22,11 +22,10 @@
 
 package org.jboss.wise.core.exception;
 
-
 /**
  * @author oracle
  */
-public class MCKernelUnavailableException extends Exception {
+public class MCKernelUnavailableException extends IllegalStateException {
     public MCKernelUnavailableException( String message ) {
         super(message);
     }

@@ -23,9 +23,9 @@
 package org.jboss.wise.core.client.builder;
 
 import java.io.File;
+import java.net.ConnectException;
 import java.util.List;
 import org.jboss.wise.core.client.WSDynamicClient;
-import org.jboss.wise.core.exception.WiseConnectionException;
 import org.jboss.wise.core.exception.WiseRuntimeException;
 
 /**
@@ -33,7 +33,7 @@ import org.jboss.wise.core.exception.WiseRuntimeException;
  */
 public interface WSDynamicClientBuilder {
 
-    public WSDynamicClient build() throws IllegalStateException, WiseConnectionException, WiseRuntimeException;
+    public WSDynamicClient build() throws IllegalStateException, ConnectException, WiseRuntimeException;
 
     public String getWsdlURL();
 
@@ -50,17 +50,17 @@ public interface WSDynamicClientBuilder {
     public WSDynamicClientBuilder tmpDir( String tmpDir );
 
     public WSDynamicClientBuilder targetPackage( String targetPackage );
-    
-    public WSDynamicClientBuilder bindingFiles(List<File> bindings);
-    
-    public WSDynamicClientBuilder catelogFile(File catelog);
+
+    public WSDynamicClientBuilder bindingFiles( List<File> bindings );
+
+    public WSDynamicClientBuilder catelogFile( File catelog );
 
     public String getTmpDir();
 
     public String getTargetPackage();
-    
+
     public List<File> getBindingFiles();
-    
+
     public File getCatelogFile();
 
 }

@@ -27,7 +27,7 @@ package org.jboss.wise.core.exception;
  * 
  * @author alessio.soldano@javalinux.it
  */
-public class WiseRuntimeException extends Exception {
+public class WiseRuntimeException extends RuntimeException {
 
     private static final long serialVersionUID = -4622247006256827035L;
 
@@ -36,7 +36,7 @@ public class WiseRuntimeException extends Exception {
     }
 
     public WiseRuntimeException( String message,
-                                    Throwable cause ) {
+                                 Throwable cause ) {
         super(message, cause);
     }
 

@@ -42,7 +42,6 @@ import org.jboss.wise.core.client.WSService;
 import org.jboss.wise.core.client.builder.WSDynamicClientBuilder;
 import org.jboss.wise.core.consumer.WSConsumer;
 import org.jboss.wise.core.exception.MCKernelUnavailableException;
-import org.jboss.wise.core.exception.WiseConnectionException;
 import org.jboss.wise.core.exception.WiseRuntimeException;
 import org.jboss.wise.core.utils.JavaUtils;
 
@@ -66,15 +65,14 @@ public class WSDynamicClientImpl implements WSDynamicClient {
     private final List<String> classNames;
     private final Map<String, WSService> servicesMap = Collections.synchronizedMap(new HashMap<String, WSService>());
 
-    public WSDynamicClientImpl( WSDynamicClientBuilder builder )
-        throws WiseConnectionException, WiseRuntimeException, MCKernelUnavailableException {
+    public WSDynamicClientImpl( WSDynamicClientBuilder builder ) throws WiseRuntimeException, MCKernelUnavailableException {
         this(builder, WSConsumer.getInstance());
         this.servicesMap.clear();
 
     }
 
     public WSDynamicClientImpl( WSDynamicClientBuilder builder,
-                                WSConsumer consumer ) throws WiseConnectionException, WiseRuntimeException {
+                                WSConsumer consumer ) throws WiseRuntimeException {
         userName = builder.getUserName();
         password = builder.getPassword();
         final String symbolicName = this.getSymlicName(builder.getWsdlURL());
@@ -96,11 +94,10 @@ public class WSDynamicClientImpl implements WSDynamicClient {
 
     /**
      * @param outputDir
-     * @throws WiseConnectionException
      * @throws WiseRuntimeException
      */
 
-    private void initClassLoader( File outputDir ) throws WiseConnectionException, WiseRuntimeException {
+    private void initClassLoader( File outputDir ) throws WiseRuntimeException {
         try {
 
             // we need a custom classloader pointing the temp dir
@@ -126,7 +123,7 @@ public class WSDynamicClientImpl implements WSDynamicClient {
      * 
      * @see org.jboss.wise.core.client.WSDynamicClient#processServices()
      */
-    public Map<String, WSService> processServices() {
+    public Map<String, WSService> processServices() throws IllegalStateException {
         ClassLoader oldLoader = Thread.currentThread().getContextClassLoader();
 
         try {
@@ -141,11 +138,8 @@ public class WSDynamicClientImpl implements WSDynamicClient {
                         servicesMap.put(((WebServiceClient)annotation).name(), service);
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
-                    if (log.isDebugEnabled()) {
-                        log.debug("Error during loading/instanciating class:" + className + " with exception message: "
-                                  + e.getMessage());
-                    }
+                    throw new IllegalStateException("Error during loading/instanciating class:" + className
+                                                    + " with exception message: " + e.getMessage());
                 }
             }
         } finally {

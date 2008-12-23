@@ -29,6 +29,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.StringWriter;
+import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
@@ -38,7 +39,6 @@ import org.jboss.wise.core.client.WSDynamicClient;
 import org.jboss.wise.core.client.builder.WSDynamicClientBuilder;
 import org.jboss.wise.core.client.impl.reflection.WSDynamicClientImpl;
 import org.jboss.wise.core.exception.MCKernelUnavailableException;
-import org.jboss.wise.core.exception.WiseConnectionException;
 import org.jboss.wise.core.exception.WiseRuntimeException;
 import org.jboss.wise.core.utils.IDGenerator;
 import org.jboss.wise.core.utils.IOUtils;
@@ -60,10 +60,9 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
     /**
      * {@inheritDoc}
      * 
-     * @throws WiseRuntimeException
      * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#build()
      */
-    public WSDynamicClient build() throws IllegalStateException, WiseConnectionException, WiseRuntimeException {
+    public WSDynamicClient build() throws IllegalStateException, ConnectException, WiseRuntimeException {
         if (wsdlURL != null && wsdlURL.startsWith("http://")) {
             wsdlURL = this.getUsableWSDL();
         }
@@ -239,10 +238,11 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * Gets a WSDL given its url and userName/password if needed.
      * 
      * @return The path to the temp file containing the requested wsdl
-     * @throws WiseConnectionException If an error occurs while downloading the wsdl
+     * @throws ConnectException If an error occurs while downloading the wsdl
+     * @throws WiseRuntimeException If an error occurs while reading the wsdl stream
      */
     // TODO: move to super class
-    private String getUsableWSDL() throws WiseConnectionException {
+    private String getUsableWSDL() throws ConnectException, WiseRuntimeException {
         if (StringUtils.trimToNull(userName) == null || StringUtils.trimToNull(password) == null) {
             return this.wsdlURL;
         } else {
@@ -255,7 +255,7 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * 
      * @throws WiseConnectionException If the wsdl cannot be retrieved
      */
-    private String transferWSDL( String usernameAndPassword ) throws WiseConnectionException {
+    private String transferWSDL( String usernameAndPassword ) throws ConnectException, WiseRuntimeException {
         String filePath = null;
         try {
             URL endpoint = new URL(wsdlURL);
@@ -289,7 +289,7 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
                     read = isr.read(buf);
                     sw.write(buf);
                 }
-                throw new WiseConnectionException("Remote server's response is an error: " + sw.toString());
+                throw new ConnectException("Remote server's response is an error: " + sw.toString());
             }
             // saving file
             File file = new File(tmpDir, new StringBuffer("Wise").append(IDGenerator.nextVal()).append(".xml").toString());
@@ -298,11 +298,11 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
             fos.close();
             is.close();
             filePath = file.getPath();
-        } catch (WiseConnectionException wce) {
+        } catch (ConnectException wce) {
             throw wce;
         } catch (Exception e) {
             logger.error("Failed to download wsdl from URL : " + wsdlURL);
-            throw new WiseConnectionException("Wsdl download failed!", e);
+            throw new WiseRuntimeException("Failed to read Wsdl Stream!", e);
         }
         return filePath;
     }

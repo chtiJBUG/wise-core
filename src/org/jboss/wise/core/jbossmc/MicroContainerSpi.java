@@ -26,6 +26,7 @@ import org.jboss.kernel.Kernel;
 import org.jboss.kernel.plugins.bootstrap.standalone.StandaloneBootstrap;
 import org.jboss.kernel.spi.registry.KernelRegistry;
 import org.jboss.kernel.spi.registry.KernelRegistryEntry;
+import org.jboss.wise.core.exception.MCKernelUnavailableException;
 
 /**
  * @author stefano.maestri@javalinux.it
@@ -36,18 +37,18 @@ public final class MicroContainerSpi {
     }
 
     public static <T> T getKernelProvidedImplementation( String beanName,
-                                                         Class<T> clazz ) {
+                                                         Class<T> clazz ) throws MCKernelUnavailableException {
         Kernel kernel = KernelUtil.getKernel();
         if (kernel == null) {
             try {
                 kernel = bootstrap();
             } catch (Exception e) {
                 e.printStackTrace();
-                throw new IllegalStateException("Failed to bootstrap standalone Kernel", e);
+                throw new MCKernelUnavailableException("Failed to bootstrap standalone Kernel", e);
             }
         }
         if (kernel == null) {
-            throw new IllegalStateException("Kernel is null");
+            throw new MCKernelUnavailableException("Kernel is null");
         }
         KernelRegistry registry = kernel.getRegistry();
         KernelRegistryEntry entry = registry.getEntry(beanName);

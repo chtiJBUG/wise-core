@@ -39,8 +39,9 @@ public interface WSDynamicClient {
      * Create the services' map and gives it back.
      * 
      * @return The Map of WSEndpoint with symbolic names as keys
+     * @throws IllegalStateException thrown if method can't process or load generated classes to find a service
      */
-    public Map<String, WSService> processServices();
+    public Map<String, WSService> processServices() throws IllegalStateException;
 
     /**
      * @return The classLoader used to load generated class.
