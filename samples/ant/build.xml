@@ -8,6 +8,7 @@
             It's the base file used by all samples's build
     </description>
 
+	<property name="log.dir" value="log" />
 	<property name="build.dir" value="build" />
 	<property name="build.client.dir" value="build/client" />
 	<property name="build.server.dir" value="build/server" />
@@ -70,6 +71,7 @@
 		<delete dir="${build.client.dir}" />
 		<delete dir="${build.server.dir}" />
                 <delete dir="${build.dir}" />
+                <delete dir="${log.dir}" />
 	</target>
 
 	<target name="prepare">
