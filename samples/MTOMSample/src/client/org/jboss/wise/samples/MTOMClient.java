@@ -22,6 +22,7 @@
 
 package org.jboss.wise.samples;
 
+import java.net.ConnectException;
 import java.util.HashMap;
 import java.util.Map;
 import org.jboss.wise.core.client.InvocationResult;
@@ -31,13 +32,13 @@ import org.jboss.wise.core.client.factories.WSDynamicClientFactory;
 import org.jboss.wise.core.exception.InvocationException;
 import org.jboss.wise.core.exception.MCKernelUnavailableException;
 import org.jboss.wise.core.exception.MappingException;
-import org.jboss.wise.core.exception.WiseConnectionException;
 import org.jboss.wise.core.exception.WiseRuntimeException;
 import org.jboss.wise.core.handlers.LoggingHandler;
 import org.jboss.wise.core.wsextensions.impl.MTOMEnabler;
 
 /**
- * @author oracle
+ * @author stefano.maestri@javalinux.it
+ * @author alessio.soldano@jboss.com
  */
 public class MTOMClient {
 
@@ -60,11 +61,9 @@ public class MTOMClient {
             System.out.println(bytes.length);
             System.out.println(bytes);
             System.out.println(result.getMapRequestAndResult(null, requestMap));
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-        } catch (WiseConnectionException e) {
-            e.printStackTrace();
         } catch (WiseRuntimeException e) {
+            e.printStackTrace();
+        } catch (ConnectException e) {
             e.printStackTrace();
         } catch (MCKernelUnavailableException e) {
             e.printStackTrace();
@@ -74,7 +73,8 @@ public class MTOMClient {
             e.printStackTrace();
         } catch (MappingException e) {
             e.printStackTrace();
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
         }
     }
-
 }
