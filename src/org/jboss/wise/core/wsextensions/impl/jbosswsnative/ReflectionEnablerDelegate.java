@@ -93,6 +93,9 @@ public class ReflectionEnablerDelegate implements EnablerDelegate {
 
         if (endpoint.getUnderlyingObjectInstance() instanceof StubExt) {
             URL configFile = getClass().getClassLoader().getResource(securityConfig.getConfigFileURL());
+            if (configFile == null) {
+                throw new IllegalStateException("Cannot find file: " + securityConfig.getConfigFileURL());
+            }
             ((StubExt)endpoint.getUnderlyingObjectInstance()).setSecurityConfig(configFile.toExternalForm());
             ((StubExt)endpoint.getUnderlyingObjectInstance()).setConfigName(securityConfig.getConfigName());
         }
