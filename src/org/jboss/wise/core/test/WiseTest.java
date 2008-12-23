@@ -39,6 +39,7 @@ public class WiseTest {
     private static final Logger logger = Logger.getLogger(WiseTest.class);
     private static final String MAIN_DEPLOYER = "jboss.system:service=MainDeployer";
     private static final String WS_SERVER_CONFIG = "jboss.ws:service=ServerConfig";
+    private static final String TEST_WS_ARCHIVE_DIR = "test-ws-archive";
     
     /**
      * Deploy the webservice war in JBoss server
@@ -57,22 +58,20 @@ public class WiseTest {
         JBossWSTestHelper.getServer().invoke(new ObjectName(MAIN_DEPLOYER), "undeploy", new Object[] { url }, new String[] { "java.net.URL" });       
     }
     
-    /**Get the URL path for a given webservice war. It will find this war file under ${baseDir}/build/webservice-wars
-     * @param warName the webservice war name
+    /**Get the URL path for a given webservice archive. It will find this war file under ${baseDir}/build/test-ws-archive
+     * @param archiveName the webservice archive name
      * @return webservice war url
      */
-    public URL getWarUrl( String warName ) {
+    public URL getArchiveUrl( String archiveName ) {
          URL warUrl = null;
          URL dirURL = this.getClass().getClassLoader().getResource(".");
-         File file = new File(dirURL.getFile(), "../webservice-wars/" + warName);
+         File file = new File(dirURL.getFile(), ".." + File.separator + TEST_WS_ARCHIVE_DIR + File.separator + archiveName);
          if (file.exists()) {
              try {
                  warUrl = file.getAbsoluteFile().toURL();
              } catch (MalformedURLException e) {
                  return null;
              }
-         } else {
-             warUrl = null;
          }
          return warUrl;
 

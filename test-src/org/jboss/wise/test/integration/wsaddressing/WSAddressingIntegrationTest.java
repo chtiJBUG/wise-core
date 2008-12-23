@@ -48,7 +48,7 @@ public class WSAddressingIntegrationTest extends WiseTest {
 
     @Before
     public void setUp() throws Exception {
-        warUrl = this.getWarUrl("wsaddressing.jar");
+        warUrl = this.getArchiveUrl("wsaddressing.jar");
         deployWS(warUrl);
     }
 

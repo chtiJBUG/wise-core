@@ -2,7 +2,7 @@
 <project name="Wise-core" default="integrationTest" basedir="../../">
 
 	<import file="${basedir}/builder/ant-import/build-setup.xml" />
-	<property name="wswar.output.dir" value="${build.dir}/webservice-wars" />
+	<property name="ws.archive.output.dir" value="${build.dir}/test-ws-archive" />
 
 	<path id="test.execution.classpath">
 		<pathelement location="${coverage.dir}/instrumentedClasses" />
@@ -29,9 +29,9 @@
 	</target>
 
 	<target name="build-test-wars" description="Build the test war for deployments" depends="compileTest">
-		<mkdir dir="${wswar.output.dir}" />
+		<mkdir dir="${ws.archive.output.dir}" />
                 <!-- Integration test for basic --> 
-		<war warfile="${wswar.output.dir}/basic.war" webxml="${test.resources.dir}/integration/test/basic/WEB-INF/web.xml">
+		<war warfile="${ws.archive.output.dir}/basic.war" webxml="${test.resources.dir}/integration/test/basic/WEB-INF/web.xml">
 			<classes dir="${test.classes.dir}">
 				<include name="org/jboss/wise/test/integration/basic/**/*.class" />
 				<exclude name="org/jboss/wise/test/integration/basic/**/*Test.class" />
@@ -40,7 +40,7 @@
 		</war>
 
                 <!-- Integration test for WS-Security --> 
-                <war warfile="${wswar.output.dir}/wsse.war" webxml="${test.resources.dir}/integration/test/wsse/WEB-INF/web.xml">
+                <war warfile="${ws.archive.output.dir}/wsse.war" webxml="${test.resources.dir}/integration/test/wsse/WEB-INF/web.xml">
                         <webinf dir="${test.resources.dir}/integration/test/wsse/WEB-INF/">
                               <include name="*"/>                             
                        </webinf>
@@ -51,7 +51,7 @@
 		</war>
 
                 <!-- Integration test for WS-Addressing -->
-                <jar destfile="${wswar.output.dir}/wsaddressing.jar">
+                <jar destfile="${ws.archive.output.dir}/wsaddressing.jar">
                        <fileset dir="${test.classes.dir}">
                               <include name="org/jboss/wise/test/integration/wsaddressing/**/*.class" />
                               <exclude name="org/jboss/wise/test/integration/wsaddressing/**/*Test.class" />

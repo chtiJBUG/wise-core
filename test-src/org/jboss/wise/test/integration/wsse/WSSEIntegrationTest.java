@@ -41,7 +41,7 @@ public class WSSEIntegrationTest extends WiseTest {
 
     @Before
     public void setUp() throws Exception {
-        warUrl = this.getWarUrl("wsse.war");
+        warUrl = this.getArchiveUrl("wsse.war");
         deployWS(warUrl);
 
     }
