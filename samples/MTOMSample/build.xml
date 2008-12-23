@@ -3,7 +3,7 @@
      29 Sep 2008 16:36:29                                                        
                                                           
      ====================================================================== -->
-<project name="MTOMSample" basedir=".">
+<project name="MTOMSample" default="compile" basedir=".">
 
 	<property name="MainClass" value="org.jboss.wise.samples.MTOMClient">
 	</property>
