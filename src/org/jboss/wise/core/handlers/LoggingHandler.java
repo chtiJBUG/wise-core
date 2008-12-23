@@ -23,22 +23,18 @@
 package org.jboss.wise.core.handlers;
 
 import java.io.PrintStream;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.xml.namespace.QName;
-import javax.xml.soap.MessageFactory;
-import javax.xml.soap.SOAPFactory;
 import javax.xml.soap.SOAPMessage;
 import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.handler.soap.SOAPHandler;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
-import org.jboss.wise.core.client.factories.WSDynamicClientFactory;
 
 /**
- * This simple SOAPHandler will output the contents of incoming and outgoing
- * messages. Check the MESSAGE_OUTBOUND_PROPERTY in the context to see if this
- * is an outgoing or incoming message. Write a brief message to the print stream
- * and output the message. 
+ * This simple SOAPHandler will output the contents of incoming and outgoing messages. Check the MESSAGE_OUTBOUND_PROPERTY in the
+ * context to see if this is an outgoing or incoming message. Write a brief message to the print stream and output the message.
  * 
  * @author Stefano Maestri, stefano.maestri@javalinux.it
  */
@@ -50,61 +46,57 @@ public class LoggingHandler implements SOAPHandler<SOAPMessageContext> {
      * Default constructor using default System.out PrintStream to print message
      */
     public LoggingHandler() {
-        
 
     }
 
     /**
      * Constructor for custom PrintStream outputter
      * 
-     * @param outStream
-     *                the PrintStream to use to print messages.
+     * @param outStream the PrintStream to use to print messages.
      */
-    public LoggingHandler(PrintStream outStream) {
-	this.outputStream = outStream;
+    public LoggingHandler( PrintStream outStream ) {
+        this.outputStream = outStream;
     }
 
     public Set<QName> getHeaders() {
-	return null;
+        return new HashSet<QName>(); //empty set
     }
 
-    public boolean handleMessage(SOAPMessageContext smc) {
-	logToSystemOut(smc);
-	return true;
+    public boolean handleMessage( SOAPMessageContext smc ) {
+        logToSystemOut(smc);
+        return true;
     }
 
-    public boolean handleFault(SOAPMessageContext smc) {
-	logToSystemOut(smc);
-	return true;
+    public boolean handleFault( SOAPMessageContext smc ) {
+        logToSystemOut(smc);
+        return true;
     }
 
     // nothing to clean up
-    public void close(MessageContext messageContext) {
+    public void close( MessageContext messageContext ) {
     }
 
-    private void logToSystemOut(SOAPMessageContext smc) {
-	Boolean outboundProperty = (Boolean) smc.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
+    private void logToSystemOut( SOAPMessageContext smc ) {
+        Boolean outboundProperty = (Boolean)smc.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
 
-	if (outboundProperty.booleanValue()) {
-	    outputStream.println("\nOutbound message:");
-	} else {
-	    outputStream.println("\nInbound message:");
-	}
-	SOAPMessage message = smc.getMessage();
-	try {
-	    message.writeTo(outputStream);
-	    outputStream.println(""); // just to add a newline
-	} catch (Exception e) {
-	    outputStream.println("Exception in handler: " + e);
-	}
+        if (outboundProperty.booleanValue()) {
+            outputStream.println("\nOutbound message:");
+        } else {
+            outputStream.println("\nInbound message:");
+        }
+        SOAPMessage message = smc.getMessage();
+        try {
+            message.writeTo(outputStream);
+            outputStream.println(""); // just to add a newline
+        } catch (Exception e) {
+            outputStream.println("Exception in handler: " + e);
+        }
     }
 
     /**
-     * 
-     * @param outputStream
-     *                custom PrintStream outputter
+     * @param outputStream custom PrintStream outputter
      */
-    public void setOutputStream(PrintStream outputStream) {
-	this.outputStream = outputStream;
+    public void setOutputStream( PrintStream outputStream ) {
+        this.outputStream = outputStream;
     }
 }
