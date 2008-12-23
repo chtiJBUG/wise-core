@@ -39,6 +39,7 @@
 	<target name="oneTest" depends="compileTest">
 		<junit printsummary="yes" haltonfailure="no">
 			<classpath refid="test.execution.classpath" />
+			<jvmarg line="${remote.debug.line}"/>
 			<test fork="yes" name="${classToTest}" haltonfailure="no" todir="${test.output.dir}">
 				<formatter type="plain" />
 			</test>
@@ -48,6 +49,7 @@
 	<target name="allTest" depends="compileTest">
 		<junit printsummary="yes" haltonfailure="yes">
 			<classpath refid="test.execution.classpath" />
+			<jvmarg line="${remote.debug.line}"/>
 			<batchtest fork="yes" todir="${test.output.dir}">
 				<formatter type="plain" />
 				<fileset dir="${src.test.dir}">
