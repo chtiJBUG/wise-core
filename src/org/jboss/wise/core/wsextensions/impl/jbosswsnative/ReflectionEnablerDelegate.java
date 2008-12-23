@@ -81,7 +81,7 @@ public class ReflectionEnablerDelegate implements EnablerDelegate {
      */
     public void visitWSSecurity( WSEndpoint endpoint ) throws UnsupportedOperationException, IllegalStateException {
 
-        NativeSecurityConfig securityConfig = securityConfigMap.get(endpoint.getMethodName());
+        NativeSecurityConfig securityConfig = securityConfigMap != null ? securityConfigMap.get(endpoint.getMethodName()) : null;
 
         if (securityConfig == null) {
             securityConfig = defaultSecurityConfig;
