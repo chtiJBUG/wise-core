@@ -30,23 +30,34 @@
 
 	<target name="build-test-wars" description="Build the test war for deployments" depends="compileTest">
 		<mkdir dir="${wswar.output.dir}" />
-                <!--Integration test for basic--> 
+                <!-- Integration test for basic --> 
 		<war warfile="${wswar.output.dir}/basic.war" webxml="${test.resources.dir}/integration/test/basic/WEB-INF/web.xml">
 			<classes dir="${test.classes.dir}">
 				<include name="org/jboss/wise/test/integration/basic/**/*.class" />
+				<exclude name="org/jboss/wise/test/integration/basic/**/*Test.class" />
 				<include name="org/jboss/wise/test/integration/basic/**/*.xml" />
 			</classes>
 		</war>
 
-                <!--Integration test for WSSE--> 
+                <!-- Integration test for WS-Security --> 
                 <war warfile="${wswar.output.dir}/wsse.war" webxml="${test.resources.dir}/integration/test/wsse/WEB-INF/web.xml">
                         <webinf dir="${test.resources.dir}/integration/test/wsse/WEB-INF/">
                               <include name="*"/>                             
                        </webinf>
                        <classes dir="${test.classes.dir}">
 		              <include name="org/jboss/wise/test/integration/wsse/**/*.class" />
+		              <exclude name="org/jboss/wise/test/integration/wsse/**/*Test.class" />
 		       </classes>
 		</war>
+
+                <!-- Integration test for WS-Addressing -->
+                <jar destfile="${wswar.output.dir}/wsaddressing.jar">
+                       <fileset dir="${test.classes.dir}">
+                              <include name="org/jboss/wise/test/integration/wsaddressing/**/*.class" />
+                              <exclude name="org/jboss/wise/test/integration/wsaddressing/**/*Test.class" />
+                       </fileset>
+                </jar>
+
 	</target>
 	<target name="compileTest" depends="init">
 		<ant antfile="${main.builder}" target="compile" />
@@ -61,6 +72,7 @@
 		    message="Have you a JBoss instance up and running? Press Enter to continue..."
 		  />
 		<junit printsummary="yes" haltonfailure="yes">
+			<jvmarg line="${remote.debug.line}"/>
 			<classpath refid="test.execution.classpath" />
 			<batchtest fork="yes" todir="${test.output.dir}">
 				<formatter type="plain" />
@@ -70,6 +82,17 @@
 			</batchtest>
 		</junit>
 		<echo>You can now stop you JBoss instance.</echo>
+	</target>
+	
+	<target name="oneIntegrationTest" depends="build-test-wars">
+	    <input message="Have you a JBoss instance up and running? Press Enter to continue..."/>
+		<junit printsummary="yes" haltonfailure="no">
+			<classpath refid="test.execution.classpath" />
+			<jvmarg line="${remote.debug.line}"/>
+			<test fork="yes" name="${classToTest}" haltonfailure="no" todir="${test.output.dir}">
+				<formatter type="plain" />
+			</test>
+		</junit>
 	</target>
 
 </project>
