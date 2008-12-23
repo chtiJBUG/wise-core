@@ -28,7 +28,7 @@
 
 	</target>
 
-	<target name="build-test-wars" description="Build the test war for deployments">
+	<target name="build-test-wars" description="Build the test war for deployments" depends="compileTest">
 		<mkdir dir="${wswar.output.dir}" />
                 <!--Integration test for basic--> 
 		<war warfile="${wswar.output.dir}/basic.war" webxml="${test.resources.dir}/integration/test/basic/WEB-INF/web.xml">
@@ -43,13 +43,12 @@
                         <webinf dir="${test.resources.dir}/integration/test/wsse/WEB-INF/">
                               <include name="*"/>                             
                        </webinf>
-
-                        <classes dir="${test.classes.dir}">
-				<include name="org/jboss/wise/test/integration/wsse/**/*.class" />
-			</classes>
+                       <classes dir="${test.classes.dir}">
+		              <include name="org/jboss/wise/test/integration/wsse/**/*.class" />
+		       </classes>
 		</war>
 	</target>
-	<target name="compileTest" depends="init,build-test-wars">
+	<target name="compileTest" depends="init">
 		<ant antfile="${main.builder}" target="compile" />
 		<javac destdir="${test.classes.dir}" classpathref="test.execution.classpath" debug="${javac.debug}" deprecation="${javac.deprecation}" nowarn="on" target="1.5">
 			<src path="${src.test.dir}" />
@@ -57,7 +56,7 @@
 		</javac>
 	</target>
 
-	<target name="integrationTest" depends="compileTest">
+	<target name="integrationTest" depends="build-test-wars">
 		<input
 		    message="Have you a JBoss instance up and running? Press Enter to continue..."
 		  />
