@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="samples/MTOMStandardClient/src/server"/>
-	<classpathentry kind="src" path="samples/MTOMStandardClient/src/client"/>
+	<classpathentry kind="src" path="samples/AddressingAndSecurity/src/server"/>
+	<classpathentry kind="src" path="samples/AddressingAndSecurity/src/client"/>
 	<classpathentry kind="src" path="test-src"/>
 	<classpathentry kind="src" path="samples/helloWorld/src/client"/>
 	<classpathentry kind="src" path="samples/helloWorld/src/server"/>
