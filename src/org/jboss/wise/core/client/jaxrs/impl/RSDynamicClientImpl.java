@@ -50,14 +50,13 @@ import org.jboss.wise.core.mapper.WiseMapper;
 
 /*
  * TODO: 
- * 1. return statusCode
- * 2. return headers
- * 3. Support MultipartRequestEntity
- * 4. Support HttpClient properties
- * 5. Support setting headers
- * 6. Return the result in formats other than InputStream
- * 7. Exception handling
- * 8. Using jax-rs providers
+ * 1. return headers
+ * 2. Support MultipartRequestEntity
+ * 3. Support HttpClient properties
+ * 4. Support setting headers
+ * 5. Return the result in formats other than InputStream
+ * 6. Exception handling
+ * 7. Using jax-rs providers
  */
 @ThreadSafe
 public class RSDynamicClientImpl implements RSDynamicClient {
@@ -168,8 +167,8 @@ public class RSDynamicClientImpl implements RSDynamicClient {
     //      5. Return the result in formats other than InputStream
      
     public InvocationResult invoke(RequestEntity requestEntity, WiseMapper mapper) {        
-        InvocationResultImpl result = null;
-        Map<String, Object> emptyHolder = Collections.emptyMap();
+        InvocationResult result = null;
+        Map<String, Object> responseHolder = new HashMap<String, Object>();
         
         if (HttpMethod.GET == httpMethod) {
             GetMethod get = new GetMethod(resourceURI);
@@ -179,8 +178,9 @@ public class RSDynamicClientImpl implements RSDynamicClient {
                 int statusCode = httpClient.executeMethod(get);
                 //TODO: Use InputStream
                 String response = get.getResponseBodyAsString();
+                responseHolder.put(InvocationResult.STATUS, new Integer(statusCode));
                 
-                result = new InvocationResultImpl("result", response, emptyHolder);
+                result = new InvocationResultImpl(InvocationResult.RESPONSE, response, responseHolder);
                 
                 // System.out.print(response);
             } catch(IOException e) {
@@ -197,8 +197,9 @@ public class RSDynamicClientImpl implements RSDynamicClient {
             try {
                 int statusCode = httpClient.executeMethod(post);
                 String response = post.getResponseBodyAsString();
+                responseHolder.put(InvocationResult.STATUS, new Integer(statusCode));
                 
-                result = new InvocationResultImpl("result", response, emptyHolder);
+                result = new InvocationResultImpl(InvocationResult.RESPONSE, response, responseHolder);
                 
                 // System.out.print(response);
             } catch(IOException e) {
@@ -215,8 +216,9 @@ public class RSDynamicClientImpl implements RSDynamicClient {
             try {
                 int statusCode = httpClient.executeMethod(put);
                 String response = put.getResponseBodyAsString();
+                responseHolder.put(InvocationResult.STATUS, new Integer(statusCode));
                 
-                result = new InvocationResultImpl("result", response, emptyHolder);
+                result = new InvocationResultImpl(InvocationResult.RESPONSE, response, responseHolder);
                 
                 // System.out.print(response);
             } catch(IOException e) {
@@ -231,8 +233,9 @@ public class RSDynamicClientImpl implements RSDynamicClient {
             try {
                 int statusCode = httpClient.executeMethod(delete);
                 String response = delete.getResponseBodyAsString();
+                responseHolder.put(InvocationResult.STATUS, new Integer(statusCode));
                 
-                result = new InvocationResultImpl("result", response, emptyHolder);
+                result = new InvocationResultImpl(InvocationResult.RESPONSE, response, responseHolder);
                 
                 // System.out.print(response);
             } catch(IOException e) {

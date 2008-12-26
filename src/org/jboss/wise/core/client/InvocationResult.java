@@ -38,6 +38,9 @@ import org.jboss.wise.core.mapper.WiseMapper;
  */
 @Immutable
 public interface InvocationResult {
+	public final static String RESPONSE = "RESPONSE";
+	public final static String STATUS = "STATUS";
+	public final static String HEADERS = "HEADERS";
 
     /**
      * Apply WiseMapper provided with to returned Object as defined in wsdl/wiseconsume generated objects. If mapper parameter is

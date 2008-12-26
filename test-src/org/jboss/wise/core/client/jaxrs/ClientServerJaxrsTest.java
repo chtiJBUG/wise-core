@@ -25,7 +25,7 @@ public class ClientServerJaxrsTest extends AbstractClientServerTestBase {
     public void testGetBook() throws Exception {
         RSDynamicClient client = WSDynamicClientFactory.getInstance().getJAXRSClient("http://localhost:9080/bookstore/books/123", RSDynamicClient.HttpMethod.GET, null, "application/xml");
         InvocationResult result = client.invoke();
-        String response = (String)result.getResult().get("result");
+        String response = (String)result.getResult().get(InvocationResult.RESPONSE);
         
         String expected = getStringFromInputStream(
               getClass().getResourceAsStream("resources/expected_get_book123.txt"));            
@@ -40,7 +40,7 @@ public class ClientServerJaxrsTest extends AbstractClientServerTestBase {
         InputStream request = getClass().getResourceAsStream("resources/add_book.txt"); 
         InvocationResult result = client.invoke(request, null);
 
-        String response = (String)result.getResult().get("result");
+        String response = (String)result.getResult().get(InvocationResult.RESPONSE);
         System.out.println("-------------" + response);
         
         String expected = getStringFromInputStream(
@@ -56,16 +56,14 @@ public class ClientServerJaxrsTest extends AbstractClientServerTestBase {
         InputStream request = getClass().getResourceAsStream("resources/update_book.txt"); 
         InvocationResult result = client.invoke(request, null);
 
-        String response = (String)result.getResult().get("result");
-
-        //TODO: Verify the status code is 200
-        
+        String response = (String)result.getResult().get(InvocationResult.RESPONSE);
+        int statusCode = ((Integer)result.getResult().get(InvocationResult.STATUS)).intValue();
+        assertEquals(200, statusCode);        
         
         //verify result
         client = WSDynamicClientFactory.getInstance().getJAXRSClient("http://localhost:9080/bookstore/books/123", RSDynamicClient.HttpMethod.GET, null, "application/xml");
         result = client.invoke();
-        response = (String)result.getResult().get("result");
-
+        response = (String)result.getResult().get(InvocationResult.RESPONSE);
      
         String expected = getStringFromInputStream(
               getClass().getResourceAsStream("resources/expected_update_book.txt"));            
@@ -83,7 +81,8 @@ public class ClientServerJaxrsTest extends AbstractClientServerTestBase {
         RSDynamicClient client = WSDynamicClientFactory.getInstance().getJAXRSClient("http://localhost:9080/bookstore/books/123", RSDynamicClient.HttpMethod.DELETE, "application/xml", "application/xml");
 
         InvocationResult result = client.invoke();
-        //Verify the status code
+        int statusCode = ((Integer)result.getResult().get(InvocationResult.STATUS)).intValue();
+        assertEquals(200, statusCode);  
     }
     
     private String getStringFromInputStream(InputStream in) throws Exception {        
