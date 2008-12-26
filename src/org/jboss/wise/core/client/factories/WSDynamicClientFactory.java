@@ -3,17 +3,17 @@
  * individual contributors as indicated by the @authors tag. See the
  * copyright.txt in the distribution for a full listing of individual
  * contributors.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 2.1 of the License, or (at your option)
  * any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
@@ -33,10 +33,11 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.apache.log4j.helpers.NullEnumeration;
 import org.apache.log4j.xml.DOMConfigurator;
-import org.jboss.wise.core.client.RSDynamicClient;
 import org.jboss.wise.core.client.WSDynamicClient;
 import org.jboss.wise.core.client.WSDynamicClientCache;
 import org.jboss.wise.core.client.builder.WSDynamicClientBuilder;
+import org.jboss.wise.core.client.jaxrs.RSDynamicClient;
+import org.jboss.wise.core.client.jaxrs.impl.RSDynamicClientImpl;
 import org.jboss.wise.core.exception.MCKernelUnavailableException;
 import org.jboss.wise.core.exception.WiseRuntimeException;
 import org.jboss.wise.core.jbossmc.BeansNames;
@@ -48,7 +49,7 @@ import org.jboss.wise.core.utils.SmooksCache;
  * WSDynamicClientFactory is a singleton containing a WSDynamicClient cache. It's able to create WSDynamicCient objects, and init
  * then using WiseProperties using wise-core.properties find in classpath as default. This default properties may be overridden
  * using setWiseProperties method.
- * 
+ *
  * @author Stefano Maestri, stefano.maestri@javalinux.it
  */
 @ThreadSafe
@@ -120,7 +121,7 @@ public abstract class WSDynamicClientFactory {
 
     /**
      * Return an instance of WSDynamicClient taken from cache if possible, generate and initialise if not.
-     * 
+     *
      * @param wsdlURL The URL to retrive wsdl of webservice called
      * @param userName we support HTTP BASIC Auth protected wsdls: this is username used for authentication
      * @param password we support HTTP BASIC Auth protected wsdls: this is password used for authentication
@@ -168,36 +169,39 @@ public abstract class WSDynamicClientFactory {
 
     /**
      * Return an instance of RSDynamicClient taken from cache if possible, generate and initialise if not.
-     * 
+     *
      * @param endpointURL
+     * @param produceMediaTypes
+     * @param consumeMediaTypes
      * @param httpMethod
-     * @param contentType
      * @param userName
      * @param password
      * @return an instance of {@link RSDynamicClient} already initialized, ready to be called
      */
     public RSDynamicClient getJAXRSClient( String endpointURL,
                                            RSDynamicClient.HttpMethod httpMethod,
-                                           String contentType,
+                                           String produceMediaTypes,
+                                           String consumeMediaTypes,
                                            String userName,
                                            String password ) {
-        // to be implemented
-        return null;
-
+        RSDynamicClient client = new RSDynamicClientImpl(endpointURL, produceMediaTypes, consumeMediaTypes, httpMethod);
+        return client;
     }
 
     /**
      * Return an instance of RSDynamicClient taken from cache if possible, generate and initialise if not.
-     * 
+     *
      * @param endpointURL
+     * @param produceMediaTypes
+     * @param consumeMediaTypes
      * @param httpMethod
-     * @param contentType
      * @return an instance of {@link RSDynamicClient} already initialized, ready to be called
      */
     public RSDynamicClient getJAXRSClient( String endpointURL,
                                            RSDynamicClient.HttpMethod httpMethod,
-                                           String contentType ) {
-        return this.getJAXRSClient(endpointURL, httpMethod, contentType, null, null);
+                                           String produceMediaTypes,
+                                           String consumeMediaTypes ) {
+        return this.getJAXRSClient(endpointURL, httpMethod, produceMediaTypes, consumeMediaTypes, null, null);
 
     }
 

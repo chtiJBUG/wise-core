@@ -15,6 +15,9 @@
 		<pathelement location="${env.JAVA_HOME}/lib/tools.jar" />
 		<pathelement location="${lib.dir}" />
 		<pathelement location="${test.lib.dir}" />
+		<fileset dir="${lib.dir}/cxf">
+		    <include name="**/*.jar"/>
+		</fileset>		
 	</path>
 
 	<target name="clean" description="Cleans up the build directory">
@@ -34,6 +37,11 @@
 			<src path="${src.test.dir}" />
 			<exclude name="**/integration/**" />
 		</javac>
+		<copy todir="${test.classes.dir}">
+					<fileset dir="${src.test.dir}">
+			<include name="**/resources/**" />
+					</fileset>
+		</copy>
 	</target>
 
 	<target name="oneTest" depends="compileTest">
