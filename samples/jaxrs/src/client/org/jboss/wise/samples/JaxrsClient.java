@@ -67,7 +67,7 @@ public class JaxrsClient {
 					RSDynamicClient.HttpMethod.PUT, "application/xml",
 					"application/xml");
 			JaxrsClient jaxrsClient = new JaxrsClient();
-			InputStream request = jaxrsClient.getClass().getResourceAsStream("update_customer.xml");
+			InputStream request = jaxrsClient.getClass().getResourceAsStream("resources/update_customer.xml");
 			result = client.invoke(request, null);
 			response = (String) result.getResult().get(InvocationResult.RESPONSE);
 			int statusCode = ((Integer) result.getResult().get(InvocationResult.STATUS)).intValue();
@@ -82,7 +82,7 @@ public class JaxrsClient {
 					"http://localhost:9000/customerservice/customers",
 					RSDynamicClient.HttpMethod.POST, "application/xml",
 					"application/xml");
-			request = jaxrsClient.getClass().getResourceAsStream("resources/add_customer.txt");
+			request = jaxrsClient.getClass().getResourceAsStream("resources/add_customer.xml");
 			result = client.invoke(request, null);
 			response = (String) result.getResult().get(InvocationResult.RESPONSE);
 			statusCode = ((Integer) result.getResult().get(InvocationResult.STATUS)).intValue();

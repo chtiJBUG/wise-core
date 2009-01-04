@@ -87,6 +87,11 @@
 		<javac destdir="${classes.java.server.dir}" classpathref="build.classpath" debug="true" deprecation="true" target="1.5">
 			<src path="${src.java.server.dir}" />
 		</javac>
+		<copy todir="${classes.java.client.dir}">
+			<fileset dir="${src.java.client.dir}">
+			    <include name="**/resources/**" />
+			</fileset>
+		</copy>		
 	</target>
 
 	<target name="jar" depends="compile">
