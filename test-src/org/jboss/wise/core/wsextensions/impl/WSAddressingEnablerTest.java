@@ -26,8 +26,8 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import org.jboss.wise.core.client.impl.reflection.WSEndpointImpl;
-import org.jboss.wise.core.wsextensions.WSExtensionEnabler;
 import org.jboss.wise.core.wsextensions.EnablerDelegate;
+import org.jboss.wise.core.wsextensions.WSExtensionEnabler;
 import org.jboss.wise.core.wsextensions.impl.jbosswsnative.ReflectionEnablerDelegate;
 import org.junit.Test;
 
@@ -45,6 +45,16 @@ public class WSAddressingEnablerTest {
 
     @Test
     public void shouldDelegateToVisitor() {
+        EnablerDelegate delegate = mock(EnablerDelegate.class);
+        WSEndpointImpl ep = mock(WSEndpointImpl.class);
+        enabler.setDelegate(delegate);
+        enabler.enable(ep);
+        verify(delegate).visitWSAddressing(ep);
+
+    }
+
+    @Test
+    public void shouldAddAddressingHandler() {
         EnablerDelegate delegate = mock(EnablerDelegate.class);
         WSEndpointImpl ep = mock(WSEndpointImpl.class);
         enabler.setDelegate(delegate);
