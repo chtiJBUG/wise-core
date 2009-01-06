@@ -38,6 +38,8 @@ public class WSImportImpl extends WSConsumer {
     private final String[] needeJars = {"jbossws-native-jaxws.jar", "jbossws-native-jaxws-ext.jar", "jaxb-api.jar",
         "jaxb-impl.jar"};
 
+    ProviderChanger providerChanger = new ProviderChanger();
+
     @Override
     public List<String> importObjectFromWsdl( String wsdlURL,
                                               File outputDir,
@@ -47,8 +49,7 @@ public class WSImportImpl extends WSConsumer {
                                               File catelog ) throws MalformedURLException, WiseRuntimeException {
         try {
             // NEEDED for WISE-36 issue
-            System.setProperty("javax.xml.ws.spi.Provider", "com.sun.xml.ws.spi.ProviderImpl");
-
+            providerChanger.changeProvider();
             WSContractConsumer wsImporter = WSContractConsumer.newInstance(Thread.currentThread().getContextClassLoader());
 
             if (targetPackage != null && targetPackage.trim().length() > 0) {
@@ -74,7 +75,7 @@ public class WSImportImpl extends WSConsumer {
             return this.getClassNames(outputDir, targetPackage);
         } finally {
             // NEEDED for WISE-36 issue
-            System.setProperty("javax.xml.ws.spi.Provider", "org.jboss.ws.core.jaxws.spi.ProviderImpl");
+            providerChanger.restoreDefaultProvider();
 
         }
 
@@ -99,4 +100,16 @@ public class WSImportImpl extends WSConsumer {
         return cp;
     }
 
+    public class ProviderChanger {
+
+        private final String defaultProvider = "org.jboss.ws.core.jaxws.spi.ProviderImpl";
+
+        public void changeProvider() {
+            System.setProperty("javax.xml.ws.spi.Provider", "com.sun.xml.ws.spi.ProviderImpl");
+        }
+
+        public void restoreDefaultProvider() {
+            System.setProperty("javax.xml.ws.spi.Provider", defaultProvider);
+        }
+    }
 }

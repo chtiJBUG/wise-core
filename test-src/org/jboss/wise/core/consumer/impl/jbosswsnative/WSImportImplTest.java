@@ -20,16 +20,18 @@
  * site: http://www.fsf.org.
  */
 
-package org.jboss.wise.core.consumer.impl.reflection;
+package org.jboss.wise.core.consumer.impl.jbosswsnative;
 
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.matchers.JUnitMatchers.hasItem;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 import java.io.File;
 import java.net.URL;
 import java.util.List;
-import org.jboss.wise.core.consumer.impl.jbosswsnative.WSImportImpl;
 import org.jboss.wise.core.exception.WiseRuntimeException;
 import org.junit.Test;
 
@@ -45,6 +47,32 @@ public class WSImportImplTest {
         URL wsdURL = Thread.currentThread().getContextClassLoader().getResource("../test-resources/hello_world.wsdl");
         WSImportImpl importer = new WSImportImpl();
         importer.importObjectFromWsdl(wsdURL.toExternalForm(), outputDir, outputDir, null, null, null);
+    }
+
+    @Test
+    public void importObjectFromWsdlShouldSetProviderProperties() throws Exception {
+        URL url = Thread.currentThread().getContextClassLoader().getResource(".");
+        File outputDir = new File(url.getFile());
+        URL wsdURL = Thread.currentThread().getContextClassLoader().getResource("../test-resources/hello_world.wsdl");
+        WSImportImpl importer = new WSImportImpl();
+        WSImportImpl.ProviderChanger providerChanger = spy(importer.providerChanger);
+        importer.providerChanger = providerChanger;
+        importer.importObjectFromWsdl(wsdURL.toExternalForm(), outputDir, outputDir, null, null, null);
+        verify(providerChanger).changeProvider();
+        verify(providerChanger).restoreDefaultProvider();
+
+    }
+
+    @Test
+    public void importObjectFromWsdlShouldRestoreDefaultProviderProperties() throws Exception {
+        URL url = Thread.currentThread().getContextClassLoader().getResource(".");
+        File outputDir = new File(url.getFile());
+        URL wsdURL = Thread.currentThread().getContextClassLoader().getResource("../test-resources/hello_world.wsdl");
+        WSImportImpl importer = new WSImportImpl();
+        String defaultProvider = System.getProperty("javax.xml.ws.spi.Provider");
+        importer.importObjectFromWsdl(wsdURL.toExternalForm(), outputDir, outputDir, null, null, null);
+        assertThat(System.getProperty("javax.xml.ws.spi.Provider"), equalTo(defaultProvider));
+
     }
 
     @Test( )
