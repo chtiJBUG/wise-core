@@ -61,7 +61,7 @@ public class WSImportImpl extends WSConsumer {
             wsImporter.setSourceDirectory(sourceDir);
 
             wsImporter.setMessageStream(System.out);
-            // wsImporter.setAdditionalCompilerClassPath(defineAdditionalCompilerClassPath());
+            wsImporter.setAdditionalCompilerClassPath(defineAdditionalCompilerClassPath());
 
             if (bindingFiles != null && bindingFiles.size() > 0) {
                 wsImporter.setBindingFiles(bindingFiles);
