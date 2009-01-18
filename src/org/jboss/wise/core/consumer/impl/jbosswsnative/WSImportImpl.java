@@ -26,6 +26,7 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.util.LinkedList;
 import java.util.List;
+import org.apache.log4j.Logger;
 import org.jboss.wise.core.consumer.WSConsumer;
 import org.jboss.wise.core.exception.WiseRuntimeException;
 import org.jboss.wsf.spi.tools.WSContractConsumer;
@@ -93,7 +94,7 @@ public class WSImportImpl extends WSConsumer {
             try {
                 cp.add(Thread.currentThread().getContextClassLoader().getResource(jar).getPath());
             } catch (NullPointerException npe) {
-                throw new WiseRuntimeException("Didnt't find jar needed by wsImport API:" + jar);
+                Logger.getLogger(this.getClass()).debug("Didnt't find jar needed by wsImport API:" + jar);
             }
 
         }
