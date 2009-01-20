@@ -1,15 +1,23 @@
-/**
- *  WISE Invokes Services Easily - Stefano Maestri / Alessio Soldano
- *  
- *  http://www.javalinuxlabs.org - http://www.javalinux.it 
- *
- *  Wise is free software; you can redistribute it and/or modify it under the 
- *  terms of the GNU Lesser General Public License as published by the Free Software Foundation; 
- *  either version 2.1 of the License, or (at your option) any later version.
- *
- *  Wise is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
- *  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
- *  See the GNU Lesser General Public License for more details at gnu.org.
+/*
+ * JBoss, Home of Professional Open Source Copyright 2006, JBoss Inc., and
+ * individual contributors as indicated by the @authors tag. See the
+ * copyright.txt in the distribution for a full listing of individual
+ * contributors.
+ * 
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ * 
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
  */
 package org.jboss.wise.smooks.decoders;
 
@@ -25,13 +33,16 @@ import org.milyn.javabean.DecodeType;
 import org.milyn.javabean.decoders.DateDecoder;
 
 /**
- * {@link javax.xml.datatype.XMLGregorianCalendar} data decoder. <p/> Decodes the supplied string into a
- * {@link javax.xml.datatype.XMLGregorianCalendar} value based on the supplied "{@link java.text.SimpleDateFormat format}"
- * parameter, or the default (see below). <p/> The default date format used is "<i>yyyy-MM-dd'T'HH:mm:ss</i>" (see
- * {@link SimpleDateFormat}). This format is based on the <a
+ * {@link javax.xml.datatype.XMLGregorianCalendar} data decoder.
+ * <p/>
+ * Decodes the supplied string into a {@link javax.xml.datatype.XMLGregorianCalendar} value based on the supplied "
+ * {@link java.text.SimpleDateFormat format}" parameter, or the default (see below).
+ * <p/>
+ * The default date format used is "<i>yyyy-MM-dd'T'HH:mm:ss</i>" (see {@link SimpleDateFormat}). This format is based on the <a
  * href="http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#isoformats">ISO 8601</a> standard as used by the XML Schema type "<a
- * href="http://www.w3.org/TR/xmlschema-2/#dateTime">dateTime</a>". <p/> This decoder is synchronized on its underlying
- * {@link SimpleDateFormat} instance.
+ * href="http://www.w3.org/TR/xmlschema-2/#dateTime">dateTime</a>".
+ * <p/>
+ * This decoder is synchronized on its underlying {@link SimpleDateFormat} instance.
  * 
  * @author <a href="mailto:stefano.maestri@javalinux.it">stefano.maestri@javalinux.it</a>
  */
