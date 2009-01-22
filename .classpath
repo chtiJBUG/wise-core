@@ -14,6 +14,8 @@
 	<classpathentry kind="src" path="samples/interactiveHelloWorldJDK6/src/server"/>
 	<classpathentry kind="src" path="samples/MTOMSample/src/client"/>
 	<classpathentry kind="src" path="samples/MTOMSample/src/server"/>
+	<classpathentry kind="src" path="samples/helloWorldServlet/src/client"/>
+	<classpathentry kind="src" path="samples/helloWorldServlet/src/server"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/jboss-microcontainer.jar"/>
 	<classpathentry kind="lib" path="lib/commons-lang-2.3.jar"/>
@@ -49,5 +51,6 @@
 	<classpathentry kind="lib" path="lib/cxf/cxf-2.2-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="lib/cxf/jsr311-api-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/jboss-container.jar"/>
+	<classpathentry kind="lib" path="lib/servlet.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>

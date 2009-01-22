@@ -4,7 +4,7 @@
 	xsi:schemaLocation="urn:jboss:bean-deployer bean-deployer_1_0.xsd"
 	xmlns="urn:jboss:bean-deployer">
 
-	<bean name="WSKernelLocator"
+	<bean name="WiseKernelLocator"
 		class="it.javalinux.wise.core.jbossmc.KernelUtil">
 		<property name="kernel">
 			<inject bean="jboss.kernel:service=Kernel" />
