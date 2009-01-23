@@ -156,12 +156,12 @@ public class WSDynamicClientImpl implements WSDynamicClient {
      */
     public WSMethod getWSMethod( String serviceName,
                                  String portName,
-                                 String methodName ) {
+                                 String operationName ) {
         if (servicesMap.size() == 0) {
             processServices();
         }
         WSService wsService = servicesMap.get(serviceName);
-        return wsService.processEndpoints().get(portName).getWSMethods().get(methodName);
+        return wsService.processEndpoints().get(portName).getWSMethods().get(operationName);
     }
 
     public synchronized final URLClassLoader getClassLoader() {

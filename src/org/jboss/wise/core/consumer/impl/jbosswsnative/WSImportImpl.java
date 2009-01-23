@@ -34,6 +34,7 @@ import org.jboss.wsf.spi.tools.WSContractConsumer;
 /**
  * @author stefano.maestri@javalinux.it
  */
+
 public class WSImportImpl extends WSConsumer {
 
     private final String[] needeJars = {"jbossws-native-jaxws.jar", "jbossws-native-jaxws-ext.jar", "jaxb-api.jar",

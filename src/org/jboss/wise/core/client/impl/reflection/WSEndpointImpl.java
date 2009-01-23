@@ -171,7 +171,11 @@ public class WSEndpointImpl implements WSEndpoint {
         for (Method method : this.getUnderlyingObjectClass().getMethods()) {
             WebMethod annotation = method.getAnnotation(WebMethod.class);
             if (annotation != null) {
-                wsMethods.put(method.getName(), new WSMethodImpl(method, this));
+                if (annotation.operationName() != null && !annotation.operationName().equals("")) {
+                    wsMethods.put(annotation.operationName(), new WSMethodImpl(method, this));
+                } else {
+                    wsMethods.put(method.getName(), new WSMethodImpl(method, this));
+                }
             }
         }
         return wsMethods;

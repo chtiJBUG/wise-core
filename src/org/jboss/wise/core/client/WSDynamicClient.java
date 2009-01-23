@@ -54,11 +54,11 @@ public interface WSDynamicClient {
      * 
      * @param serviceName
      * @param portName
-     * @param actionName
+     * @param operationName
      * @return the WSMethod class to use for effective service invocation
      */
     public WSMethod getWSMethod( String serviceName,
                                  String portName,
-                                 String actionName );
+                                 String operationName );
 
 }
