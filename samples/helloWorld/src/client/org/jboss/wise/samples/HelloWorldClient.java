@@ -32,6 +32,7 @@ import org.jboss.wise.core.exception.InvocationException;
 import org.jboss.wise.core.exception.MCKernelUnavailableException;
 import org.jboss.wise.core.exception.MappingException;
 import org.jboss.wise.core.exception.WiseRuntimeException;
+import org.jboss.wise.core.handlers.LoggingHandler;
 
 /**
  * @author stefano.maestri@javalinux.it
@@ -45,6 +46,7 @@ public class HelloWorldClient {
         try {
             WSDynamicClient client = WSDynamicClientFactory.getInstance().getJAXWSClient("http://127.0.0.1:8080/HelloWorld/HelloWorldWS?wsdl");
             WSMethod method = client.getWSMethod("HelloWorldWSService", "HelloWorldPort", "sayHello");
+            method.getEndpoint().addHandler(new LoggingHandler());
             HashMap<String, Object> requestMap = new HashMap<String, Object>();
             requestMap.put("toWhom", "SpiderMan");
             InvocationResult result = method.invoke(requestMap, null);

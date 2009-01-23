@@ -29,9 +29,19 @@ import javax.jws.WebService;
 
 @WebService( name = "HelloWorld", targetNamespace = "http://wise_samples/helloworld" )
 public class HelloWorldWS {
-    @WebMethod
+    @WebMethod( action = "pippo" )
     @WebResult( name = "result" )
     public String sayHello( @WebParam( name = "toWhom" ) String toWhom ) {
+
+        String greeting = "Hello World Greeting for '" + toWhom + "' on " + new java.util.Date();
+
+        return greeting;
+
+    }
+
+    @WebMethod( action = "pippo" )
+    @WebResult( name = "result" )
+    public String sayHello2( @WebParam( name = "toWhom" ) String toWhom ) {
 
         String greeting = "Hello World Greeting for '" + toWhom + "' on " + new java.util.Date();
 
