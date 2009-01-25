@@ -22,9 +22,12 @@
 package org.jboss.wise.core.wsextensions.impl.jbosswsnative;
 
 import java.net.URL;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.soap.SOAPBinding;
+import net.jcip.annotations.ThreadSafe;
 import org.jboss.wise.core.client.WSEndpoint;
 import org.jboss.wise.core.wsextensions.EnablerDelegate;
 import org.jboss.ws.core.StubExt;
@@ -37,9 +40,10 @@ import org.jboss.ws.extensions.addressing.jaxws.WSAddressingClientHandler;
  * @author stefano.maestri@javalinux.it
  * @author alessio.soldano@jboss.com
  */
+@ThreadSafe
 public class ReflectionEnablerDelegate implements EnablerDelegate {
 
-    Map<String, NativeSecurityConfig> securityConfigMap;
+    Map<String, NativeSecurityConfig> securityConfigMap = Collections.synchronizedMap(new HashMap<String, NativeSecurityConfig>());
 
     NativeSecurityConfig defaultSecurityConfig;
 
@@ -81,10 +85,10 @@ public class ReflectionEnablerDelegate implements EnablerDelegate {
      */
     public void visitWSSecurity( WSEndpoint endpoint ) throws UnsupportedOperationException, IllegalStateException {
 
-        NativeSecurityConfig securityConfig = securityConfigMap != null ? securityConfigMap.get(endpoint.getMethodName()) : null;
+        NativeSecurityConfig securityConfig = getSecurityConfigMap() != null ? getSecurityConfigMap().get(endpoint.getMethodName()) : null;
 
         if (securityConfig == null) {
-            securityConfig = defaultSecurityConfig;
+            securityConfig = this.getDefaultSecurityConfig();
         }
 
         if (securityConfig == null) {
@@ -108,7 +112,7 @@ public class ReflectionEnablerDelegate implements EnablerDelegate {
      * 
      * @return securityConfigMap
      */
-    public final Map<String, NativeSecurityConfig> getSecurityConfigMap() {
+    public synchronized final Map<String, NativeSecurityConfig> getSecurityConfigMap() {
         return securityConfigMap;
     }
 
@@ -118,8 +122,9 @@ public class ReflectionEnablerDelegate implements EnablerDelegate {
      * 
      * @param securityConfigMap Sets securityConfigMap to the specified value.
      */
-    public final void setSecurityConfigMap( Map<String, NativeSecurityConfig> securityConfigMap ) {
-        this.securityConfigMap = securityConfigMap;
+    public synchronized final void setSecurityConfigMap( Map<String, NativeSecurityConfig> securityConfigMap ) {
+        this.securityConfigMap.clear();
+        this.securityConfigMap.putAll(securityConfigMap);
     }
 
     /**
@@ -128,7 +133,7 @@ public class ReflectionEnablerDelegate implements EnablerDelegate {
      * 
      * @return defaultSecurityConfig
      */
-    public final NativeSecurityConfig getDefaultSecurityConfig() {
+    public synchronized final NativeSecurityConfig getDefaultSecurityConfig() {
         return defaultSecurityConfig;
     }
 
@@ -138,7 +143,7 @@ public class ReflectionEnablerDelegate implements EnablerDelegate {
      * 
      * @param defaultSecurityConfig Sets defaultSecurityConfig to the specified value.
      */
-    public final void setDefaultSecurityConfig( NativeSecurityConfig defaultSecurityConfig ) {
+    public synchronized final void setDefaultSecurityConfig( NativeSecurityConfig defaultSecurityConfig ) {
         this.defaultSecurityConfig = defaultSecurityConfig;
     }
 }

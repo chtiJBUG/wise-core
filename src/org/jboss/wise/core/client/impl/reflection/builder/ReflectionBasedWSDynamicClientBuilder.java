@@ -33,6 +33,8 @@ import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
+import net.jcip.annotations.GuardedBy;
+import net.jcip.annotations.ThreadSafe;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.jboss.wise.core.client.WSDynamicClient;
@@ -47,14 +49,22 @@ import sun.misc.BASE64Encoder;
 /**
  * @author stefano.maestri@javalinux.it
  */
+@ThreadSafe
 public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBuilder {
     private static Logger logger = Logger.getLogger(ReflectionBasedWSDynamicClientBuilder.class);
+    @GuardedBy( "this" )
     private String wsdlURL;
+    @GuardedBy( "this" )
     private String userName;
+    @GuardedBy( "this" )
     private String password;
+    @GuardedBy( "this" )
     private String tmpDir;
+    @GuardedBy( "this" )
     private String targetPackage;
+    @GuardedBy( "this" )
     private List<File> bindingFiles = null;
+    @GuardedBy( "this" )
     private File catelog = null;
 
     /**
@@ -63,12 +73,12 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#build()
      */
     public WSDynamicClient build() throws IllegalStateException, ConnectException, WiseRuntimeException {
-        if (wsdlURL != null && wsdlURL.startsWith("http://")) {
-            wsdlURL = this.getUsableWSDL();
+        if (this.getWsdlURL() != null && this.getWsdlURL().startsWith("http://")) {
+            this.setWsdlURL(this.getUsableWSDL());
         }
         logger.debug("Get usable WSDL :" + wsdlURL);
 
-        if (wsdlURL == null || wsdlURL.trim().length() == 0) {
+        if (this.getWsdlURL() == null || this.getWsdlURL().trim().length() == 0) {
             throw new IllegalStateException("wsdlURL cannot be null");
         }
 
@@ -151,15 +161,15 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * 
      * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#getTargetPackage()
      */
-    public final String getTargetPackage() {
+    public synchronized final String getTargetPackage() {
         return targetPackage;
     }
 
-    public final List<File> getBindingFiles() {
+    public synchronized final List<File> getBindingFiles() {
         return this.bindingFiles;
     }
 
-    public final File getCatelogFile() {
+    public synchronized final File getCatelogFile() {
         return this.catelog;
     }
 
@@ -170,7 +180,7 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * 
      * @param wsdlURL
      */
-    public final void setWsdlURL( String wsdlURL ) {
+    public synchronized final void setWsdlURL( String wsdlURL ) {
         this.wsdlURL = wsdlURL;
     }
 
@@ -181,7 +191,7 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * 
      * @param userName
      */
-    public final void setUserName( String userName ) {
+    public synchronized final void setUserName( String userName ) {
         this.userName = userName;
     }
 
@@ -192,15 +202,15 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * 
      * @param password
      */
-    public final void setPassword( String password ) {
+    public synchronized final void setPassword( String password ) {
         this.password = password;
     }
 
-    public final void setBindingFiles( List<File> bindings ) {
+    public synchronized final void setBindingFiles( List<File> bindings ) {
         this.bindingFiles = bindings;
     }
 
-    public final void setCatelogFile( File catelog ) {
+    public synchronized final void setCatelogFile( File catelog ) {
         this.catelog = catelog;
     }
 
@@ -209,7 +219,7 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * 
      * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#targetPackage(java.lang.String)
      */
-    public WSDynamicClientBuilder targetPackage( String targetPackage ) {
+    public synchronized WSDynamicClientBuilder targetPackage( String targetPackage ) {
         this.targetPackage = targetPackage;
         return this;
     }
@@ -219,17 +229,17 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * 
      * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#tmpDir(java.lang.String)
      */
-    public WSDynamicClientBuilder tmpDir( String tmpDir ) {
+    public synchronized WSDynamicClientBuilder tmpDir( String tmpDir ) {
         this.tmpDir = tmpDir;
         return this;
     }
 
-    public WSDynamicClientBuilder bindingFiles( List<File> bindings ) {
+    public synchronized WSDynamicClientBuilder bindingFiles( List<File> bindings ) {
         this.bindingFiles = bindings;
         return this;
     }
 
-    public WSDynamicClientBuilder catelogFile( File catelogFile ) {
+    public synchronized WSDynamicClientBuilder catelogFile( File catelogFile ) {
         catelog = catelogFile;
         return this;
     }
@@ -242,7 +252,7 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * @throws WiseRuntimeException If an error occurs while reading the wsdl stream
      */
     // TODO: move to super class
-    private String getUsableWSDL() throws ConnectException, WiseRuntimeException {
+    private synchronized String getUsableWSDL() throws ConnectException, WiseRuntimeException {
         if (StringUtils.trimToNull(userName) == null || StringUtils.trimToNull(password) == null) {
             return this.wsdlURL;
         } else {
@@ -255,7 +265,7 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * 
      * @throws WiseConnectionException If the wsdl cannot be retrieved
      */
-    private String transferWSDL( String usernameAndPassword ) throws ConnectException, WiseRuntimeException {
+    private synchronized String transferWSDL( String usernameAndPassword ) throws ConnectException, WiseRuntimeException {
         String filePath = null;
         try {
             URL endpoint = new URL(wsdlURL);

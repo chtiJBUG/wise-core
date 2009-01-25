@@ -21,6 +21,7 @@
  */
 package org.jboss.wise.core.wsextensions;
 
+import net.jcip.annotations.ThreadSafe;
 import org.jboss.wise.core.client.WSEndpoint;
 
 /**
@@ -33,6 +34,7 @@ import org.jboss.wise.core.client.WSEndpoint;
  * 
  * @author stefano.maestri@javalinux.it
  */
+@ThreadSafe
 public interface EnablerDelegate {
 
     public void visitWSSecurity( WSEndpoint endpoint ) throws UnsupportedOperationException, IllegalStateException;

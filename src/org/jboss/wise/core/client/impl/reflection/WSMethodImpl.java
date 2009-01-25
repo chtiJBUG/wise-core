@@ -32,6 +32,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.jws.Oneway;
 import javax.jws.WebParam;
+import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
 import org.jboss.wise.core.client.InvocationResult;
 import org.jboss.wise.core.client.WSEndpoint;
@@ -49,11 +50,13 @@ import org.jboss.wise.core.mapper.WiseMapper;
 @ThreadSafe
 public class WSMethodImpl implements WSMethod {
 
+    @GuardedBy( "this" )
     private Method method;
 
+    @GuardedBy( "this" )
     private WSEndpoint endpoint;
 
-    private Map<String, WebParameterImpl> parameters = new HashMap<String, WebParameterImpl>();
+    private final Map<String, WebParameterImpl> parameters = Collections.synchronizedMap(new HashMap<String, WebParameterImpl>());
 
     public WSMethodImpl( Method method,
                          WSEndpoint endpoint ) throws IllegalArgumentException {
@@ -93,10 +96,12 @@ public class WSMethodImpl implements WSMethod {
         } catch (InvocationTargetException ite) {
             System.out.print("error invoking:" + this.getMethod());
             System.out.print("error invoking:" + args.values().toArray());
-            for (int i = 0; i < methodPointer.getExceptionTypes().length; i++) {
-                if (ite.getCause().getClass().isAssignableFrom(methodPointer.getExceptionTypes()[i])) {
-                    result = new InvocationResultImpl("exception", ite.getCause(), emptyHolder);
-                    return result;
+            if (methodPointer != null && methodPointer.getExceptionTypes() != null) {
+                for (int i = 0; i < methodPointer.getExceptionTypes().length; i++) {
+                    if (ite.getCause().getClass().isAssignableFrom(methodPointer.getExceptionTypes()[i])) {
+                        result = new InvocationResultImpl("exception", ite.getCause(), emptyHolder);
+                        return result;
+                    }
                 }
             }
             throw new InvocationException("Unknown exception received: " + ite.getMessage(), ite);
@@ -155,7 +160,6 @@ public class WSMethodImpl implements WSMethod {
     }
 
     private void initWebParams() {
-        parameters = new HashMap<String, WebParameterImpl>();
         Method method = this.getMethod();
         Annotation[][] annotations = method.getParameterAnnotations();
         Type[] methodparameterTypes = method.getGenericParameterTypes();

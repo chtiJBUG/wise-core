@@ -25,12 +25,13 @@ package org.jboss.wise.core.handlers;
 import java.io.PrintStream;
 import java.util.HashSet;
 import java.util.Set;
-
 import javax.xml.namespace.QName;
 import javax.xml.soap.SOAPMessage;
 import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.handler.soap.SOAPHandler;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
+import net.jcip.annotations.Immutable;
+import net.jcip.annotations.ThreadSafe;
 
 /**
  * This simple SOAPHandler will output the contents of incoming and outgoing messages. Check the MESSAGE_OUTBOUND_PROPERTY in the
@@ -38,15 +39,17 @@ import javax.xml.ws.handler.soap.SOAPMessageContext;
  * 
  * @author Stefano Maestri, stefano.maestri@javalinux.it
  */
+@ThreadSafe
+@Immutable
 public class LoggingHandler implements SOAPHandler<SOAPMessageContext> {
 
-    private PrintStream outputStream = System.out;
+    private final PrintStream outputStream;
 
     /**
      * Default constructor using default System.out PrintStream to print message
      */
     public LoggingHandler() {
-
+        outputStream = System.out;
     }
 
     /**
@@ -59,7 +62,7 @@ public class LoggingHandler implements SOAPHandler<SOAPMessageContext> {
     }
 
     public Set<QName> getHeaders() {
-        return new HashSet<QName>(); //empty set
+        return new HashSet<QName>(); // empty set
     }
 
     public boolean handleMessage( SOAPMessageContext smc ) {
@@ -93,10 +96,4 @@ public class LoggingHandler implements SOAPHandler<SOAPMessageContext> {
         }
     }
 
-    /**
-     * @param outputStream custom PrintStream outputter
-     */
-    public void setOutputStream( PrintStream outputStream ) {
-        this.outputStream = outputStream;
-    }
 }

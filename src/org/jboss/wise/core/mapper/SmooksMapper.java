@@ -25,6 +25,8 @@ package org.jboss.wise.core.mapper;
 import java.io.IOException;
 import java.util.Map;
 import javax.xml.transform.Source;
+import net.jcip.annotations.GuardedBy;
+import net.jcip.annotations.ThreadSafe;
 import org.apache.log4j.Logger;
 import org.jboss.wise.core.exception.MappingException;
 import org.jboss.wise.core.utils.SmooksCache;
@@ -41,10 +43,13 @@ import org.xml.sax.SAXException;
  * 
  * @author stefano.maestri@javalinux.it
  */
+@ThreadSafe
 public class SmooksMapper implements WiseMapper {
 
+    @GuardedBy( "this" )
     private String smooksResource;
 
+    @GuardedBy( "this" )
     private String smooksReport = null;
 
     private final Logger log = Logger.getLogger(SmooksMapper.class);
@@ -81,11 +86,11 @@ public class SmooksMapper implements WiseMapper {
      */
     public Map<String, Object> applyMapping( Object originalObjects ) throws MappingException {
 
-        Smooks smooks = SmooksCache.getInstance().get(smooksResource);
+        Smooks smooks = SmooksCache.getInstance().get(this.getSmooksResource());
         if (smooks == null) {
             smooks = new Smooks();
             try {
-                smooks.addConfigurations("smooks-resource", new URIResourceLocator().getResource(smooksResource));
+                smooks.addConfigurations("smooks-resource", new URIResourceLocator().getResource(this.getSmooksResource()));
             } catch (IllegalArgumentException e) {
                 throw new MappingException("Failed to add smooks resource to smooks cahe", e);
             } catch (SAXException e) {
@@ -93,7 +98,7 @@ public class SmooksMapper implements WiseMapper {
             } catch (IOException e) {
                 throw new MappingException("Failed to add smooks resource to smooks cahe", e);
             }
-            SmooksCache.getInstance().put(smooksResource, smooks);
+            SmooksCache.getInstance().put(this.getSmooksResource(), smooks);
         }
 
         ExecutionContext executionContext = smooks.createExecutionContext();
@@ -117,7 +122,7 @@ public class SmooksMapper implements WiseMapper {
                                                                                             org.milyn.container.plugin.ResultType.JAVA);
         Map<String, Object> returnMap = (Map<String, Object>)payloadProcessor.process(originalObjects, executionContext);
         // workaround when we would to use smooks to extract a single value
-        // Have a lok to SmooksMapperTest.shouldMapToSingleInput() for an example of use
+        // Have a look to SmooksMapperTest.shouldMapToSingleInput() for an example of use
         if (returnMap.size() == 1 && returnMap.get("singleInput") != null) {
             returnMap = (Map<String, Object>)returnMap.get("singleInput");
         }
@@ -125,19 +130,19 @@ public class SmooksMapper implements WiseMapper {
 
     }
 
-    public String getSmooksResource() {
+    public synchronized String getSmooksResource() {
         return smooksResource;
     }
 
-    public void setSmooksResource( String smooksResource ) {
+    public synchronized void setSmooksResource( String smooksResource ) {
         this.smooksResource = smooksResource;
     }
 
-    public String getSmooksReport() {
+    public synchronized String getSmooksReport() {
         return smooksReport;
     }
 
-    public void setSmooksReport( String smooksReport ) {
+    public synchronized void setSmooksReport( String smooksReport ) {
         this.smooksReport = smooksReport;
     }
 

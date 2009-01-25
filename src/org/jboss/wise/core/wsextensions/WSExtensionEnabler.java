@@ -21,6 +21,8 @@
  */
 package org.jboss.wise.core.wsextensions;
 
+import net.jcip.annotations.GuardedBy;
+import net.jcip.annotations.ThreadSafe;
 import org.jboss.wise.core.client.WSEndpoint;
 import org.jboss.wise.core.jbossmc.BeansNames;
 import org.jboss.wise.core.jbossmc.MicroContainerSpi;
@@ -34,8 +36,10 @@ import org.jboss.wise.core.jbossmc.MicroContainerSpi;
  * 
  * @author stefano.maestri@javalinux.it
  */
+@ThreadSafe
 public abstract class WSExtensionEnabler {
 
+    @GuardedBy( "this" )
     protected EnablerDelegate delegate = MicroContainerSpi.getKernelProvidedImplementation(BeansNames.EnablerDelegate.name(),
                                                                                            EnablerDelegate.class);
 
@@ -52,14 +56,14 @@ public abstract class WSExtensionEnabler {
      * 
      * @return visitor
      */
-    public final EnablerDelegate getDelegate() {
+    public synchronized final EnablerDelegate getDelegate() {
         return delegate;
     }
 
     /**
      * @param delegate
      */
-    public final void setDelegate( EnablerDelegate delegate ) {
+    public synchronized final void setDelegate( EnablerDelegate delegate ) {
         this.delegate = delegate;
     }
 

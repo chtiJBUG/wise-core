@@ -34,6 +34,8 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.handler.soap.SOAPHandler;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
+import net.jcip.annotations.GuardedBy;
+import net.jcip.annotations.ThreadSafe;
 import org.jboss.wise.core.utils.SmooksCache;
 import org.milyn.Smooks;
 import org.milyn.container.ExecutionContext;
@@ -49,14 +51,17 @@ import org.milyn.resource.URIResourceLocator;
  * @see #setOutBoundHandlingEnabled(boolean)
  * @author Stefano Maestri, stefano.maestri@javalinux.it
  */
+@ThreadSafe
 public class SmooksHandler implements SOAPHandler<SOAPMessageContext> {
 
     private final String smooksResource;
 
     private final Map beansMap;
 
+    @GuardedBy( "this" )
     private boolean outBoundHandlingEnabled = true;
 
+    @GuardedBy( "this" )
     private boolean inBoundHandlingEnabled = true;
 
     /**
@@ -144,25 +149,25 @@ public class SmooksHandler implements SOAPHandler<SOAPMessageContext> {
         }
     }
 
-    public boolean isOutBoundHandlingEnabled() {
+    public synchronized boolean isOutBoundHandlingEnabled() {
         return outBoundHandlingEnabled;
     }
 
     /**
      * @param outBoundHandlingEnabled if true smooks transformation are applied to outBound message
      */
-    public void setOutBoundHandlingEnabled( boolean outBoundHandlingEnabled ) {
+    public synchronized void setOutBoundHandlingEnabled( boolean outBoundHandlingEnabled ) {
         this.outBoundHandlingEnabled = outBoundHandlingEnabled;
     }
 
-    public boolean isInBoundHandlingEnabled() {
+    public synchronized boolean isInBoundHandlingEnabled() {
         return inBoundHandlingEnabled;
     }
 
     /**
      * @param inBoundHandlingEnabled if true smooks transformation are applied to inBound message
      */
-    public void setInBoundHandlingEnabled( boolean inBoundHandlingEnabled ) {
+    public synchronized void setInBoundHandlingEnabled( boolean inBoundHandlingEnabled ) {
         this.inBoundHandlingEnabled = inBoundHandlingEnabled;
     }
 }

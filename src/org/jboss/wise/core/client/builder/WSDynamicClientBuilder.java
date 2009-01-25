@@ -25,12 +25,14 @@ package org.jboss.wise.core.client.builder;
 import java.io.File;
 import java.net.ConnectException;
 import java.util.List;
+import net.jcip.annotations.ThreadSafe;
 import org.jboss.wise.core.client.WSDynamicClient;
 import org.jboss.wise.core.exception.WiseRuntimeException;
 
 /**
  * @author stefano.maestri@javalinux.it
  */
+@ThreadSafe
 public interface WSDynamicClientBuilder {
 
     public WSDynamicClient build() throws IllegalStateException, ConnectException, WiseRuntimeException;

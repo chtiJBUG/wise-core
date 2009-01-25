@@ -49,7 +49,7 @@ import org.jboss.wise.core.utils.SmooksCache;
  * WSDynamicClientFactory is a singleton containing a WSDynamicClient cache. It's able to create WSDynamicCient objects, and init
  * then using WiseProperties using wise-core.properties find in classpath as default. This default properties may be overridden
  * using setWiseProperties method.
- *
+ * 
  * @author Stefano Maestri, stefano.maestri@javalinux.it
  */
 @ThreadSafe
@@ -121,7 +121,7 @@ public abstract class WSDynamicClientFactory {
 
     /**
      * Return an instance of WSDynamicClient taken from cache if possible, generate and initialise if not.
-     *
+     * 
      * @param wsdlURL The URL to retrive wsdl of webservice called
      * @param userName we support HTTP BASIC Auth protected wsdls: this is username used for authentication
      * @param password we support HTTP BASIC Auth protected wsdls: this is password used for authentication
@@ -158,18 +158,21 @@ public abstract class WSDynamicClientFactory {
             password = config.getDefaultPassword();
         }
         builder.userName(userName).password(password);
-        WSDynamicClient client = WSDynamicClientCache.getInstace().get(wsdlURL);
-        if (client == null) {
-            client = builder.build();
-            WSDynamicClientCache.getInstace().addToCache(wsdlURL, client);
+        synchronized (WSDynamicClientFactory.class) {
+            WSDynamicClient client = WSDynamicClientCache.getInstace().get(wsdlURL);
+            if (client == null) {
+                client = builder.build();
+                WSDynamicClientCache.getInstace().addToCache(wsdlURL, client);
+            }
+            log.debug("Create WSDynamicClient successfully");
+            return client;
+
         }
-        log.debug("Create WSDynamicClient successfully");
-        return client;
     }
 
     /**
      * Return an instance of RSDynamicClient taken from cache if possible, generate and initialise if not.
-     *
+     * 
      * @param endpointURL
      * @param produceMediaTypes
      * @param consumeMediaTypes
@@ -190,7 +193,7 @@ public abstract class WSDynamicClientFactory {
 
     /**
      * Return an instance of RSDynamicClient taken from cache if possible, generate and initialise if not.
-     *
+     * 
      * @param endpointURL
      * @param produceMediaTypes
      * @param consumeMediaTypes
@@ -205,11 +208,11 @@ public abstract class WSDynamicClientFactory {
 
     }
 
-    public final WiseClientConfiguration getConfig() {
+    public final synchronized WiseClientConfiguration getConfig() {
         return config;
     }
 
-    public final void setConfig( WiseClientConfiguration config ) {
+    public final synchronized void setConfig( WiseClientConfiguration config ) {
         this.config = config;
     }
 

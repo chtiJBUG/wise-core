@@ -29,8 +29,8 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 import javax.xml.ws.WebServiceClient;
 import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
@@ -62,7 +62,7 @@ public class WSDynamicClientImpl implements WSDynamicClient {
     private final String userName;
     private final String password;
 
-    private final List<String> classNames;
+    private final CopyOnWriteArrayList<String> classNames = new CopyOnWriteArrayList<String>();
     private final Map<String, WSService> servicesMap = Collections.synchronizedMap(new HashMap<String, WSService>());
 
     public WSDynamicClientImpl( WSDynamicClientBuilder builder ) throws WiseRuntimeException, MCKernelUnavailableException {
@@ -80,12 +80,12 @@ public class WSDynamicClientImpl implements WSDynamicClient {
         File sourceDir = new File(builder.getTmpDir() + "/src/" + symbolicName + "/");
 
         try {
-            classNames = consumer.importObjectFromWsdl(builder.getWsdlURL(),
-                                                       outputDir,
-                                                       sourceDir,
-                                                       builder.getTargetPackage(),
-                                                       builder.getBindingFiles(),
-                                                       builder.getCatelogFile());
+            classNames.addAll(consumer.importObjectFromWsdl(builder.getWsdlURL(),
+                                                            outputDir,
+                                                            sourceDir,
+                                                            builder.getTargetPackage(),
+                                                            builder.getBindingFiles(),
+                                                            builder.getCatelogFile()));
         } catch (MalformedURLException e) {
             throw new WiseRuntimeException("Problem consumig wsdl:" + builder.getWsdlURL(), e);
         }
