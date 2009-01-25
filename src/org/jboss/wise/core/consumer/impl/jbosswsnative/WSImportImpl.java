@@ -26,6 +26,7 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.util.LinkedList;
 import java.util.List;
+import net.jcip.annotations.ThreadSafe;
 import org.apache.log4j.Logger;
 import org.jboss.wise.core.consumer.WSConsumer;
 import org.jboss.wise.core.exception.WiseRuntimeException;
@@ -34,21 +35,29 @@ import org.jboss.wsf.spi.tools.WSContractConsumer;
 /**
  * @author stefano.maestri@javalinux.it
  */
-
+@ThreadSafe
 public class WSImportImpl extends WSConsumer {
 
     private final String[] needeJars = {"jbossws-native-jaxws.jar", "jbossws-native-jaxws-ext.jar", "jaxb-api.jar",
         "jaxb-impl.jar"};
 
-    ProviderChanger providerChanger = new ProviderChanger();
+    private final ProviderChanger providerChanger;
+
+    public WSImportImpl() {
+        providerChanger = new ProviderChanger();
+    }
+
+    WSImportImpl( ProviderChanger changer ) {
+        providerChanger = changer;
+    }
 
     @Override
-    public List<String> importObjectFromWsdl( String wsdlURL,
-                                              File outputDir,
-                                              File sourceDir,
-                                              String targetPackage,
-                                              List<File> bindingFiles,
-                                              File catelog ) throws MalformedURLException, WiseRuntimeException {
+    public synchronized List<String> importObjectFromWsdl( String wsdlURL,
+                                                           File outputDir,
+                                                           File sourceDir,
+                                                           String targetPackage,
+                                                           List<File> bindingFiles,
+                                                           File catelog ) throws MalformedURLException, WiseRuntimeException {
         try {
             // NEEDED for WISE-36 issue
             providerChanger.changeProvider();
@@ -89,7 +98,7 @@ public class WSImportImpl extends WSConsumer {
     *
     * @return A list of paths
     */
-    List<String> defineAdditionalCompilerClassPath() throws WiseRuntimeException {
+    private List<String> defineAdditionalCompilerClassPath() throws WiseRuntimeException {
         List<String> cp = new LinkedList<String>();
         for (String jar : needeJars) {
             try {
