@@ -14,6 +14,7 @@
 	<property name="integration.test.builder" value="builder/test/build-integration-tests.xml" />
 	<property name="classes.dir" value="${build.dir}/classes" />
 	<property name="test.classes.dir" value="${build.dir}/test-classes" />
+	<property name="resources.dir" value="${basedir}/resources" />
 	<property name="test.resources.dir" value="${basedir}/test-resources" />
 	<property name="test.output.dir" value="${basedir}/test-output" />
 	<property name="src.java.dir" value="src" />

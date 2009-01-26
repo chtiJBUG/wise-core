@@ -17,7 +17,7 @@
 	</target>
 
 	<target name="dist" depends="clean" description="Generates jar archive">
-		<ant antfile="${main.builder}" target="jar" />
+		<ant antfile="${main.builder}" target="sar" />
 	</target>
 
 	<target name="release" depends="cleanAll,dist" description="prepare binary distribution">

@@ -31,6 +31,34 @@
 		</jar>
 	</target>
 
+	<target name="sar" depends="jar">
+		<mkdir dir="${build.dir}/${ant.project.name}.sar" />
+		<copy todir="${build.dir}/${ant.project.name}.sar" flatten="true">
+			<fileset dir="${lib.dir}">
+				<include name="**/commons-io-1.4.jar" />
+				<include name="**/commons-lang-2.3.jar" />
+				<include name="**/freemarker-2.3.9.jar" />
+				<include name="**/jaxb-xjc.jar" />
+				<include name="**/jaxws-rt.jar" />
+				<include name="**/jaxws-tools.jar" />
+				<include name="**/jbossws-native-jaxws-ext.jar" />
+				<include name="**/jbossws-native-jaxws.jar" />
+				<include name="**/jcip-annotations.jar" />
+				<include name="**/smooks/*" />
+				<include name="**/stax-ex.jar" />
+				<include name="**/streambuffer.jar" />
+				<include name="**/wise-core.jar" />
+				<include name="**/xstream-1.2.2.jar" />
+			</fileset>
+		</copy>
+		<copy tofile="${build.dir}/${ant.project.name}.sar/${ant.project.name}.jar" file="${build.dir}/${ant.project.name}.jar" />
+		<copy todir="${build.dir}/${ant.project.name}.sar" flatten="false">
+			<fileset dir="${resources.dir}">
+			</fileset>
+		</copy>
+	</target>
+
+
 	<target name="copyLibForSample">
 		<copy todir="${samples.lib.dir}" flatten="true">
 			<fileset dir="${lib.dir}">
@@ -56,6 +84,7 @@
 				<include name="**/commons-httpclient-3.1.jar" />
 			</fileset>
 		</copy>
+
 		<copy todir="${samples.lib.dir}/JDK5" flatten="true">
 			<fileset dir="${lib.dir}">
 				<include name="**/wsdl4j.jar" />
@@ -89,8 +118,8 @@
 		</copy>
 	</target>
 	<target name="javadoc" description="Creates the JavaDoc output">
-	    <javadoc sourcepath="${src.java.dir}" destdir="docs/api" classpathref="build.classpath"/>
-	  </target>
+		<javadoc sourcepath="${src.java.dir}" destdir="docs/api" classpathref="build.classpath" />
+	</target>
 
 
 </project>
