@@ -24,8 +24,11 @@ package org.jboss.wise.core.wsextensions.impl.jbosswsnative;
 import java.net.URL;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import javax.xml.ws.BindingProvider;
+import javax.xml.ws.handler.Handler;
 import javax.xml.ws.soap.SOAPBinding;
 import net.jcip.annotations.ThreadSafe;
 import org.jboss.wise.core.client.WSEndpoint;
@@ -84,6 +87,8 @@ public class ReflectionEnablerDelegate implements EnablerDelegate {
      * @see org.jboss.wise.core.wsextensions.EnablerDelegate#visitWSSecurity(org.jboss.wise.core.client.WSEndpoint)
      */
     public void visitWSSecurity( WSEndpoint endpoint ) throws UnsupportedOperationException, IllegalStateException {
+        List<Handler> origHandlerChain = ((BindingProvider)endpoint.getUnderlyingObjectInstance()).getBinding().getHandlerChain();
+        ((BindingProvider)endpoint.getUnderlyingObjectInstance()).getBinding().setHandlerChain(new LinkedList<Handler>());
 
         NativeSecurityConfig securityConfig = getSecurityConfigMap() != null ? getSecurityConfigMap().get(endpoint.getMethodName()) : null;
 
@@ -103,6 +108,9 @@ public class ReflectionEnablerDelegate implements EnablerDelegate {
             ((StubExt)endpoint.getUnderlyingObjectInstance()).setSecurityConfig(configFile.toExternalForm());
             ((StubExt)endpoint.getUnderlyingObjectInstance()).setConfigName(securityConfig.getConfigName());
         }
+        List<Handler> handlerChain = ((BindingProvider)endpoint.getUnderlyingObjectInstance()).getBinding().getHandlerChain();
+        handlerChain.addAll(origHandlerChain);
+        ((BindingProvider)endpoint.getUnderlyingObjectInstance()).getBinding().setHandlerChain(handlerChain);
 
     }
 
