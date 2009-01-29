@@ -1,0 +1,20 @@
+
+# /
+/smook
+/temp
+/test-output
+/build
+/classes
+/.settings
+/target
+
+# /docs/
+/docs/api
+
+# /samples/
+/samples/lib
+
+# /samples/MTOMSample/
+/samples/MTOMSample/build
+/samples/MTOMSample/classes
+/samples/MTOMSample/log
