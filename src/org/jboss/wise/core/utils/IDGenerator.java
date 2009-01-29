@@ -22,22 +22,17 @@
 
 package org.jboss.wise.core.utils;
 
+import java.util.UUID;
+
 /**
- * Generates unique ID numbers, almost like
- * a database sequence.
+ * Generates unique ID numbers, almost like a database sequence.
  * 
  * @author alessio.soldano@javalinux.it
  * @since 25-Apr-2005
  */
 public final class IDGenerator {
-	
-	private static long counter = 0;
-	
-	
-	public static final synchronized long nextVal() {
-		if (counter>=Long.MAX_VALUE-1) {
-			counter = 0;
-		}
-		return counter++;
-	}
+
+    public static final synchronized String nextVal() {
+        return UUID.randomUUID().toString();
+    }
 }
