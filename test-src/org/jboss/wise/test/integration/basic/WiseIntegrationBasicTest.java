@@ -22,15 +22,15 @@
 
 package org.jboss.wise.test.integration.basic;
 
+import java.net.URL;
+import java.util.Map;
 import org.jboss.wise.core.client.InvocationResult;
 import org.jboss.wise.core.client.WSDynamicClient;
 import org.jboss.wise.core.client.WSMethod;
 import org.jboss.wise.core.client.factories.WSDynamicClientFactory;
 import org.jboss.wise.core.test.WiseTest;
-import org.junit.Assert;
-import java.net.URL;
-import java.util.Map;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 

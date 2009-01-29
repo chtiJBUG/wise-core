@@ -22,8 +22,8 @@
 
 package org.jboss.wise.test.mocks;
 
-import javax.xml.ws.WebServiceClient;
 import javax.xml.ws.WebEndpoint;
+import javax.xml.ws.WebServiceClient;
 
 /**
  * @author stefano.maestri@javalinux.it

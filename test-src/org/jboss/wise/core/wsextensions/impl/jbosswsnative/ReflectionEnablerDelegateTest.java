@@ -25,8 +25,8 @@ import static org.hamcrest.core.IsAnything.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.stub;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.soap.SOAPBinding;
 import org.jboss.wise.core.client.WSEndpoint;
@@ -52,8 +52,8 @@ public class ReflectionEnablerDelegateTest {
         WSEndpoint endpoint = mock(WSEndpoint.class);
         BindingProvider bindingProvider = mock(BindingProvider.class);
         SOAPBinding binding = mock(SOAPBinding.class);
-        stub(endpoint.getUnderlyingObjectInstance()).toReturn(bindingProvider);
-        stub(bindingProvider.getBinding()).toReturn(binding);
+        when(endpoint.getUnderlyingObjectInstance()).thenReturn(bindingProvider);
+        when(bindingProvider.getBinding()).thenReturn(binding);
         delegate.visitMTOM(endpoint);
         verify(binding).setMTOMEnabled(true);
     }
@@ -96,7 +96,7 @@ public class ReflectionEnablerDelegateTest {
 
         WSEndpoint endpoint = mock(WSEndpoint.class);
         StubExt stub = mock(StubExt.class);
-        stub(endpoint.getUnderlyingObjectInstance()).toReturn(stub);
+        when(endpoint.getUnderlyingObjectInstance()).thenReturn(stub);
         delegate.visitWSSecurity(endpoint);
         verify(stub).setSecurityConfig(anyString());
         verify(stub).setConfigName(anyString());

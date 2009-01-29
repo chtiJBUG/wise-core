@@ -28,7 +28,6 @@ import static org.junit.Assert.assertThat;
 import java.util.Map;
 import javax.jws.WebMethod;
 import org.jboss.wise.core.client.WSMethod;
-import org.jboss.wise.core.client.impl.reflection.WSEndpointImpl;
 import org.junit.Test;
 
 /**

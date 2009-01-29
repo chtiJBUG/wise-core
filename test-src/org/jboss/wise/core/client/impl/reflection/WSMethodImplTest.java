@@ -28,7 +28,7 @@ import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.stub;
+import static org.mockito.Mockito.when;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.HashMap;
@@ -38,8 +38,6 @@ import javax.jws.WebParam;
 import javax.jws.WebParam.Mode;
 import org.jboss.wise.core.client.InvocationResult;
 import org.jboss.wise.core.client.WSEndpoint;
-import org.jboss.wise.core.client.impl.reflection.WSMethodImpl;
-import org.jboss.wise.core.client.impl.reflection.WebParameterImpl;
 import org.jboss.wise.core.mapper.WiseMapper;
 import org.junit.Before;
 import org.junit.Test;
@@ -185,7 +183,7 @@ public class WSMethodImplTest {
     public void shouldRuninvokeForOneWayMethod() throws Exception {
         Method method = this.getClass().getMethod("methodOneWay", new Class[] {});
         WSEndpoint endPointMock = mock(WSEndpoint.class);
-        stub(endPointMock.getUnderlyingObjectInstance()).toReturn(this);
+        when(endPointMock.getUnderlyingObjectInstance()).thenReturn(this);
         WSMethodImpl wsMethod = new WSMethodImpl(method, endPointMock);
         InvocationResult invocationResults = wsMethod.invoke(Collections.EMPTY_MAP);
         Map<String, Object> results = invocationResults.getMapRequestAndResult(null, null);
@@ -199,7 +197,7 @@ public class WSMethodImplTest {
     public void shouldRuninvokeForMethods() throws Exception {
         Method method = this.getClass().getMethod("methodForAnnotation", new Class[] {Integer.class, String.class, String.class});
         WSEndpoint endPointMock = mock(WSEndpoint.class);
-        stub(endPointMock.getUnderlyingObjectInstance()).toReturn(this);
+        when(endPointMock.getUnderlyingObjectInstance()).thenReturn(this);
         WSMethodImpl wsMethod = new WSMethodImpl(method, endPointMock);
         Map<String, Object> inputMap = new HashMap<String, Object>();
         inputMap.put("annotation2", "foo2");
@@ -219,14 +217,14 @@ public class WSMethodImplTest {
     public void shouldRuninvokeForMethodsApplyingMapping() throws Exception {
         Method method = this.getClass().getMethod("methodForAnnotation", new Class[] {Integer.class, String.class, String.class});
         WSEndpoint endPointMock = mock(WSEndpoint.class);
-        stub(endPointMock.getUnderlyingObjectInstance()).toReturn(this);
+        when(endPointMock.getUnderlyingObjectInstance()).thenReturn(this);
         WSMethodImpl wsMethod = new WSMethodImpl(method, endPointMock);
         Map<String, Object> inputMap = new HashMap<String, Object>();
         inputMap.put("annotation2", "foo2");
         inputMap.put("annotation3", "foo3");
         inputMap.put("annotaion1", Integer.valueOf(3));
         WiseMapper mapper = mock(WiseMapper.class);
-        stub(mapper.applyMapping(anyObject())).toReturn(inputMap);
+        when(mapper.applyMapping(anyObject())).thenReturn(inputMap);
         InvocationResult invocationResults = wsMethod.invoke(inputMap, mapper);
         assertThat(this.methodWorked, is(true));
         Map<String, Object> results = (Map)invocationResults.getMapRequestAndResult(null, null).get("results");

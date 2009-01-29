@@ -30,7 +30,7 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.stub;
+import static org.mockito.Mockito.when;
 import java.io.File;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -67,12 +67,12 @@ public class WSDynamicClientImplTest {
     public void shouldInitClassLoader() throws Exception {
         WSConsumer consumerMock = mock(WSConsumer.class);
 
-        stub(consumerMock.importObjectFromWsdl(anyString(),
+        when(consumerMock.importObjectFromWsdl(anyString(),
                                                (File)anyObject(),
                                                (File)anyObject(),
                                                anyString(),
                                                (List)anyObject(),
-                                               (File)anyObject())).toReturn(new LinkedList<String>());
+                                               (File)anyObject())).thenReturn(new LinkedList<String>());
         WSDynamicClientImpl client = new WSDynamicClientImpl(builder, consumerMock);
         File expectedOutPutDir = new File("/tmp/" + DigestUtils.md5Hex("foo"));
         assertThat(client.getClassLoader().getURLs().length, is(1));
@@ -84,12 +84,12 @@ public class WSDynamicClientImplTest {
         WSConsumer consumerMock = mock(WSConsumer.class);
         String[] classes = {"org.jboss.wise.test.mocks.Service1", "org.jboss.wise.test.mocks.Service2"};
 
-        stub(consumerMock.importObjectFromWsdl(anyString(),
+        when(consumerMock.importObjectFromWsdl(anyString(),
                                                (File)anyObject(),
                                                (File)anyObject(),
                                                anyString(),
                                                (List)anyObject(),
-                                               (File)anyObject())).toReturn(Arrays.asList(classes));
+                                               (File)anyObject())).thenReturn(Arrays.asList(classes));
         WSDynamicClientImpl client = new WSDynamicClientImpl(builder, consumerMock);
 
         Map<String, WSService> services = client.processServices();
@@ -103,12 +103,12 @@ public class WSDynamicClientImplTest {
         WSConsumer consumerMock = mock(WSConsumer.class);
         String[] classes = {"org.jboss.wise.test.mocks.Service1", "org.jboss.wise.test.mocks.Service2"};
 
-        stub(consumerMock.importObjectFromWsdl(anyString(),
+        when(consumerMock.importObjectFromWsdl(anyString(),
                                                (File)anyObject(),
                                                (File)anyObject(),
                                                anyString(),
                                                (List)anyObject(),
-                                               (File)anyObject())).toReturn(Arrays.asList(classes));
+                                               (File)anyObject())).thenReturn(Arrays.asList(classes));
         WSDynamicClientImpl client = new WSDynamicClientImpl(builder, consumerMock);
 
         WSMethod wsMethod = client.getWSMethod("ServiceName1", "Port1", "testMethod");

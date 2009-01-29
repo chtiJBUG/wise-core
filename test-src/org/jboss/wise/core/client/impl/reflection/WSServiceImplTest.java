@@ -33,8 +33,6 @@ import javax.xml.ws.WebEndpoint;
 import net.jcip.annotations.Immutable;
 import org.jboss.wise.core.client.WSEndpoint;
 import org.jboss.wise.core.client.WSService;
-import org.jboss.wise.core.client.impl.reflection.WSEndpointImpl;
-import org.jboss.wise.core.client.impl.reflection.WSServiceImpl;
 import org.junit.Test;
 
 /**

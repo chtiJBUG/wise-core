@@ -27,10 +27,9 @@ import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.stub;
+import static org.mockito.Mockito.when;
 import java.util.HashMap;
 import java.util.Map;
-import org.jboss.wise.core.client.impl.reflection.InvocationResultImpl;
 import org.jboss.wise.core.mapper.WiseMapper;
 import org.junit.Test;
 
@@ -69,7 +68,7 @@ public class InvocationResultImplTest {
         WiseMapper mapper = mock(WiseMapper.class);
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put("result", new Long(2));
-        stub(mapper.applyMapping(anyObject())).toReturn(map);
+        when(mapper.applyMapping(anyObject())).thenReturn(map);
         Map<String, Object> mappedResult = results.getMapRequestAndResult(mapper, null);
         assertThat((Long)((Map)mappedResult).get("result"), equalTo(new Long(2)));
 
@@ -92,7 +91,7 @@ public class InvocationResultImplTest {
         WiseMapper mapper = mock(WiseMapper.class);
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put("result", new Long(2));
-        stub(mapper.applyMapping(anyObject())).toReturn(map);
+        when(mapper.applyMapping(anyObject())).thenReturn(map);
         Map<String, Object> inputMap = new HashMap<String, Object>();
         inputMap.put("origKey", "origValue");
         Map<String, Object> mappedResult = results.getMapRequestAndResult(null, inputMap);

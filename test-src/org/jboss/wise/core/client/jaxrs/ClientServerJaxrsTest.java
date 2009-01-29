@@ -1,10 +1,6 @@
 package org.jboss.wise.core.client.jaxrs;
 
-import java.io.File;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.cxf.helpers.IOUtils;
 import org.apache.cxf.io.CachedOutputStream;
 import org.apache.cxf.testutil.common.AbstractClientServerTestBase;
