@@ -2,7 +2,7 @@
 <project name="wise-core" default="dist" basedir=".">
 
 	<import file="${basedir}/builder/ant-import/build-setup.xml" />
-	<property name="Version" value="0.9"></property>
+	<property name="Version" value="1.0.1"></property>
 
 	<target name="clean" description="Cleans up the build directory">
 		<delete dir="${build.dir}" />
