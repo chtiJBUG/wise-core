@@ -59,7 +59,7 @@ public class WSDynamicClientImplTest {
 
     @Before
     public void before() {
-        builder = new ReflectionBasedWSDynamicClientBuilder();
+        builder = new ReflectionBasedWSDynamicClientBuilder(null);
         builder.wsdlURL("foo").tmpDir("/tmp").targetPackage("org.jboss.wise.test.mocks");
     }
 

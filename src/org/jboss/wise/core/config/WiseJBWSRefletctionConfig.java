@@ -19,67 +19,72 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package org.jboss.wise.core.wsextensions.impl.jbosswsnative;
-
-import java.io.Serializable;
-import net.jcip.annotations.GuardedBy;
-import net.jcip.annotations.ThreadSafe;
+package org.jboss.wise.core.config;
 
 /**
- * Contains configuration needed by jbossws-native to enable WS-Security Intended to be used by IOC (jboss-beans.xml) injected in
- * {@link ReflectionEnablerDelegate}
- * 
  * @author stefano.maestri@javalinux.it
  */
-@ThreadSafe
-public class NativeSecurityConfig implements Serializable {
+public class WiseJBWSRefletctionConfig implements WiseConfig {
 
-    @GuardedBy( "this" )
-    private String configFileURL;
-    @GuardedBy( "this" )
-    private String configName;
-
-    public NativeSecurityConfig() {
-        super();
-    }
+    private final String configFileURL;
+    private final String configName;
+    private final boolean keepSource;
+    private final boolean verbose;
+    private final String tmpDir;
 
     /**
      * @param configFileURL
      * @param configName
+     * @param keepSource
+     * @param verbose
+     * @param tmpDir
      */
-    public NativeSecurityConfig( String configFileURL,
-                                 String configName ) {
+    public WiseJBWSRefletctionConfig( String configFileURL,
+                                      String configName,
+                                      boolean keepSource,
+                                      boolean verbose,
+                                      String tmpDir ) {
         super();
         this.configFileURL = configFileURL;
         this.configName = configName;
+        this.keepSource = keepSource;
+        this.verbose = verbose;
+        this.tmpDir = tmpDir;
     }
 
     /**
      * @return configFileURL
      */
-    public final synchronized String getConfigFileURL() {
+    public final String getConfigFileURL() {
         return configFileURL;
-    }
-
-    /**
-     * @param configFileURL Sets configFileURL to the specified value.
-     */
-    public final synchronized void setConfigFileURL( String configFileURL ) {
-        this.configFileURL = configFileURL;
     }
 
     /**
      * @return configName
      */
-    public final synchronized String getConfigName() {
+    public final String getConfigName() {
         return configName;
     }
 
     /**
-     * @param configName Sets configName to the specified value.
+     * @return keepSource
      */
-    public final synchronized void setConfigName( String configName ) {
-        this.configName = configName;
+    public final boolean isKeepSource() {
+        return keepSource;
+    }
+
+    /**
+     * @return verbose
+     */
+    public final boolean isVerbose() {
+        return verbose;
+    }
+
+    /**
+     * @return tmpDir
+     */
+    public final String getTmpDir() {
+        return tmpDir;
     }
 
 }

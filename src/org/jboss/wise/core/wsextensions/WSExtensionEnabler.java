@@ -24,6 +24,7 @@ package org.jboss.wise.core.wsextensions;
 import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
 import org.jboss.wise.core.client.WSEndpoint;
+import org.jboss.wise.core.config.WiseConfig;
 import org.jboss.wise.core.jbossmc.BeansNames;
 import org.jboss.wise.core.jbossmc.MicroContainerSpi;
 
@@ -40,8 +41,12 @@ import org.jboss.wise.core.jbossmc.MicroContainerSpi;
 public abstract class WSExtensionEnabler {
 
     @GuardedBy( "this" )
-    protected EnablerDelegate delegate = MicroContainerSpi.getKernelProvidedImplementation(BeansNames.EnablerDelegate.name(),
-                                                                                           EnablerDelegate.class);
+    private WiseConfig config = null;
+
+    @GuardedBy( "this" )
+    protected EnablerDelegate delegate = MicroContainerSpi.getImplementation(BeansNames.EnablerDelegate,
+                                                                             EnablerDelegate.class,
+                                                                             config);
 
     /**
      * This is the call back method invoked by {@link WSEndpoint} to ask this extension to enable itself. Implementer should
@@ -65,6 +70,20 @@ public abstract class WSExtensionEnabler {
      */
     public synchronized final void setDelegate( EnablerDelegate delegate ) {
         this.delegate = delegate;
+    }
+
+    /**
+     * @return config
+     */
+    protected final WiseConfig getConfig() {
+        return config;
+    }
+
+    /**
+     * @param config Sets config to the specified value.
+     */
+    protected final void setConfig( WiseConfig config ) {
+        this.config = config;
     }
 
 }

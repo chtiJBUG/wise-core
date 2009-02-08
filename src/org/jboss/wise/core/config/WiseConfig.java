@@ -19,39 +19,12 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package org.jboss.wise.core.wsextensions.impl;
-
-import net.jcip.annotations.Immutable;
-import net.jcip.annotations.ThreadSafe;
-import org.jboss.wise.core.client.WSEndpoint;
-import org.jboss.wise.core.config.WiseConfig;
-import org.jboss.wise.core.wsextensions.WSExtensionEnabler;
+package org.jboss.wise.core.config;
 
 /**
- * It is the enabler for WS-Security extension
- * 
  * @author stefano.maestri@javalinux.it
+ *
  */
-@ThreadSafe
-@Immutable
-public class WSSecurityEnabler extends WSExtensionEnabler {
-
-    public WSSecurityEnabler() {
-
-    }
-
-    public WSSecurityEnabler( WiseConfig config ) {
-        setConfig(config);
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.jboss.wise.core.wsextensions.WSExtensionEnabler#enable(WSEndpoint)
-     */
-    @Override
-    public void enable( WSEndpoint endpoint ) throws UnsupportedOperationException {
-        delegate.visitWSSecurity(endpoint);
-    }
+public interface WiseConfig {
 
 }

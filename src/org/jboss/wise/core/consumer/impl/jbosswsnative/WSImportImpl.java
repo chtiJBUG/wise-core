@@ -47,8 +47,17 @@ public class WSImportImpl extends WSConsumer {
         providerChanger = new ProviderChanger();
     }
 
+    // for test purpose
     WSImportImpl( ProviderChanger changer ) {
         providerChanger = changer;
+    }
+
+    public WSImportImpl( boolean keepSource,
+                         boolean verbose ) {
+        super();
+        providerChanger = new ProviderChanger();
+        this.setKeepSource(keepSource);
+        this.setVerbose(verbose);
     }
 
     @Override

@@ -25,11 +25,27 @@ package org.jboss.wise.core.jbossmc.beans;
 import org.jboss.wise.core.client.builder.WSDynamicClientBuilder;
 import org.jboss.wise.core.client.factories.WSDynamicClientFactory;
 import org.jboss.wise.core.client.impl.reflection.builder.ReflectionBasedWSDynamicClientBuilder;
+import org.jboss.wise.core.config.WiseConfig;
 
 /**
  * @author stefano.maestri@javalinux.it
  */
 public class ReflectionWSDynamicClientFactory extends WSDynamicClientFactory {
+
+    private final WiseConfig config;
+
+    public ReflectionWSDynamicClientFactory() {
+        super();
+        this.config = null;
+    }
+
+    /**
+     * @param config
+     */
+    public ReflectionWSDynamicClientFactory( WiseConfig config ) {
+        super();
+        this.config = config;
+    }
 
     /**
      * {@inheritDoc}
@@ -38,7 +54,7 @@ public class ReflectionWSDynamicClientFactory extends WSDynamicClientFactory {
      */
     @Override
     public WSDynamicClientBuilder createBuilder() {
-        ReflectionBasedWSDynamicClientBuilder builder = new ReflectionBasedWSDynamicClientBuilder();
+        ReflectionBasedWSDynamicClientBuilder builder = new ReflectionBasedWSDynamicClientBuilder(config);
         return builder;
     }
 

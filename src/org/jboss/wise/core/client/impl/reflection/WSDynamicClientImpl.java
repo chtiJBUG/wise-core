@@ -40,6 +40,7 @@ import org.jboss.wise.core.client.WSDynamicClient;
 import org.jboss.wise.core.client.WSMethod;
 import org.jboss.wise.core.client.WSService;
 import org.jboss.wise.core.client.builder.WSDynamicClientBuilder;
+import org.jboss.wise.core.config.WiseConfig;
 import org.jboss.wise.core.consumer.WSConsumer;
 import org.jboss.wise.core.exception.MCKernelUnavailableException;
 import org.jboss.wise.core.exception.WiseRuntimeException;
@@ -65,14 +66,16 @@ public class WSDynamicClientImpl implements WSDynamicClient {
     private final CopyOnWriteArrayList<String> classNames = new CopyOnWriteArrayList<String>();
     private final Map<String, WSService> servicesMap = Collections.synchronizedMap(new HashMap<String, WSService>());
 
-    public WSDynamicClientImpl( WSDynamicClientBuilder builder ) throws WiseRuntimeException, MCKernelUnavailableException {
-        this(builder, WSConsumer.getInstance());
-        this.servicesMap.clear();
+    private final WiseConfig config;
 
+    public WSDynamicClientImpl( WSDynamicClientBuilder builder ) throws WiseRuntimeException, MCKernelUnavailableException {
+        this(builder, WSConsumer.getInstance(builder.getConfig()));
+        this.servicesMap.clear();
     }
 
     public WSDynamicClientImpl( WSDynamicClientBuilder builder,
                                 WSConsumer consumer ) throws WiseRuntimeException {
+        config = builder.getConfig();
         userName = builder.getUserName();
         password = builder.getPassword();
         final String symbolicName = this.getSymlicName(builder.getWsdlURL());

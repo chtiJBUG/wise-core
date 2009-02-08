@@ -27,6 +27,7 @@ import java.net.ConnectException;
 import java.util.List;
 import net.jcip.annotations.ThreadSafe;
 import org.jboss.wise.core.client.WSDynamicClient;
+import org.jboss.wise.core.config.WiseConfig;
 import org.jboss.wise.core.exception.WiseRuntimeException;
 
 /**
@@ -65,4 +66,5 @@ public interface WSDynamicClientBuilder {
 
     public File getCatelogFile();
 
+    public WiseConfig getConfig();
 }

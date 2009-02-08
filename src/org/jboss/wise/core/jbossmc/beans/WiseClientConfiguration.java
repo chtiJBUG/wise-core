@@ -22,62 +22,86 @@
 
 package org.jboss.wise.core.jbossmc.beans;
 
+import net.jcip.annotations.GuardedBy;
+import net.jcip.annotations.ThreadSafe;
+
 /**
  * @author stefano.maestri@javalinux.it
  */
-
+@ThreadSafe
 public class WiseClientConfiguration {
-
+    @GuardedBy( "this" )
     private String defaultTmpDeployDir = "tmp";
-
+    @GuardedBy( "this" )
     private String defaultUserName;
-
+    @GuardedBy( "this" )
     private String defaultPassword;
-
+    @GuardedBy( "this" )
     private String logConfig;
 
-    public final String getDefaultUserName() {
-        return defaultUserName;
+    public WiseClientConfiguration() {
+        super();
     }
 
-    public final void setDefaultUserName( String defaultUserName ) {
-        this.defaultUserName = defaultUserName;
+    public WiseClientConfiguration( String tmpDir ) {
+        super();
+        this.defaultTmpDeployDir = tmpDir;
     }
 
-    public final String getDefaultPassword() {
-        return defaultPassword;
-    }
-
-    public final void setDefaultPassword( String defaultPassword ) {
-        this.defaultPassword = defaultPassword;
-    }
-
-    public final String getDefaultTmpDeployDir() {
+    /**
+     * @return defaultTmpDeployDir
+     */
+    public synchronized final String getDefaultTmpDeployDir() {
         return defaultTmpDeployDir;
     }
 
-    public WiseClientConfiguration() {
-
-    }
-
-    public final void setDefaultTmpDeployDir( String defaultTmpDeployDir ) {
+    /**
+     * @param defaultTmpDeployDir Sets defaultTmpDeployDir to the specified value.
+     */
+    public synchronized final void setDefaultTmpDeployDir( String defaultTmpDeployDir ) {
         this.defaultTmpDeployDir = defaultTmpDeployDir;
     }
 
     /**
-     * Set the log4j configuraton file url
-     * 
-     * @param url log4j configuraiton url
+     * @return defaultUserName
      */
-    public final void setLogConfig( String url ) {
-        this.logConfig = url;
+    public synchronized final String getDefaultUserName() {
+        return defaultUserName;
     }
 
     /**
-     * @return log4j configuration url
+     * @param defaultUserName Sets defaultUserName to the specified value.
      */
-    public String getLogConfig() {
+    public synchronized final void setDefaultUserName( String defaultUserName ) {
+        this.defaultUserName = defaultUserName;
+    }
+
+    /**
+     * @return defaultPassword
+     */
+    public synchronized final String getDefaultPassword() {
+        return defaultPassword;
+    }
+
+    /**
+     * @param defaultPassword Sets defaultPassword to the specified value.
+     */
+    public synchronized final void setDefaultPassword( String defaultPassword ) {
+        this.defaultPassword = defaultPassword;
+    }
+
+    /**
+     * @return logConfig
+     */
+    public synchronized final String getLogConfig() {
         return logConfig;
+    }
+
+    /**
+     * @param logConfig Sets logConfig to the specified value.
+     */
+    public synchronized final void setLogConfig( String logConfig ) {
+        this.logConfig = logConfig;
     }
 
 }

@@ -40,6 +40,7 @@ import org.apache.log4j.Logger;
 import org.jboss.wise.core.client.WSDynamicClient;
 import org.jboss.wise.core.client.builder.WSDynamicClientBuilder;
 import org.jboss.wise.core.client.impl.reflection.WSDynamicClientImpl;
+import org.jboss.wise.core.config.WiseConfig;
 import org.jboss.wise.core.exception.MCKernelUnavailableException;
 import org.jboss.wise.core.exception.WiseRuntimeException;
 import org.jboss.wise.core.utils.IDGenerator;
@@ -66,6 +67,16 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
     private List<File> bindingFiles = null;
     @GuardedBy( "this" )
     private File catelog = null;
+
+    private final WiseConfig config;
+
+    /**
+     * @param config
+     */
+    public ReflectionBasedWSDynamicClientBuilder( WiseConfig config ) {
+        super();
+        this.config = config;
+    }
 
     /**
      * {@inheritDoc}
@@ -315,6 +326,13 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
             throw new WiseRuntimeException("Failed to read Wsdl Stream!", e);
         }
         return filePath;
+    }
+
+    /**
+     * @return config
+     */
+    public final WiseConfig getConfig() {
+        return config;
     }
 
 }

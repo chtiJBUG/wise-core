@@ -41,8 +41,9 @@ public class ReflectionBasedWSDynamicClientBuilderTest {
 
     @Before
     public void before() throws Exception {
-        WSDynamicClientFactory factory = MicroContainerSpi.getKernelProvidedImplementation(BeansNames.WSDynamicClientFactory.name(),
-                                                                                           WSDynamicClientFactory.class);
+        WSDynamicClientFactory factory = MicroContainerSpi.getImplementation(BeansNames.WSDynamicClientFactory,
+                                                                             WSDynamicClientFactory.class,
+                                                                             null);
         builder = factory.createBuilder();
     }
 

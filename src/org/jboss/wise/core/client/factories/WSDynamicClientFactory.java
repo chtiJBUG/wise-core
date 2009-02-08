@@ -38,6 +38,7 @@ import org.jboss.wise.core.client.WSDynamicClientCache;
 import org.jboss.wise.core.client.builder.WSDynamicClientBuilder;
 import org.jboss.wise.core.client.jaxrs.RSDynamicClient;
 import org.jboss.wise.core.client.jaxrs.impl.RSDynamicClientImpl;
+import org.jboss.wise.core.config.WiseConfig;
 import org.jboss.wise.core.exception.MCKernelUnavailableException;
 import org.jboss.wise.core.exception.WiseRuntimeException;
 import org.jboss.wise.core.jbossmc.BeansNames;
@@ -68,6 +69,27 @@ public abstract class WSDynamicClientFactory {
         WSDynamicClientCache.getInstace().clearCache();
     }
 
+    public static WSDynamicClientFactory newInstance( WiseConfig config ) throws MCKernelUnavailableException {
+        WSDynamicClientFactory factory = MicroContainerSpi.getImplementation(BeansNames.WSDynamicClientFactory,
+                                                                             WSDynamicClientFactory.class,
+                                                                             config);
+        // if the log config file is specified, configure it
+
+        File tmp = new File(factory.config.getDefaultTmpDeployDir());
+        if (tmp.exists()) {
+            try {
+                FileUtils.cleanDirectory(tmp);
+            } catch (IOException e) {
+                throw new IllegalStateException("Failed to clean existing temporary directory");
+            }
+        } else {
+            if (!tmp.mkdirs()) {
+                throw new IllegalStateException("Failed to create temporary directory");
+            }
+        }
+        return factory;
+    }
+
     public static WSDynamicClientFactory getInstance() throws MCKernelUnavailableException {
         synchronized (WSDynamicClientFactory.class) {
             // If the logger has not been configured
@@ -81,8 +103,9 @@ public abstract class WSDynamicClientFactory {
             }
 
         }
-        WSDynamicClientFactory factory = MicroContainerSpi.getKernelProvidedImplementation(BeansNames.WSDynamicClientFactory.name(),
-                                                                                           WSDynamicClientFactory.class);
+        WSDynamicClientFactory factory = MicroContainerSpi.getImplementation(BeansNames.WSDynamicClientFactory,
+                                                                             WSDynamicClientFactory.class,
+                                                                             null);
         // if the log config file is specified, configure it
 
         synchronized (WSDynamicClientFactory.class) {

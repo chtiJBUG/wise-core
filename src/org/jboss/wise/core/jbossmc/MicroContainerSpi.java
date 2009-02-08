@@ -26,7 +26,15 @@ import org.jboss.kernel.Kernel;
 import org.jboss.kernel.plugins.bootstrap.standalone.StandaloneBootstrap;
 import org.jboss.kernel.spi.registry.KernelRegistry;
 import org.jboss.kernel.spi.registry.KernelRegistryEntry;
+import org.jboss.wise.core.config.WiseConfig;
+import org.jboss.wise.core.config.WiseJBWSRefletctionConfig;
+import org.jboss.wise.core.consumer.impl.jbosswsnative.WSImportImpl;
 import org.jboss.wise.core.exception.MCKernelUnavailableException;
+import org.jboss.wise.core.exception.WiseRuntimeException;
+import org.jboss.wise.core.jbossmc.beans.ReflectionWSDynamicClientFactory;
+import org.jboss.wise.core.jbossmc.beans.WiseClientConfiguration;
+import org.jboss.wise.core.wsextensions.impl.jbosswsnative.NativeSecurityConfig;
+import org.jboss.wise.core.wsextensions.impl.jbosswsnative.ReflectionEnablerDelegate;
 
 /**
  * @author stefano.maestri@javalinux.it
@@ -36,8 +44,27 @@ public final class MicroContainerSpi {
     private MicroContainerSpi() {
     }
 
-    public static <T> T getKernelProvidedImplementation( String beanName,
-                                                         Class<T> clazz ) throws MCKernelUnavailableException {
+    public static <T> T getImplementation( BeansNames beanName,
+                                           Class<T> clazz,
+                                           WiseConfig config ) throws WiseRuntimeException {
+        if (config == null) {
+            try {
+                return getKernelProvidedImplementation(beanName, clazz);
+            } catch (MCKernelUnavailableException mke) {
+                throw new WiseRuntimeException(mke);
+            }
+        }
+
+        if (config instanceof WiseJBWSRefletctionConfig) {
+            return getJBWSReflectionImplementation(beanName, clazz, (WiseJBWSRefletctionConfig)config);
+        }
+
+        throw new WiseRuntimeException("Not valid static configuration");
+
+    }
+
+    private static <T> T getKernelProvidedImplementation( BeansNames beanName,
+                                                          Class<T> clazz ) throws MCKernelUnavailableException {
         Kernel kernel = KernelUtil.getKernel();
         if (kernel == null) {
             try {
@@ -51,7 +78,7 @@ public final class MicroContainerSpi {
             throw new MCKernelUnavailableException("Kernel is null");
         }
         KernelRegistry registry = kernel.getRegistry();
-        KernelRegistryEntry entry = registry.getEntry(beanName);
+        KernelRegistryEntry entry = registry.getEntry(beanName.name());
         return (T)entry.getTarget();
     }
 
@@ -62,4 +89,24 @@ public final class MicroContainerSpi {
         return KernelUtil.getKernel();
     }
 
+    private static <T> T getJBWSReflectionImplementation( BeansNames beanName,
+                                                          Class<T> clazz,
+                                                          WiseJBWSRefletctionConfig config ) {
+        switch (beanName) {
+            case EnablerDelegate:
+                ReflectionEnablerDelegate enablerDelegate = new ReflectionEnablerDelegate();
+                enablerDelegate.setDefaultSecurityConfig(new NativeSecurityConfig(config.getConfigFileURL(),
+                                                                                  config.getConfigName()));
+                return (T)enablerDelegate;
+            case WSDynamicClientFactory:
+                return (T)new ReflectionWSDynamicClientFactory();
+            case WiseClientConfiguration:
+                return (T)new WiseClientConfiguration(config.getTmpDir());
+            case WSConsumer:
+                return (T)new WSImportImpl(config.isKeepSource(), config.isVerbose());
+            default:
+                throw new WiseRuntimeException("Not valid static configuration for " + beanName);
+        }
+
+    }
 }

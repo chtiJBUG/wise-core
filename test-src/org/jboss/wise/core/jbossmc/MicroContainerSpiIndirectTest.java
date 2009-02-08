@@ -42,8 +42,9 @@ public class MicroContainerSpiIndirectTest {
 
     @Before
     public void before() throws Exception {
-        WSDynamicClientFactory factory = MicroContainerSpi.getKernelProvidedImplementation(BeansNames.WSDynamicClientFactory.name(),
-                                                                                           WSDynamicClientFactory.class);
+        WSDynamicClientFactory factory = MicroContainerSpi.getImplementation(BeansNames.WSDynamicClientFactory,
+                                                                             WSDynamicClientFactory.class,
+                                                                             null);
 
         config = factory.getConfig();
     }

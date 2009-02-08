@@ -24,6 +24,7 @@ package org.jboss.wise.core.wsextensions.impl;
 import net.jcip.annotations.Immutable;
 import net.jcip.annotations.ThreadSafe;
 import org.jboss.wise.core.client.WSEndpoint;
+import org.jboss.wise.core.config.WiseConfig;
 import org.jboss.wise.core.wsextensions.WSExtensionEnabler;
 
 /**
@@ -34,6 +35,14 @@ import org.jboss.wise.core.wsextensions.WSExtensionEnabler;
 @ThreadSafe
 @Immutable
 public class WSAddressingEnabler extends WSExtensionEnabler {
+
+    public WSAddressingEnabler() {
+
+    }
+
+    public WSAddressingEnabler( WiseConfig config ) {
+        setConfig(config);
+    }
 
     /**
      * {@inheritDoc}

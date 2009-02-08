@@ -87,8 +87,6 @@ public class ReflectionEnablerDelegate implements EnablerDelegate {
      * @see org.jboss.wise.core.wsextensions.EnablerDelegate#visitWSSecurity(org.jboss.wise.core.client.WSEndpoint)
      */
     public void visitWSSecurity( WSEndpoint endpoint ) throws UnsupportedOperationException, IllegalStateException {
-        List<Handler> origHandlerChain = ((BindingProvider)endpoint.getUnderlyingObjectInstance()).getBinding().getHandlerChain();
-        ((BindingProvider)endpoint.getUnderlyingObjectInstance()).getBinding().setHandlerChain(new LinkedList<Handler>());
 
         NativeSecurityConfig securityConfig = getSecurityConfigMap() != null ? getSecurityConfigMap().get(endpoint.getName()) : null;
 
@@ -99,6 +97,9 @@ public class ReflectionEnablerDelegate implements EnablerDelegate {
         if (securityConfig == null) {
             throw new IllegalStateException("Configure at least a default NativeSecurityConfig for WSSE in jboss-beans.xml");
         }
+
+        List<Handler> origHandlerChain = ((BindingProvider)endpoint.getUnderlyingObjectInstance()).getBinding().getHandlerChain();
+        ((BindingProvider)endpoint.getUnderlyingObjectInstance()).getBinding().setHandlerChain(new LinkedList<Handler>());
 
         if (endpoint.getUnderlyingObjectInstance() instanceof StubExt) {
             URL configFile = getClass().getClassLoader().getResource(securityConfig.getConfigFileURL());
