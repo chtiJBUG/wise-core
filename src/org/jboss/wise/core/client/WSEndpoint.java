@@ -49,7 +49,8 @@ public interface WSEndpoint {
 
     public Class getUnderlyingObjectClass();
 
-    public String getMethodName();
+    @GuardedBy( "this" )
+    public String getName();
 
     /**
      * Add an Handler to this endpoint. Handler will apply on all endpoint method called

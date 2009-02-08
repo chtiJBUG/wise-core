@@ -90,7 +90,7 @@ public class ReflectionEnablerDelegate implements EnablerDelegate {
         List<Handler> origHandlerChain = ((BindingProvider)endpoint.getUnderlyingObjectInstance()).getBinding().getHandlerChain();
         ((BindingProvider)endpoint.getUnderlyingObjectInstance()).getBinding().setHandlerChain(new LinkedList<Handler>());
 
-        NativeSecurityConfig securityConfig = getSecurityConfigMap() != null ? getSecurityConfigMap().get(endpoint.getMethodName()) : null;
+        NativeSecurityConfig securityConfig = getSecurityConfigMap() != null ? getSecurityConfigMap().get(endpoint.getName()) : null;
 
         if (securityConfig == null) {
             securityConfig = this.getDefaultSecurityConfig();
