@@ -108,8 +108,10 @@
 		<cobertura-instrument todir="${coverage.dir}">
 			<ignore regex="org.apache.log4j.*" />
 			<fileset dir="${classes.dir}">
-				<include name="**/*.class" />
+				<include name="**/wise/**/*.class" />
 				<exclude name="**/*Test.class"/>
+				<exclude name="**/metro/**/*.class"/>
+				<exclude name="**/utils/**/*.class"/>
 			</fileset>
 		</cobertura-instrument>
 		<junit fork="yes" dir="${basedir}" failureProperty="test.failed">
