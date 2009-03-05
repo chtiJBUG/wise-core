@@ -56,7 +56,7 @@ import org.jboss.wise.core.utils.SmooksCache;
 @ThreadSafe
 public abstract class WSDynamicClientFactory {
     private static final String WISE_LOG_CONFIG = "wise-log4j.xml";
-    private WiseClientConfiguration config;
+    protected WiseClientConfiguration config;
     private static boolean initialized;
 
     private static Logger log;

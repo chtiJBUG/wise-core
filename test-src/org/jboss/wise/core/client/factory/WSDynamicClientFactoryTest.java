@@ -23,18 +23,50 @@
 package org.jboss.wise.core.client.factory;
 
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsInstanceOf.instanceOf;
+import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import org.apache.log4j.Logger;
 import org.apache.log4j.helpers.NullEnumeration;
 import org.jboss.wise.core.client.factories.WSDynamicClientFactory;
+import org.jboss.wise.core.config.WiseConfig;
+import org.jboss.wise.core.config.WiseJBWSRefletctionConfig;
+import org.jboss.wise.core.exception.WiseRuntimeException;
+import org.jboss.wise.core.jbossmc.beans.ReflectionWSDynamicClientFactory;
 import org.junit.Test;
 
 public class WSDynamicClientFactoryTest {
 
     @Test
     public void testLogger() throws Exception {
-        WSDynamicClientFactory factory =  WSDynamicClientFactory.getInstance();        
-        assertThat(factory == null , is(false));
-        assertThat(Logger.getRootLogger().getAllAppenders() instanceof NullEnumeration , is(false));
+        WSDynamicClientFactory factory = WSDynamicClientFactory.getInstance();
+        assertThat(factory == null, is(false));
+        assertThat(Logger.getRootLogger().getAllAppenders() instanceof NullEnumeration, is(false));
+    }
+
+    @Test
+    public void twoInvocationOfNewInstanceShouldReturnDifferentObject() {
+        WiseConfig config = mock(WiseJBWSRefletctionConfig.class);
+        when(config.getTmpDir()).thenReturn("./tmp");
+        WSDynamicClientFactory factory = WSDynamicClientFactory.newInstance(config);
+        assertThat(factory, not(is(WSDynamicClientFactory.newInstance(config))));
+    }
+
+    @Test( expected = WiseRuntimeException.class )
+    public void newInstanceShouldThrowWiseRuntimeExceptionForNonValidConfig() {
+        WiseConfig config = mock(WiseConfig.class);
+        when(config.getTmpDir()).thenReturn("./tmp");
+        WSDynamicClientFactory factory = WSDynamicClientFactory.newInstance(config);
+    }
+
+    @Test
+    public void neInstanceShouldReturnRightClassAccordingToConfig() {
+        WiseConfig config = mock(WiseJBWSRefletctionConfig.class);
+        when(config.getTmpDir()).thenReturn("./tmp");
+        WSDynamicClientFactory factory = WSDynamicClientFactory.newInstance(config);
+        assertThat(factory, instanceOf(ReflectionWSDynamicClientFactory.class));
+        assertThat(((ReflectionWSDynamicClientFactory)factory).getWiseConfig(), is(config));
     }
 }

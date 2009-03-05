@@ -32,19 +32,21 @@ import org.jboss.wise.core.config.WiseConfig;
  */
 public class ReflectionWSDynamicClientFactory extends WSDynamicClientFactory {
 
-    private final WiseConfig config;
+    private final WiseConfig wiseConfig;
 
     public ReflectionWSDynamicClientFactory() {
         super();
-        this.config = null;
+        this.wiseConfig = null;
     }
 
     /**
-     * @param config
+     * @param wiseConfig
      */
-    public ReflectionWSDynamicClientFactory( WiseConfig config ) {
+    public ReflectionWSDynamicClientFactory( WiseConfig wiseConfig ) {
         super();
-        this.config = config;
+        this.wiseConfig = wiseConfig;
+        super.config = new WiseClientConfiguration(wiseConfig.getTmpDir());
+
     }
 
     /**
@@ -54,8 +56,12 @@ public class ReflectionWSDynamicClientFactory extends WSDynamicClientFactory {
      */
     @Override
     public WSDynamicClientBuilder createBuilder() {
-        ReflectionBasedWSDynamicClientBuilder builder = new ReflectionBasedWSDynamicClientBuilder(config);
+        ReflectionBasedWSDynamicClientBuilder builder = new ReflectionBasedWSDynamicClientBuilder(wiseConfig);
         return builder;
+    }
+
+    public WiseConfig getWiseConfig() {
+        return wiseConfig;
     }
 
 }

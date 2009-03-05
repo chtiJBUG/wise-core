@@ -99,7 +99,7 @@ public final class MicroContainerSpi {
                                                                                   config.getConfigName()));
                 return (T)enablerDelegate;
             case WSDynamicClientFactory:
-                return (T)new ReflectionWSDynamicClientFactory();
+                return (T)new ReflectionWSDynamicClientFactory(config);
             case WiseClientConfiguration:
                 return (T)new WiseClientConfiguration(config.getTmpDir());
             case WSConsumer:

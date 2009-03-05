@@ -23,8 +23,9 @@ package org.jboss.wise.core.config;
 
 /**
  * @author stefano.maestri@javalinux.it
- *
  */
 public interface WiseConfig {
+
+    public String getTmpDir();
 
 }

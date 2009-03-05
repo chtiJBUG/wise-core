@@ -55,35 +55,35 @@ public class WiseJBWSRefletctionConfig implements WiseConfig {
     /**
      * @return configFileURL
      */
-    public final String getConfigFileURL() {
+    public String getConfigFileURL() {
         return configFileURL;
     }
 
     /**
      * @return configName
      */
-    public final String getConfigName() {
+    public String getConfigName() {
         return configName;
     }
 
     /**
      * @return keepSource
      */
-    public final boolean isKeepSource() {
+    public boolean isKeepSource() {
         return keepSource;
     }
 
     /**
      * @return verbose
      */
-    public final boolean isVerbose() {
+    public boolean isVerbose() {
         return verbose;
     }
 
     /**
      * @return tmpDir
      */
-    public final String getTmpDir() {
+    public String getTmpDir() {
         return tmpDir;
     }
 
