@@ -45,6 +45,8 @@ public class DurationDecoder extends DateDecoder implements DataDecoder {
             result = DatatypeFactory.newInstance().newDuration(Long.parseLong(data));
         } catch (DatatypeConfigurationException e) {
             throw new DataDecodeException("Error decoding Duration data value '" + data, e);
+        } catch (NumberFormatException e) {
+            throw new DataDecodeException("Error decoding Duration data value '" + data, e);
         }
 
         return result;

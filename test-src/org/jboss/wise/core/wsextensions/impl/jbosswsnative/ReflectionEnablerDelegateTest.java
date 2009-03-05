@@ -80,24 +80,23 @@ public class ReflectionEnablerDelegateTest {
 
     }
 
-    /**
-     * Test method for
-     * {@link org.jboss.wise.core.wsextensions.impl.jbosswsnative.ReflectionEnablerDelegate#visitWSSecurity(org.jboss.wise.core.client.WSEndpoint)}
-     * .
-     */
-    // TODO: disabled test for class cast exception new mockito??
+    // /**
+    // * Test method for
+    // * {@link
+    // org.jboss.wise.core.wsextensions.impl.jbosswsnative.ReflectionEnablerDelegate#visitWSSecurity(org.jboss.wise.core.client.WSEndpoint)}
+    // * .
+    // */
     // @Test
     // public void visitWSSecurityShouldSetConfig() {
-    // ReflectionEnablerDelegate delegate = MicroContainerSpi.getImplementation(BeansNames.EnablerDelegate,
-    // ReflectionEnablerDelegate.class,
-    // null);
-    //
+    // ReflectionEnablerDelegate delegate = new ReflectionEnablerDelegate();
+    //    
     // WSEndpoint endpoint = mock(WSEndpoint.class);
     // StubExt stub = mock(StubExt.class);
-    // when(endpoint.getUnderlyingObjectInstance()).thenReturn(stub);
+    // BindingProvider provider = mock(BindingProvider.class);
+    // when(endpoint.getUnderlyingObjectInstance()).thenReturn(provider).thenReturn(provider).thenReturn(stub);
     // delegate.visitWSSecurity(endpoint);
     // verify(stub).setSecurityConfig(anyString());
     // verify(stub).setConfigName(anyString());
-    //
+    //    
     // }
 }

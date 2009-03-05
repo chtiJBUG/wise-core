@@ -109,6 +109,7 @@
 			<ignore regex="org.apache.log4j.*" />
 			<fileset dir="${classes.dir}">
 				<include name="**/*.class" />
+				<exclude name="**/*Test.class"/>
 			</fileset>
 		</cobertura-instrument>
 		<junit fork="yes" dir="${basedir}" failureProperty="test.failed">
