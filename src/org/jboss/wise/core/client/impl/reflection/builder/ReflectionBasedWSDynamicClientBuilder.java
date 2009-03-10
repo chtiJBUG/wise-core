@@ -134,7 +134,7 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * 
      * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#userName(java.lang.String)
      */
-    public synchronized final WSDynamicClientBuilder userName( String userName ) {
+    public synchronized WSDynamicClientBuilder userName( String userName ) {
         this.userName = userName;
         return this;
     }
@@ -153,7 +153,7 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * 
      * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#password(java.lang.String)
      */
-    public final WSDynamicClientBuilder password( String password ) {
+    public synchronized WSDynamicClientBuilder password( String password ) {
         this.password = password;
         return this;
     }
@@ -163,7 +163,7 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * 
      * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#getTmpDir()
      */
-    public final String getTmpDir() {
+    public synchronized final String getTmpDir() {
         return tmpDir;
     }
 
@@ -250,7 +250,7 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
         return this;
     }
 
-    public synchronized WSDynamicClientBuilder catelogFile( File catelogFile ) {
+    public synchronized WSDynamicClientBuilder catalogFile( File catelogFile ) {
         catelog = catelogFile;
         return this;
     }
@@ -331,7 +331,7 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
     /**
      * @return config
      */
-    public final WiseConfig getConfig() {
+    public synchronized final WiseConfig getConfig() {
         return config;
     }
 

@@ -31,6 +31,7 @@ public class WiseJBWSRefletctionConfig implements WiseConfig {
     private final boolean keepSource;
     private final boolean verbose;
     private final String tmpDir;
+    private final boolean cacheEnabled;
 
     /**
      * @param configFileURL
@@ -38,18 +39,21 @@ public class WiseJBWSRefletctionConfig implements WiseConfig {
      * @param keepSource
      * @param verbose
      * @param tmpDir
+     * @param cacheEnabled
      */
     public WiseJBWSRefletctionConfig( String configFileURL,
                                       String configName,
                                       boolean keepSource,
                                       boolean verbose,
-                                      String tmpDir ) {
+                                      String tmpDir,
+                                      boolean cacheEnabled ) {
         super();
         this.configFileURL = configFileURL;
         this.configName = configName;
         this.keepSource = keepSource;
         this.verbose = verbose;
         this.tmpDir = tmpDir;
+        this.cacheEnabled = cacheEnabled;
     }
 
     /**
@@ -85,6 +89,13 @@ public class WiseJBWSRefletctionConfig implements WiseConfig {
      */
     public String getTmpDir() {
         return tmpDir;
+    }
+
+    /**
+     * @return cacheEnabled
+     */
+    public boolean isCacheEnabled() {
+        return cacheEnabled;
     }
 
 }

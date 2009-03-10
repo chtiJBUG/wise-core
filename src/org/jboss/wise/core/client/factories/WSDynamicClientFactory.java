@@ -171,26 +171,59 @@ public abstract class WSDynamicClientFactory {
                                            String targetPackage,
                                            List<File> bindings,
                                            File catelog ) throws IllegalStateException, ConnectException, WiseRuntimeException {
-        WSDynamicClientBuilder builder = this.createBuilder();
-        builder.tmpDir(config.getDefaultTmpDeployDir()).bindingFiles(bindings).catelogFile(catelog).wsdlURL(wsdlURL);
-        builder.targetPackage(targetPackage);
-        if (userName == null) {
-            userName = config.getDefaultUserName();
-        }
-        if (password == null) {
-            password = config.getDefaultPassword();
-        }
-        builder.userName(userName).password(password);
         synchronized (WSDynamicClientFactory.class) {
-            WSDynamicClient client = WSDynamicClientCache.getInstace().get(wsdlURL);
-            if (client == null) {
-                client = builder.build();
-                WSDynamicClientCache.getInstace().addToCache(wsdlURL, client);
+            if (isCacheEnabled()) {
+                WSDynamicClient client = WSDynamicClientCache.getInstace().get(wsdlURL);
+                if (client == null) {
+                    WSDynamicClientBuilder builder = this.prepareBuilder(wsdlURL,
+                                                                         userName,
+                                                                         password,
+                                                                         targetPackage,
+                                                                         bindings,
+                                                                         catelog);
+                    client = builder.build();
+                    WSDynamicClientCache.getInstace().addToCache(wsdlURL, client);
+                }
+                log.debug("Create WSDynamicClient successfully");
+                return client;
+            } else {
+                WSDynamicClientBuilder builder = this.prepareBuilder(wsdlURL,
+                                                                     userName,
+                                                                     password,
+                                                                     targetPackage,
+                                                                     bindings,
+                                                                     catelog);
+                return builder.build();
             }
-            log.debug("Create WSDynamicClient successfully");
-            return client;
 
         }
+    }
+
+    /**
+     * @param wsdlURL
+     * @param userName
+     * @param password
+     * @param targetPackage
+     * @param bindings
+     * @param catelog
+     * @return a builder to prepare
+     */
+    WSDynamicClientBuilder prepareBuilder( String wsdlURL,
+                                           String userName,
+                                           String password,
+                                           String targetPackage,
+                                           List<File> bindings,
+                                           File catelog ) {
+        WSDynamicClientBuilder builder = this.createBuilder();
+        builder.tmpDir(config.getDefaultTmpDeployDir()).bindingFiles(bindings).catalogFile(catelog).wsdlURL(wsdlURL);
+        builder.targetPackage(targetPackage);
+        if (userName == null || userName.length() == 0) {
+            userName = config.getDefaultUserName();
+        }
+        if (password == null || password.length() == 0) {
+            password = config.getDefaultPassword();
+        }
+        return builder.userName(userName).password(password);
     }
 
     /**
@@ -240,4 +273,6 @@ public abstract class WSDynamicClientFactory {
     }
 
     public abstract WSDynamicClientBuilder createBuilder();
+
+    public abstract boolean isCacheEnabled();
 }

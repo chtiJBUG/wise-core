@@ -45,7 +45,9 @@ public class ReflectionWSDynamicClientFactory extends WSDynamicClientFactory {
     public ReflectionWSDynamicClientFactory( WiseConfig wiseConfig ) {
         super();
         this.wiseConfig = wiseConfig;
-        super.config = new WiseClientConfiguration(wiseConfig.getTmpDir());
+        if (wiseConfig != null) {
+            super.config = new WiseClientConfiguration(wiseConfig.getTmpDir());
+        }
 
     }
 
@@ -62,6 +64,11 @@ public class ReflectionWSDynamicClientFactory extends WSDynamicClientFactory {
 
     public WiseConfig getWiseConfig() {
         return wiseConfig;
+    }
+
+    @Override
+    public boolean isCacheEnabled() {
+        return wiseConfig == null ? true : wiseConfig.isCacheEnabled();
     }
 
 }

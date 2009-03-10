@@ -56,7 +56,7 @@ public interface WSDynamicClientBuilder {
 
     public WSDynamicClientBuilder bindingFiles( List<File> bindings );
 
-    public WSDynamicClientBuilder catelogFile( File catelog );
+    public WSDynamicClientBuilder catalogFile( File catelog );
 
     public String getTmpDir();
 

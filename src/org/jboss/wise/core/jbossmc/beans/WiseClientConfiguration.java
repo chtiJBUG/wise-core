@@ -33,9 +33,9 @@ public class WiseClientConfiguration {
     @GuardedBy( "this" )
     private String defaultTmpDeployDir = "tmp";
     @GuardedBy( "this" )
-    private String defaultUserName;
+    private String defaultUserName = null;
     @GuardedBy( "this" )
-    private String defaultPassword;
+    private String defaultPassword = null;
     @GuardedBy( "this" )
     private String logConfig;
 

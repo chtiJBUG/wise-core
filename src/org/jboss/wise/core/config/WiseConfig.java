@@ -28,4 +28,6 @@ public interface WiseConfig {
 
     public String getTmpDir();
 
+    public boolean isCacheEnabled();
+
 }
