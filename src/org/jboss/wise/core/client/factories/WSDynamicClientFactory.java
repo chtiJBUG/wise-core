@@ -66,7 +66,7 @@ public abstract class WSDynamicClientFactory {
      */
     public static void initialise() {
         SmooksCache.getInstance().clearAll();
-        WSDynamicClientCache.getInstace().clearCache();
+        WSDynamicClientCache.getInstance().clearCache();
     }
 
     public static WSDynamicClientFactory newInstance( WiseConfig config ) throws MCKernelUnavailableException {
@@ -173,7 +173,7 @@ public abstract class WSDynamicClientFactory {
                                            File catelog ) throws IllegalStateException, ConnectException, WiseRuntimeException {
         synchronized (WSDynamicClientFactory.class) {
             if (isCacheEnabled()) {
-                WSDynamicClient client = WSDynamicClientCache.getInstace().get(wsdlURL);
+                WSDynamicClient client = WSDynamicClientCache.getInstance().get(wsdlURL);
                 if (client == null) {
                     WSDynamicClientBuilder builder = this.prepareBuilder(wsdlURL,
                                                                          userName,
@@ -182,7 +182,7 @@ public abstract class WSDynamicClientFactory {
                                                                          bindings,
                                                                          catelog);
                     client = builder.build();
-                    WSDynamicClientCache.getInstace().addToCache(wsdlURL, client);
+                    WSDynamicClientCache.getInstance().addToCache(wsdlURL, client);
                 }
                 log.debug("Create WSDynamicClient successfully");
                 return client;

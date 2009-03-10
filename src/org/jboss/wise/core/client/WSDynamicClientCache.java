@@ -42,7 +42,7 @@ public class WSDynamicClientCache {
      * 
      * @return an Instance of this singleton class
      */
-    public static synchronized WSDynamicClientCache getInstace() {
+    public static synchronized WSDynamicClientCache getInstance() {
         if (me == null) {
             me = new WSDynamicClientCache();
         }
