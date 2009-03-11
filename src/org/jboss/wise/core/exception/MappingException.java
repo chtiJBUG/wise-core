@@ -28,17 +28,10 @@ package org.jboss.wise.core.exception;
  * @author stefano.maestri@javalinux.it
  */
 public class MappingException extends Exception {
-    public MappingException( String message ) {
-        super(message);
-    }
 
     public MappingException( String message,
                              Throwable cause ) {
         super(message, cause);
-    }
-
-    public MappingException( Throwable cause ) {
-        super(cause);
     }
 
 }

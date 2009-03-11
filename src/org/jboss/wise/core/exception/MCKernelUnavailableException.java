@@ -35,8 +35,4 @@ public class MCKernelUnavailableException extends IllegalStateException {
         super(message, cause);
     }
 
-    public MCKernelUnavailableException( Throwable cause ) {
-        super(cause);
-    }
-
 }
