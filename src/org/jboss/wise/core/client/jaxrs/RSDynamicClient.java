@@ -26,9 +26,7 @@ import java.io.InputStream;
 import java.security.InvalidParameterException;
 import java.util.Map;
 import net.jcip.annotations.Immutable;
-import org.apache.commons.httpclient.methods.RequestEntity;
 import org.jboss.wise.core.client.InvocationResult;
-import org.jboss.wise.core.mapper.JAXBMapper;
 import org.jboss.wise.core.mapper.SmooksMapper;
 import org.jboss.wise.core.mapper.WiseMapper;
 
@@ -70,41 +68,21 @@ public interface RSDynamicClient {
     public HttpMethod getHttpMethod();
 
     public String getProduceMediaTypes();
-    
+
     public String getConsumeMediaTypes();
 
     /**
      * Invoke JAXRS service.
      * 
      * @param inputObjects it's a Map containing objects to call the services. They can be pojo mapped to stream using a
-     *        {@link SmooksMapper}, JAXB annotated object marshaled using a {@link JAXBMapper}, a standard key/value pair with
-     *        keys "ContentType" and "JAXRSStream". In the last case ContentType represent the content type of the input that have
-     *        to be converted to the content type needed by service call if possible. If it isn't possible an
+     *        {@link SmooksMapper}, JAXB annotated object marshaled using a JAXBMapper, a standard key/value pair with keys
+     *        "ContentType" and "JAXRSStream". In the last case ContentType represent the content type of the input that have to
+     *        be converted to the content type needed by service call if possible. If it isn't possible an
      *        {@link InvalidParameterException} is thrown
      * @param mapper {@link WiseMapper} used to map inputObject to stream representation used to call the service
      * @return {@link InvocationResult} implementation representing the result of JAXRS service
      */
     public InvocationResult invoke( Map<String, Object> inputObjects,
-                                    WiseMapper mapper );
-    
-    /**
-     * Invoke JAXRS service.
-     * 
-     * @param request 
-     * @param mapper {@link WiseMapper} used to map inputObject to stream representation used to call the service
-     * @return {@link InvocationResult} implementation representing the result of JAXRS service
-     */
-    public InvocationResult invoke(InputStream request,
-                                    WiseMapper mapper );
-    
-    /**
-     * Invoke JAXRS service.
-     * 
-     * @param request 
-     * @param mapper {@link WiseMapper} used to map inputObject to stream representation used to call the service
-     * @return {@link InvocationResult} implementation representing the result of JAXRS service
-     */
-    public InvocationResult invoke(String request,
                                     WiseMapper mapper );
 
     /**
@@ -114,13 +92,33 @@ public interface RSDynamicClient {
      * @param mapper {@link WiseMapper} used to map inputObject to stream representation used to call the service
      * @return {@link InvocationResult} implementation representing the result of JAXRS service
      */
-    public InvocationResult invoke(byte[] request,
+    public InvocationResult invoke( InputStream request,
                                     WiseMapper mapper );
-    
+
+    /**
+     * Invoke JAXRS service.
+     * 
+     * @param request
+     * @param mapper {@link WiseMapper} used to map inputObject to stream representation used to call the service
+     * @return {@link InvocationResult} implementation representing the result of JAXRS service
+     */
+    public InvocationResult invoke( String request,
+                                    WiseMapper mapper );
+
+    /**
+     * Invoke JAXRS service.
+     * 
+     * @param request
+     * @param mapper {@link WiseMapper} used to map inputObject to stream representation used to call the service
+     * @return {@link InvocationResult} implementation representing the result of JAXRS service
+     */
+    public InvocationResult invoke( byte[] request,
+                                    WiseMapper mapper );
+
     /**
      * Invoke JAXRS service.
      * 
      * @return {@link InvocationResult} implementation representing the result of JAXRS service
-     */   
+     */
     public InvocationResult invoke();
 }
