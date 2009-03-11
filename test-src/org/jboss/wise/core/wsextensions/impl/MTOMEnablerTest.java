@@ -26,6 +26,8 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import org.jboss.wise.core.client.impl.reflection.WSEndpointImpl;
+import org.jboss.wise.core.config.WiseConfig;
+import org.jboss.wise.core.config.WiseJBWSRefletctionConfig;
 import org.jboss.wise.core.wsextensions.EnablerDelegate;
 import org.jboss.wise.core.wsextensions.WSExtensionEnabler;
 import org.jboss.wise.core.wsextensions.impl.jbosswsnative.ReflectionEnablerDelegate;
@@ -36,10 +38,16 @@ import org.junit.Test;
  */
 public class MTOMEnablerTest {
 
-    private final WSExtensionEnabler enabler = new MTOMEnabler();
-
     @Test
     public void shouldFindVisitorImplWithIOC() {
+        WSExtensionEnabler enabler = new MTOMEnabler();
+        assertThat(enabler.getDelegate(), is(ReflectionEnablerDelegate.class));
+    }
+
+    @Test
+    public void shouldFindVisitorImplWithWiseConfig() {
+        WiseConfig config = new WiseJBWSRefletctionConfig("", "", false, false, "", false);
+        WSExtensionEnabler enabler = new MTOMEnabler(config);
         assertThat(enabler.getDelegate(), is(ReflectionEnablerDelegate.class));
     }
 
@@ -47,7 +55,7 @@ public class MTOMEnablerTest {
     public void shouldDelegateToVisitor() {
         EnablerDelegate delegate = mock(EnablerDelegate.class);
         WSEndpointImpl ep = mock(WSEndpointImpl.class);
-        enabler.setDelegate(delegate);
+        WSExtensionEnabler enabler = new MTOMEnabler(null, delegate);
         enabler.enable(ep);
         verify(delegate).visitMTOM(ep);
 

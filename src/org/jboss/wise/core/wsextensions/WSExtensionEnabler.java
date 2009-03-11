@@ -21,12 +21,9 @@
  */
 package org.jboss.wise.core.wsextensions;
 
-import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
 import org.jboss.wise.core.client.WSEndpoint;
 import org.jboss.wise.core.config.WiseConfig;
-import org.jboss.wise.core.jbossmc.BeansNames;
-import org.jboss.wise.core.jbossmc.MicroContainerSpi;
 
 /**
  * It is an interface defining a WSExtension to be enabled on an endpoint using wise-core client APIs. The basic idea is to add
@@ -38,15 +35,7 @@ import org.jboss.wise.core.jbossmc.MicroContainerSpi;
  * @author stefano.maestri@javalinux.it
  */
 @ThreadSafe
-public abstract class WSExtensionEnabler {
-
-    @GuardedBy( "this" )
-    private WiseConfig config = null;
-
-    @GuardedBy( "this" )
-    protected EnablerDelegate delegate = MicroContainerSpi.getImplementation(BeansNames.EnablerDelegate,
-                                                                             EnablerDelegate.class,
-                                                                             config);
+public interface WSExtensionEnabler {
 
     /**
      * This is the call back method invoked by {@link WSEndpoint} to ask this extension to enable itself. Implementer should
@@ -61,29 +50,11 @@ public abstract class WSExtensionEnabler {
      * 
      * @return visitor
      */
-    public synchronized final EnablerDelegate getDelegate() {
-        return delegate;
-    }
-
-    /**
-     * @param delegate
-     */
-    public synchronized final void setDelegate( EnablerDelegate delegate ) {
-        this.delegate = delegate;
-    }
+    public EnablerDelegate getDelegate();
 
     /**
      * @return config
      */
-    protected final WiseConfig getConfig() {
-        return config;
-    }
-
-    /**
-     * @param config Sets config to the specified value.
-     */
-    protected final void setConfig( WiseConfig config ) {
-        this.config = config;
-    }
+    public WiseConfig getConfig();
 
 }

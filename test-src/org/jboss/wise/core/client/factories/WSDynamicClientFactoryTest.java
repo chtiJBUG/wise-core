@@ -54,8 +54,7 @@ public class WSDynamicClientFactoryTest {
 
     @Test
     public void twoInvocationOfNewInstanceShouldReturnDifferentObject() throws Exception {
-        WiseConfig config = mock(WiseJBWSRefletctionConfig.class);
-        when(config.getTmpDir()).thenReturn("./tmp");
+        WiseConfig config = new WiseJBWSRefletctionConfig(null, null, false, false, "./temp", false);
         WSDynamicClientFactory factory = WSDynamicClientFactory.newInstance(config);
         assertThat(factory, not(is(WSDynamicClientFactory.newInstance(config))));
     }
@@ -70,8 +69,7 @@ public class WSDynamicClientFactoryTest {
 
     @Test
     public void newInstanceShouldReturnRightClassAccordingToConfig() throws Exception {
-        WiseConfig config = mock(WiseJBWSRefletctionConfig.class);
-        when(config.getTmpDir()).thenReturn("./tmp");
+        WiseConfig config = new WiseJBWSRefletctionConfig(null, null, false, false, "./temp", false);
         WSDynamicClientFactory factory = WSDynamicClientFactory.newInstance(config);
         assertThat(factory, instanceOf(ReflectionWSDynamicClientFactory.class));
         assertThat(((ReflectionWSDynamicClientFactory)factory).getWiseConfig(), is(config));
@@ -79,8 +77,7 @@ public class WSDynamicClientFactoryTest {
 
     @Test
     public void prepareBuilderShouldSetAllFieldsToBuilder() throws Exception {
-        WiseConfig config = mock(WiseJBWSRefletctionConfig.class);
-        when(config.getTmpDir()).thenReturn("./tmp");
+        WiseConfig config = new WiseJBWSRefletctionConfig(null, null, false, false, "./temp", false);
         WSDynamicClientFactory factory = WSDynamicClientFactory.newInstance(config);
         List<File> bindings = mock(List.class);
         File catalog = mock(File.class);
@@ -91,14 +88,13 @@ public class WSDynamicClientFactoryTest {
         assertThat(builder.getTargetPackage(), equalTo("targetPackage"));
         assertThat(builder.getBindingFiles(), equalTo(bindings));
         assertThat(builder.getCatelogFile(), equalTo(catalog));
-        assertThat(builder.getTmpDir(), equalTo("./tmp"));
+        assertThat(builder.getTmpDir(), equalTo("./temp"));
 
     }
 
     @Test
     public void prepareBuilderShouldSetUserAndPasswordNullWhenEmptyWithNewInstance() throws Exception {
-        WiseConfig config = mock(WiseJBWSRefletctionConfig.class);
-        when(config.getTmpDir()).thenReturn("./tmp");
+        WiseConfig config = new WiseJBWSRefletctionConfig(null, null, false, false, "./temp", false);
         WSDynamicClientFactory factory = WSDynamicClientFactory.newInstance(config);
         List<File> bindings = mock(List.class);
         File catalog = mock(File.class);
@@ -109,9 +105,7 @@ public class WSDynamicClientFactoryTest {
 
     @Test
     public void getJAXWSClientShouldUseCacheIfWiseConfigRequireThat() throws Exception {
-        WiseConfig config = mock(WiseJBWSRefletctionConfig.class);
-        when(config.getTmpDir()).thenReturn("./tmp");
-        when(config.isCacheEnabled()).thenReturn(true);
+        WiseConfig config = new WiseJBWSRefletctionConfig(null, null, false, false, "./temp", true);
         WSDynamicClientFactory factory = WSDynamicClientFactory.newInstance(config);
         URL wsdURL = Thread.currentThread().getContextClassLoader().getResource("../test-resources/hello_world.wsdl");
         WSDynamicClient client = factory.getJAXWSClient(wsdURL.toExternalForm());
@@ -120,9 +114,7 @@ public class WSDynamicClientFactoryTest {
 
     @Test
     public void getJAXWSClientShouldNotUseCacheIfWiseConfigRequireThat() throws Exception {
-        WiseConfig config = mock(WiseJBWSRefletctionConfig.class);
-        when(config.getTmpDir()).thenReturn("./tmp");
-        when(config.isCacheEnabled()).thenReturn(false);
+        WiseConfig config = new WiseJBWSRefletctionConfig(null, null, false, false, "./temp", false);
         WSDynamicClientFactory factory = WSDynamicClientFactory.newInstance(config);
         URL wsdURL = Thread.currentThread().getContextClassLoader().getResource("../test-resources/hello_world.wsdl");
         WSDynamicClient client = factory.getJAXWSClient(wsdURL.toExternalForm());

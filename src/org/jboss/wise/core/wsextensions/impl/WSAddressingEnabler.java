@@ -25,6 +25,9 @@ import net.jcip.annotations.Immutable;
 import net.jcip.annotations.ThreadSafe;
 import org.jboss.wise.core.client.WSEndpoint;
 import org.jboss.wise.core.config.WiseConfig;
+import org.jboss.wise.core.jbossmc.BeansNames;
+import org.jboss.wise.core.jbossmc.MicroContainerSpi;
+import org.jboss.wise.core.wsextensions.EnablerDelegate;
 import org.jboss.wise.core.wsextensions.WSExtensionEnabler;
 
 /**
@@ -34,14 +37,26 @@ import org.jboss.wise.core.wsextensions.WSExtensionEnabler;
  */
 @ThreadSafe
 @Immutable
-public class WSAddressingEnabler extends WSExtensionEnabler {
+public class WSAddressingEnabler implements WSExtensionEnabler {
+
+    private final WiseConfig config;
+
+    private final EnablerDelegate delegate;
 
     public WSAddressingEnabler() {
-
+        this.config = null;
+        delegate = MicroContainerSpi.getImplementation(BeansNames.EnablerDelegate, EnablerDelegate.class, config);
     }
 
     public WSAddressingEnabler( WiseConfig config ) {
-        setConfig(config);
+        this.config = config;
+        delegate = MicroContainerSpi.getImplementation(BeansNames.EnablerDelegate, EnablerDelegate.class, config);
+    }
+
+    protected WSAddressingEnabler( WiseConfig config,
+                                   EnablerDelegate delegate ) {
+        this.config = config;
+        this.delegate = delegate;
     }
 
     /**
@@ -49,9 +64,26 @@ public class WSAddressingEnabler extends WSExtensionEnabler {
      * 
      * @see org.jboss.wise.core.wsextensions.WSExtensionEnabler#enable(WSEndpoint)
      */
-    @Override
     public void enable( WSEndpoint endpoint ) throws UnsupportedOperationException {
         delegate.visitWSAddressing(endpoint);
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see org.jboss.wise.core.wsextensions.WSExtensionEnabler#getConfig()
+     */
+    public WiseConfig getConfig() {
+        return config;
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see org.jboss.wise.core.wsextensions.WSExtensionEnabler#getDelegate()
+     */
+    public EnablerDelegate getDelegate() {
+        return delegate;
     }
 
 }

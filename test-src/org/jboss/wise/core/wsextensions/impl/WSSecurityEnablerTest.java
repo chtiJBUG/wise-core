@@ -27,6 +27,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import java.util.HashMap;
 import org.jboss.wise.core.client.impl.reflection.WSEndpointImpl;
+import org.jboss.wise.core.config.WiseConfig;
+import org.jboss.wise.core.config.WiseJBWSRefletctionConfig;
 import org.jboss.wise.core.wsextensions.EnablerDelegate;
 import org.jboss.wise.core.wsextensions.WSExtensionEnabler;
 import org.jboss.wise.core.wsextensions.impl.jbosswsnative.NativeSecurityConfig;
@@ -38,10 +40,16 @@ import org.junit.Test;
  */
 public class WSSecurityEnablerTest {
 
-    private final WSExtensionEnabler enabler = new WSSecurityEnabler();
-
     @Test
     public void shouldFindVisitorImplWithIOC() {
+        WSExtensionEnabler enabler = new WSSecurityEnabler();
+        assertThat(enabler.getDelegate(), is(ReflectionEnablerDelegate.class));
+    }
+
+    @Test
+    public void shouldFindVisitorImplWithWiseConfig() {
+        WiseConfig config = new WiseJBWSRefletctionConfig("", "", false, false, "", false);
+        WSExtensionEnabler enabler = new WSSecurityEnabler(config);
         assertThat(enabler.getDelegate(), is(ReflectionEnablerDelegate.class));
     }
 
@@ -49,7 +57,7 @@ public class WSSecurityEnablerTest {
     public void shouldDelegateToVisitor() {
         EnablerDelegate delegate = mock(EnablerDelegate.class);
         WSEndpointImpl ep = mock(WSEndpointImpl.class);
-        enabler.setDelegate(delegate);
+        WSExtensionEnabler enabler = new WSSecurityEnabler(null, delegate);
         enabler.enable(ep);
         verify(delegate).visitWSSecurity(ep);
 
@@ -61,8 +69,7 @@ public class WSSecurityEnablerTest {
         delegate.setSecurityConfigMap(new HashMap<String, NativeSecurityConfig>());
         delegate.setDefaultSecurityConfig(null);
         WSEndpointImpl ep = mock(WSEndpointImpl.class);
-        enabler.setDelegate(delegate);
+        WSExtensionEnabler enabler = new WSSecurityEnabler(null, delegate);
         enabler.enable(ep);
-
     }
 }
