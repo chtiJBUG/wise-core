@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== 
+     29 Sep 2008 16:36:29                                                        
+                                                          
+     ====================================================================== -->
+<project name="HelloWorldGroovy" basedir=".">
+
+	<!-- Here we have 2 "Main" script. Please uncomment her the one you would try -->
+	<property name="MainClass" value="HelloWorldClient">
+		<!--<property name="MainClass" value="HelloWorldClosure"> -->
+
+	</property>
+	<property file="${basedir}/build.properties" />
+	<path id="additional.run.classpath">
+		<fileset dir="../lib/tools">
+			<include name="*.jar" />
+		</fileset>
+		<fileset dir="../lib/groovy">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<path id="groovy.compile.classpath">
+		<path refid="build.classpath" />
+		<fileset dir="../lib/groovy">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<import file="${basedir}/../ant/build.xml" />
+
+	<taskdef name="groovyc" classname="org.codehaus.groovy.ant.Groovyc" classpathref="groovy.compile.classpath" />
+
+	<target name="compileGroovy">
+
+		<groovyc srcdir="${basedir}/src/client/" classpathref="groovy.compile.classpath" destdir="${classes.java.client.dir}">
+
+		</groovyc>
+	</target>
+
+	<!-- groovy task seems to have a class loading problem. For instructio to run script without compile read README-first.txt
+	<taskdef name="groovy" classname="org.codehaus.groovy.ant.Groovy" classpathref="groovy.run.classpath" />
+
+	    <target name="runGroovy">
+	        <groovy src="${basedir}/src/client/HelloWorldClient.groovy" classpathref="groovy.run.classpath">
+
+	        </groovy>
+	    </target>
+	    -->
+</project>

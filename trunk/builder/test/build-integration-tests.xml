@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Wise-core" default="integrationTest" basedir="../../">
+
+	<import file="${basedir}/builder/ant-import/build-setup.xml" />
+	<property name="ws.archive.output.dir" value="${build.dir}/test-ws-archive" />
+
+	<path id="test.execution.classpath">
+		<pathelement location="${coverage.dir}/instrumentedClasses" />
+		<pathelement location="${basedir}/${classes.dir}" />
+		<pathelement location="${basedir}/${test.classes.dir}" />
+		<pathelement location="${test.resources.dir}" />
+		<pathelement location="${test.output.dir}" />
+		<path refid="build.classpath" />
+		<path refid="test.build.classpath" />
+		<pathelement location="${env.JAVA_HOME}/lib/tools.jar" />
+		<pathelement location="${lib.dir}" />
+		<pathelement location="${test.lib.dir}" />
+	</path>
+
+	<target name="clean" description="Cleans up the build directory">
+		<delete dir="${test.classes.dir}" />
+	</target>
+
+	<target name="init" description="Initialize the build">
+		<mkdir dir="${test.classes.dir}" />
+		<deltree dir="${test.output.dir}" />
+		<mkdir dir="${test.output.dir}" />
+
+	</target>
+
+	<target name="build-test-wars" description="Build the test war for deployments" depends="compileTest">
+		<mkdir dir="${ws.archive.output.dir}" />
+                <!-- Integration test for basic --> 
+		<war warfile="${ws.archive.output.dir}/basic.war" webxml="${test.resources.dir}/integration/test/basic/WEB-INF/web.xml">
+			<classes dir="${test.classes.dir}">
+				<include name="org/jboss/wise/test/integration/basic/**/*.class" />
+				<exclude name="org/jboss/wise/test/integration/basic/**/*Test.class" />
+				<include name="org/jboss/wise/test/integration/basic/**/*.xml" />
+			</classes>
+		</war>
+
+                <!-- Integration test for WS-Security --> 
+                <war warfile="${ws.archive.output.dir}/wsse.war" webxml="${test.resources.dir}/integration/test/wsse/WEB-INF/web.xml">
+                        <webinf dir="${test.resources.dir}/integration/test/wsse/WEB-INF/">
+                              <include name="*"/>                             
+                       </webinf>
+                       <classes dir="${test.classes.dir}">
+		              <include name="org/jboss/wise/test/integration/wsse/**/*.class" />
+		              <exclude name="org/jboss/wise/test/integration/wsse/**/*Test.class" />
+		       </classes>
+		</war>
+
+                <!-- Integration test for WS-Addressing -->
+                <jar destfile="${ws.archive.output.dir}/wsaddressing.jar">
+                       <fileset dir="${test.classes.dir}">
+                              <include name="org/jboss/wise/test/integration/wsaddressing/**/*.class" />
+                              <exclude name="org/jboss/wise/test/integration/wsaddressing/**/*Test.class" />
+                       </fileset>
+                </jar>
+
+	</target>
+	<target name="compileTest" depends="init">
+		<ant antfile="${main.builder}" target="compile" />
+		<javac destdir="${test.classes.dir}" classpathref="test.execution.classpath" debug="${javac.debug}" deprecation="${javac.deprecation}" nowarn="on" target="1.5">
+			<src path="${src.test.dir}" />
+			<include name="**/integration/**" />
+		</javac>
+	</target>
+
+	<target name="integrationTest" depends="build-test-wars">
+		<input
+		    message="Have you a JBoss instance up and running? Press Enter to continue..."
+		  />
+		<junit printsummary="yes" haltonfailure="yes">
+			<jvmarg line="${remote.debug.line}"/>
+			<classpath refid="test.execution.classpath" />
+			<batchtest fork="yes" todir="${test.output.dir}">
+				<formatter type="plain" />
+				<fileset dir="${src.test.dir}">
+					<include name="**/integration/**/*Test.java" />
+				</fileset>
+			</batchtest>
+		</junit>
+		<echo>You can now stop you JBoss instance.</echo>
+	</target>
+	
+	<target name="oneIntegrationTest" depends="build-test-wars">
+	    <input message="Have you a JBoss instance up and running? Press Enter to continue..."/>
+		<junit printsummary="yes" haltonfailure="no">
+			<classpath refid="test.execution.classpath" />
+			<jvmarg line="${remote.debug.line}"/>
+			<test fork="yes" name="${classToTest}" haltonfailure="no" todir="${test.output.dir}">
+				<formatter type="plain" />
+			</test>
+		</junit>
+	</target>
+
+</project>
