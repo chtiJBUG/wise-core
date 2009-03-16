@@ -24,44 +24,60 @@ package org.jboss.wise.core.utils;
 
 // $Id: IOUtils.java 4018 2007-07-27 06:31:03Z thomas.diesler@jboss.com $
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
+import org.jboss.wise.core.exception.WiseRuntimeException;
 
 /**
  * IO utilites
  * 
- * @author stefano.maestri@javalinux.it class imported from JBossWS. Kept
- *         methods useful for Wise
+ * @author stefano.maestri@javalinux.it class imported from JBossWS. Kept methods useful for Wise
  */
 public final class IOUtils {
     // Hide the constructor
     private IOUtils() {
     }
 
-    public static Writer getCharsetFileWriter(File file, String charset) throws IOException {
-	return new OutputStreamWriter(new FileOutputStream(file), charset);
+    public static IOUtils newInstance() {
+        return new IOUtils();
     }
 
     /**
-     * True if the given type name is the source notation of a primitive or
-     * array of which.
+     * True if the given type name is the source notation of a primitive or array of which.
      * 
      * @param outs
      * @param ins
-     * @throws IOException
+     * @throws WiseRuntimeException
      */
-    public static void copyStream(OutputStream outs, InputStream ins) throws IOException {
-	byte[] bytes = new byte[1024];
-	int r = ins.read(bytes);
-	while (r > 0) {
-	    outs.write(bytes, 0, r);
-	    r = ins.read(bytes);
-	}
+    public void copyStreamAndClose( OutputStream outs,
+                                    InputStream ins ) throws WiseRuntimeException {
+        try {
+            byte[] bytes = new byte[1024];
+            int r = ins.read(bytes);
+            while (r > 0) {
+                outs.write(bytes, 0, r);
+                r = ins.read(bytes);
+            }
+        } catch (Exception e) {
+            throw new WiseRuntimeException(e);
+        } finally {
+            try {
+                if (outs != null) {
+                    outs.close();
+                }
+            } catch (IOException e) {
+                // suppressed
+            }
+
+            try {
+                if (ins != null) {
+                    ins.close();
+                }
+            } catch (IOException e) {
+            }
+
+        }
     }
 
 }

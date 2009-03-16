@@ -20,7 +20,7 @@
  * site: http://www.fsf.org.
  */
 
-package org.jboss.wise.core.jbossmc.beans;
+package org.jboss.wise.core.client.impl.reflection.builder;
 
 import org.jboss.wise.core.client.builder.WSDynamicClientBuilder;
 import org.jboss.wise.core.client.factories.WSDynamicClientFactory;
