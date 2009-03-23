@@ -31,6 +31,9 @@ import org.jboss.wise.core.config.WiseConfig;
 import org.jboss.wise.core.exception.WiseRuntimeException;
 
 /**
+ * {@link WSDynamicClientBuilder} is an interface to define builder for various kind of implementation of WiseDynamicClient
+ * Indirect build permit to easy inject different implementation of {@link WSDynamicClient}.
+ * 
  * @author stefano.maestri@javalinux.it
  */
 @ThreadSafe

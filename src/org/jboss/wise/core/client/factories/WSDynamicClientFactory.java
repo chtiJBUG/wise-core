@@ -47,9 +47,11 @@ import org.jboss.wise.core.jbossmc.beans.WiseClientConfiguration;
 import org.jboss.wise.core.utils.SmooksCache;
 
 /**
- * WSDynamicClientFactory is a singleton containing a WSDynamicClient cache. It's able to create WSDynamicCient objects, and init
- * then using WiseProperties using wise-core.properties find in classpath as default. This default properties may be overridden
- * using setWiseProperties method.
+ * WSDynamicClientFactory is able to create WSDynamicCient objects, and init them. It could be used as a singleton, for standalone
+ * usage of wise. In this case all configuration have been gotten using JBoss MicroKernel IOC and so defined in
+ * META-INF/jboss-beans.xml in classpath. Refer to user manual for a more complete description. It could be used also as pure
+ * factory using {@link #newInstance(WiseConfig)} method. It this case configuration have been gotten from {@link WiseConfig}
+ * parameter.
  * 
  * @author Stefano Maestri, stefano.maestri@javalinux.it
  */
@@ -69,7 +71,11 @@ public abstract class WSDynamicClientFactory {
         WSDynamicClientCache.getInstance().clearCache();
     }
 
-    public static WSDynamicClientFactory newInstance( WiseConfig config ) throws MCKernelUnavailableException {
+    /**
+     * @param config
+     * @return a new Instance of {@link WSDynamicClientFactory}
+     */
+    public static WSDynamicClientFactory newInstance( WiseConfig config ) {
         WSDynamicClientFactory factory = MicroContainerSpi.getImplementation(BeansNames.WSDynamicClientFactory,
                                                                              WSDynamicClientFactory.class,
                                                                              config);
@@ -90,6 +96,12 @@ public abstract class WSDynamicClientFactory {
         return factory;
     }
 
+    /**
+     * A singleton access to this factory. See developer manual for more information about MK configurations
+     * 
+     * @return the common singleton instance of {@link WSDynamicClientFactory} configured by MK META-INF/jboss-beans.xml
+     * @throws MCKernelUnavailableException
+     */
     public static WSDynamicClientFactory getInstance() throws MCKernelUnavailableException {
         synchronized (WSDynamicClientFactory.class) {
             // If the logger has not been configured
@@ -138,17 +150,28 @@ public abstract class WSDynamicClientFactory {
         return factory;
     }
 
+    /**
+     * Return an instance of WSDynamicClient taken from cache if possible and if cache is enabled by current configuration,
+     * generate and initialise if not.
+     * 
+     * @param wsdlURL
+     * @return an instance of {@link WSDynamicClient} already initialized, ready to call endpoints
+     * @throws IllegalStateException
+     * @throws ConnectException
+     * @throws WiseRuntimeException
+     */
     public WSDynamicClient getJAXWSClient( String wsdlURL ) throws IllegalStateException, ConnectException, WiseRuntimeException {
         return this.getJAXWSClient(wsdlURL, null, null, null, null, null);
     }
 
     /**
-     * Return an instance of WSDynamicClient taken from cache if possible, generate and initialise if not.
+     * Return an instance of WSDynamicClient taken from cache if possible and if cache is enabled by current configuration,
+     * generate and initialise if not.
      * 
      * @param wsdlURL The URL to retrive wsdl of webservice called
      * @param userName we support HTTP BASIC Auth protected wsdls: this is username used for authentication
      * @param password we support HTTP BASIC Auth protected wsdls: this is password used for authentication
-     * @return an instance of WSDynamicClient already initialized, ready to call endpoints
+     * @return an instance of {@link WSDynamicClient} already initialized, ready to call endpoints
      * @throws IllegalStateException
      * @throws ConnectException thrown in case wsdl isn't accessible at given URL
      * @throws WiseRuntimeException
@@ -159,12 +182,39 @@ public abstract class WSDynamicClientFactory {
         return this.getJAXWSClient(wsdlURL, userName, password, null, null, null);
     }
 
+    /**
+     * Return an instance of WSDynamicClient taken from cache if possible and if cache is enabled by current configuration,
+     * generate and initialise if not.
+     * 
+     * @param wsdlURL
+     * @param bindings
+     * @param catelog
+     * @return an instance of {@link WSDynamicClient} already initialized, ready to call endpoints
+     * @throws IllegalStateException
+     * @throws ConnectException
+     * @throws WiseRuntimeException
+     */
     public WSDynamicClient getJAXWSClient( String wsdlURL,
                                            List<File> bindings,
                                            File catelog ) throws IllegalStateException, ConnectException, WiseRuntimeException {
         return this.getJAXWSClient(wsdlURL, null, null, null, bindings, catelog);
     }
 
+    /**
+     * Return an instance of WSDynamicClient taken from cache if possible and if cache is enabled by current configuration,
+     * generate and initialise if not.
+     * 
+     * @param wsdlURL
+     * @param userName
+     * @param password
+     * @param targetPackage
+     * @param bindings
+     * @param catelog
+     * @return an instance of {@link WSDynamicClient} already initialized, ready to call endpoints
+     * @throws IllegalStateException
+     * @throws ConnectException
+     * @throws WiseRuntimeException
+     */
     public WSDynamicClient getJAXWSClient( String wsdlURL,
                                            String userName,
                                            String password,
@@ -268,6 +318,11 @@ public abstract class WSDynamicClientFactory {
         return config;
     }
 
+    /**
+     * injected by MK
+     * 
+     * @param config
+     */
     public final synchronized void setConfig( WiseClientConfiguration config ) {
         this.config = config;
     }
