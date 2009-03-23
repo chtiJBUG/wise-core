@@ -95,8 +95,8 @@ public final class MicroContainerSpi {
         switch (beanName) {
             case EnablerDelegate:
                 ReflectionEnablerDelegate enablerDelegate = new ReflectionEnablerDelegate();
-                enablerDelegate.setDefaultSecurityConfig(new NativeSecurityConfig(config.getConfigFileURL(),
-                                                                                  config.getConfigName()));
+                enablerDelegate.setDefaultSecurityConfig(new NativeSecurityConfig(config.getSecurityConfigFileURL(),
+                                                                                  config.getSecurityConfigName()));
                 return (T)enablerDelegate;
             case WSDynamicClientFactory:
                 return (T)new ReflectionWSDynamicClientFactory(config);

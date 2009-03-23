@@ -26,30 +26,30 @@ package org.jboss.wise.core.config;
  */
 public class WiseJBWSRefletctionConfig implements WiseConfig {
 
-    private final String configFileURL;
-    private final String configName;
+    private final String securityConfigFileURL;
+    private final String securityConfigName;
     private final boolean keepSource;
     private final boolean verbose;
     private final String tmpDir;
     private final boolean cacheEnabled;
 
     /**
-     * @param configFileURL
-     * @param configName
+     * @param securityConfigFileURL
+     * @param securityConfigName
      * @param keepSource
      * @param verbose
      * @param tmpDir
      * @param cacheEnabled
      */
-    public WiseJBWSRefletctionConfig( String configFileURL,
-                                      String configName,
+    public WiseJBWSRefletctionConfig( String securityConfigFileURL,
+                                      String securityConfigName,
                                       boolean keepSource,
                                       boolean verbose,
                                       String tmpDir,
                                       boolean cacheEnabled ) {
         super();
-        this.configFileURL = configFileURL;
-        this.configName = configName;
+        this.securityConfigFileURL = securityConfigFileURL;
+        this.securityConfigName = securityConfigName;
         this.keepSource = keepSource;
         this.verbose = verbose;
         this.tmpDir = tmpDir;
@@ -57,17 +57,17 @@ public class WiseJBWSRefletctionConfig implements WiseConfig {
     }
 
     /**
-     * @return configFileURL
+     * @return securityConfigFileURL
      */
-    public String getConfigFileURL() {
-        return configFileURL;
+    public String getSecurityConfigFileURL() {
+        return securityConfigFileURL;
     }
 
     /**
-     * @return configName
+     * @return securityConfigName
      */
-    public String getConfigName() {
-        return configName;
+    public String getSecurityConfigName() {
+        return securityConfigName;
     }
 
     /**
