@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.0.xsd">
+
+    <resource-config selector="global-parameters">
+        <param name="stream.filter.type">SAX</param>
+    </resource-config>
+
+    <resource-config selector="org.jboss.wise.core.mapper.mappingObject.ExternalObject">
+        <resource>org.milyn.javabean.BeanPopulator</resource>
+        <param name="beanId">complexObject</param>
+        <param name="beanClass">org.jboss.wise.core.mapper.mappingObject.ComplexObject</param>
+        <param name="bindings">
+            <binding property="numberField" type="Integer" selector="internal number" />
+            <binding property="textField" selector="internal text" />
+            <binding property="dateField" type="XMLGregorianCalendar" selector="date" />
+        </param>
+    </resource-config>
+<resource-config selector="decoder:XMLGregorianCalendar">
+        <resource>org.jboss.wise.smooks.decoders.XMLGregorianCalendarDecoder</resource>
+        <param name="format">yyyy-MM-dd HH:mm:ss.S z</param>
+    </resource-config>
+
+</smooks-resource-list>
