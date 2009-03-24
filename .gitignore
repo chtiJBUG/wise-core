@@ -17,6 +17,6 @@
 /samples/lib
 
 # /samples/MTOMSample/
-/samples/MTOMSample/build
-/samples/MTOMSample/classes
-/samples/MTOMSample/log
+/samples/*/build
+/samples/*/classes
+/samples/*/log
