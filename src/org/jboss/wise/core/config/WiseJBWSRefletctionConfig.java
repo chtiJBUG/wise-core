@@ -22,6 +22,9 @@
 package org.jboss.wise.core.config;
 
 /**
+ * Concrete implementation of {@link WiseConfig} which set up a Reflection based implementation of Wise based on JBossWS native
+ * JAX-WS stack
+ * 
  * @author stefano.maestri@javalinux.it
  */
 public class WiseJBWSRefletctionConfig implements WiseConfig {

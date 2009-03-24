@@ -37,6 +37,9 @@ import org.jboss.wise.core.wsextensions.impl.jbosswsnative.NativeSecurityConfig;
 import org.jboss.wise.core.wsextensions.impl.jbosswsnative.ReflectionEnablerDelegate;
 
 /**
+ * Static class used internally to masquerade MK use in case a {@link WiseConfig} is passed to
+ * {@link #getImplementation(BeansNames, Class, WiseConfig)} method
+ * 
  * @author stefano.maestri@javalinux.it
  */
 public final class MicroContainerSpi {

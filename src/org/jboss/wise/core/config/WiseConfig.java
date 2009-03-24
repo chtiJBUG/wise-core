@@ -21,7 +21,13 @@
  */
 package org.jboss.wise.core.config;
 
+import org.apache.cxf.endpoint.dynamic.DynamicClientFactory;
+
 /**
+ * This interface define a configuration to be passed to {@link DynamicClientFactory} when it is build with newInstance method.
+ * Client decide using concrete implementation of this interface which kind of implementation it would use and set also
+ * configuration parameter.
+ * 
  * @author stefano.maestri@javalinux.it
  */
 public interface WiseConfig {
@@ -29,5 +35,13 @@ public interface WiseConfig {
     public String getTmpDir();
 
     public boolean isCacheEnabled();
+
+    public String getSecurityConfigFileURL();
+
+    public String getSecurityConfigName();
+
+    public boolean isKeepSource();
+
+    public boolean isVerbose();
 
 }
