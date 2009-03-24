@@ -24,7 +24,7 @@ public class ClientServerJaxrsTest extends AbstractClientServerTestBase {
         String response = (String)result.getResult().get(InvocationResult.RESPONSE);
         
         String expected = getStringFromInputStream(
-              getClass().getResourceAsStream("/expected_get_book123.txt"));            
+              getClass().getResourceAsStream("/jaxrs/expected_get_book123.txt"));            
 
         assertEquals(response, expected);
     }
@@ -33,14 +33,14 @@ public class ClientServerJaxrsTest extends AbstractClientServerTestBase {
     public void testAddBook() throws Exception {
         RSDynamicClient client = WSDynamicClientFactory.getInstance().getJAXRSClient("http://localhost:9080/bookstore/books", RSDynamicClient.HttpMethod.POST, "application/xml", "application/xml");
 
-        InputStream request = getClass().getResourceAsStream("/add_book.txt"); 
+        InputStream request = getClass().getResourceAsStream("/jaxrs/add_book.txt"); 
         InvocationResult result = client.invoke(request, null);
 
         String response = (String)result.getResult().get(InvocationResult.RESPONSE);
         System.out.println("-------------" + response);
         
         String expected = getStringFromInputStream(
-              getClass().getResourceAsStream("/expected_add_book.txt"));            
+              getClass().getResourceAsStream("/jaxrs/expected_add_book.txt"));            
 
         assertEquals(response, expected);
     }
@@ -49,7 +49,7 @@ public class ClientServerJaxrsTest extends AbstractClientServerTestBase {
     public void testUpdateBook() throws Exception {
         RSDynamicClient client = WSDynamicClientFactory.getInstance().getJAXRSClient("http://localhost:9080/bookstore/books", RSDynamicClient.HttpMethod.PUT, "application/xml", "application/xml");
 
-        InputStream request = getClass().getResourceAsStream("/update_book.txt"); 
+        InputStream request = getClass().getResourceAsStream("/jaxrs/update_book.txt"); 
         InvocationResult result = client.invoke(request, null);
 
         String response = (String)result.getResult().get(InvocationResult.RESPONSE);
@@ -62,13 +62,13 @@ public class ClientServerJaxrsTest extends AbstractClientServerTestBase {
         response = (String)result.getResult().get(InvocationResult.RESPONSE);
      
         String expected = getStringFromInputStream(
-              getClass().getResourceAsStream("/expected_update_book.txt"));            
+              getClass().getResourceAsStream("/jaxrs/expected_update_book.txt"));            
 
         assertEquals(response, expected);    
         
         // Roll back changes:        
         client = WSDynamicClientFactory.getInstance().getJAXRSClient("http://localhost:9080/bookstore/books", RSDynamicClient.HttpMethod.PUT, "application/xml", "application/xml");
-        request = getClass().getResourceAsStream("/expected_get_book123.txt"); 
+        request = getClass().getResourceAsStream("/jaxrs/expected_get_book123.txt"); 
         result = client.invoke(request, null);
     }   
     
