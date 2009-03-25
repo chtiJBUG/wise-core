@@ -21,10 +21,12 @@
  */
 package org.jboss.wise.core.config;
 
+import org.jboss.wise.core.client.WSDynamicClient;
+
 /**
- * This interface define a configuration to be passed to {@link DynamicClientFactory} when it is build with newInstance method.
- * Client decide using concrete implementation of this interface which kind of implementation it would use and set also
- * configuration parameter.
+ * This interface define a configuration to be passed to {@link WSDynamicClient} when it is build with newInstance method. Client
+ * decide using concrete implementation of this interface which kind of implementation it would use and set also configuration
+ * parameter.
  * 
  * @author stefano.maestri@javalinux.it
  */

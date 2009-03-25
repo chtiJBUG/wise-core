@@ -20,3 +20,7 @@
 /samples/*/build
 /samples/*/classes
 /samples/*/log
+
+
+#taget
+*/target
