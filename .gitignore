@@ -2,15 +2,12 @@
 # /
 /smook
 /temp
-/tmp
 /test-output
 /build
 /classes
 /.settings
 /target
 /cobertura.ser
-/junitvm*properties
-
 
 
 # /docs/
