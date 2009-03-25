@@ -48,14 +48,14 @@ public class WSAddressingIntegrationTest extends WiseTest {
 
     @Before
     public void setUp() throws Exception {
-        warUrl = this.getArchiveUrl("wsaddressing.jar");
+        warUrl = this.getClass().getClassLoader().getResource("wsa.war");
         deployWS(warUrl);
     }
 
     @Test
     @SuppressWarnings("unchecked")
     public void testDeploy() throws Exception {
-        URL wsdURL = new URL(getServerHostAndPort() + "/wsaddressing/HelloImpl?wsdl");
+        URL wsdURL = new URL(getServerHostAndPort() + "/wsa/Hello?wsdl");
         WSDynamicClientFactory factory = WSDynamicClientFactory.getInstance();
         WSDynamicClient client = factory.getJAXWSClient(wsdURL.toString());
         WSMethod method = client.getWSMethod("HelloService", "HelloImplPort", "echoUserType");

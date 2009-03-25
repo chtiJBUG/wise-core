@@ -39,7 +39,7 @@ public class WiseIntegrationBasicTest extends WiseTest {
     private URL warUrl = null;
     @Before
     public void setUp() throws Exception  {       
-        warUrl = this.getArchiveUrl("basic.war"); 
+        warUrl = this.getClass().getClassLoader().getResource("basic.war");
         deployWS(warUrl);
   
     }
