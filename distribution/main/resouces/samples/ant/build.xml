@@ -18,7 +18,7 @@
 	<property name="classes.java.client.dir" value="classes/client" />
 	<property name="classes.java.server.dir" value="classes/server" />
 
-	<property name="lib.dir" value="../../lib" />
+	<property name="lib.dir" value="../lib" />
 	<property name="smooks.lib.dir" value="${lib.dir}/smooks" />
 
     <!-- Use -Ddebug=true for remote debugging -->
@@ -41,9 +41,9 @@
 		<fileset dir="${lib.dir}">
 			<include name="*.jar" />
 		</fileset>
-		<fileset dir="../../build">
-			<include name="wise-core.jar" />
-		</fileset>
+                <fileset dir="../../../../../core/target">
+                        <include name="wise-core*.jar" />
+                </fileset>
 		<fileset dir="${smooks.lib.dir}">
 			<include name="*.jar" />
 		</fileset>
@@ -54,8 +54,8 @@
 		<fileset dir="../lib">
 			<include name="*.jar" />
 		</fileset>
-		<fileset dir="../../build">
-			<include name="wise-core.jar" />
+                <fileset dir="../../../../../core/target">
+                        <include name="wise-core*.jar" />
 		</fileset>
 		<fileset dir="${build.client.dir}">
 			<include name="*.jar" />

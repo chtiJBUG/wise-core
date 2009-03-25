@@ -14,8 +14,8 @@
 /docs/api
 
 # /samples/
-/samples/lib
-
+distribution/main/resouces/samples/*/classes
+distribution/main/resouces/samples/*/build
 # /samples/MTOMSample/
 /samples/*/build
 /samples/*/classes
