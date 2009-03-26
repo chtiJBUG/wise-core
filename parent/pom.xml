@@ -37,30 +37,8 @@
         <surefire.format>brief</surefire.format>
         <surefire.usefile>false</surefire.usefile>
         <compile.flags>-Xlint:unchecked,deprecation,fallthrough,finally</compile.flags>
-
-        <jaxb.version>2.1</jaxb.version>
-        <jaxb.impl.version>2.1.7</jaxb.impl.version>
-        <jaxb.xjc.version>2.1.7</jaxb.xjc.version>
-        <jetty.version>6.1.9</jetty.version>
-        <saaj.version>1.3</saaj.version>
-        <saaj.impl.version>1.3</saaj.impl.version>
-        <spring.version>2.0.8</spring.version>
-        <spring.mock>spring-mock</spring.mock>
-        <wsdl4j.version>1.6.2</wsdl4j.version>
-        <derby.version>10.2.2.0</derby.version>
-        <activemq.version>4.1.1</activemq.version>
-        <rhino.version>1.6R7</rhino.version>
-        <jdom.version>1.0</jdom.version>
-        <xmlbeans.version>2.3.0</xmlbeans.version>
-        <abdera.version>0.4.0-incubating</abdera.version>
         <checkstyle.extension />
-
-        <spring.validation.mode>VALIDATION_AUTO</spring.validation.mode>
-
-        <downloadSources>true</downloadSources>
-        <servicemix.version>3.2.1</servicemix.version>
     </properties>
-
 
     <build>
         <resources>
@@ -100,7 +78,7 @@
             </testResource>
         </testResources>
         <pluginManagement>
-            <plugins>
+        <plugins>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
@@ -127,18 +105,6 @@
                             <property>
                                 <name>java.util.logging.config.file</name>
                                 <value>${basedir}/target/test-classes/logging.properties</value>
-                            </property>
-                            <property>
-                                <name>activemq.store.dir</name>
-                                <value>${basedir}/target/ActiveMQ</value>
-                            </property>
-                            <property>
-                                <name>derby.system.home</name>
-                                <value>${basedir}/target/derby</value>
-                            </property>
-                            <property>
-                                <name>spring.validation.mode</name>
-                                <value>${spring.validation.mode}</value>
                             </property>
                         </systemProperties>
                     </configuration>
@@ -409,12 +375,6 @@
             </dependency>
 
          <dependency>
-             <groupId>woodstox</groupId>
-             <artifactId>wstx</artifactId>
-             <version>1.0.7</version>
-         </dependency> 
-
-         <dependency>
              <groupId>xalan</groupId>
              <artifactId>xalan</artifactId>
              <version>2.7.1</version>
@@ -425,12 +385,6 @@
              <artifactId>mockito-all</artifactId>
              <version>1.7</version>
          </dependency> 
-
-          <dependency>
-              <groupId>woodstox</groupId>
-              <artifactId>stax2</artifactId>
-              <version>2.1</version>
-           </dependency>
 
           <dependency>
               <groupId>wsdl4j</groupId>
@@ -452,7 +406,7 @@
 
 
           <dependency>
-             <groupId>ws-commons</groupId>
+             <groupId>wscommons-policy</groupId>
              <artifactId>policy</artifactId>
              <version>1.0</version>
          </dependency> 
@@ -528,36 +482,6 @@
 
         </dependencies>
     </dependencyManagement>
-
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>cobertura-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-project-info-reports-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-report-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </reporting>
-
-    <profiles>
-    </profiles>
-
-
-
-    <scm>
-    </scm>
-
 </project>
 
 
