@@ -1,0 +1,25 @@
+
+# /
+/smook
+/temp
+/tmp
+/test-output
+/build
+/classes
+/.settings
+/target
+/cobertura.ser
+/junitvm*properties
+
+
+
+# /docs/
+/docs/api
+
+# /samples/
+/samples/lib
+
+# /samples/MTOMSample/
+/samples/*/build
+/samples/*/classes
+/samples/*/log
