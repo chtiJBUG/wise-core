@@ -7,7 +7,7 @@
 	<description>
             It's the base file used by all samples's build
     </description>
-
+        <property environment="env"/>
 	<property name="log.dir" value="log" />
 	<property name="build.dir" value="build" />
 	<property name="build.client.dir" value="build/client" />
@@ -18,8 +18,8 @@
 	<property name="classes.java.client.dir" value="classes/client" />
 	<property name="classes.java.server.dir" value="classes/server" />
 
-	<property name="lib.dir" value="../lib" />
-	<property name="smooks.lib.dir" value="${lib.dir}/smooks" />
+	<property name="lib.dir" value="../../lib" />
+        <property file="${basedir}/../ant/sample.properties" />
 
     <!-- Use -Ddebug=true for remote debugging -->
     <condition property="remote.debug.line" value="-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005">
@@ -41,25 +41,16 @@
 		<fileset dir="${lib.dir}">
 			<include name="*.jar" />
 		</fileset>
-                <fileset dir="../../../../../core/target">
-                        <include name="wise-core*.jar" />
-                </fileset>
-		<fileset dir="${smooks.lib.dir}">
-			<include name="*.jar" />
-		</fileset>
-
 	</path>
 
 	<path id="run.classpath">
-		<fileset dir="../lib">
+		<fileset dir="${lib.dir}">
 			<include name="*.jar" />
-		</fileset>
-                <fileset dir="../../../../../core/target">
-                        <include name="wise-core*.jar" />
 		</fileset>
 		<fileset dir="${build.client.dir}">
 			<include name="*.jar" />
 		</fileset>
+                <pathelement location="${env.JAVA_HOME}/lib/tools.jar"/>
 		<path refid="additional.run.classpath"/>
 
 	</path>
@@ -118,7 +109,7 @@
     </target>
 
     <target name="runTest" depends="jar" description="Run the current test">
-      <java classpathref="run.classpath" classname="${MainClass}" fork="true" jvm="${JavaHome}/bin/java">
+      <java classpathref="run.classpath" classname="${MainClass}" fork="true">
         <jvmarg line="${remote.debug.line}"/>
       </java>
     </target>

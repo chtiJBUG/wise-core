@@ -38,25 +38,29 @@
                 <artifactId>junit</artifactId>
                 <scope>test</scope>
             </dependency>
- 
-
+             <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>javax.ejb</groupId>
+                <artifactId>ejb-api</artifactId>
+                <version>3.0</version>
+                <scope>test</scope>
+             </dependency>
             <dependency>
                 <groupId>org.jboss</groupId>
                 <artifactId>wise-core</artifactId>
-                <version>${version}</version>
-                <exclusions>
-                      <exclusion>
-                         <groupId>sun-jaxws</groupId>
-                         <artifactId>jaxws-rt</artifactId>
-                      </exclusion> 
-               </exclusions>          
+                <version>${version}</version>        
                 <scope>test</scope>
             </dependency>
 
             <dependency>
-                <groupId>sun-jaxws</groupId>
-                <artifactId>jaxws-api</artifactId>
-                <scope>test</scope>
+                <groupId>jboss</groupId>
+                <artifactId>jbossall-client</artifactId>
+                <version>4.2.2.GA</version> 
+                 <scope>test</scope>
             </dependency>
 
             <dependency>

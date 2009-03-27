@@ -7,7 +7,6 @@
 
 	<property name="MainClass" value="org.jboss.wise.samples.HelloWorldClient">
 	</property>
-	<property file="${basedir}/build.properties" />
 	
 	<path id="additional.run.classpath">
 		<fileset dir="../lib/JDK5">

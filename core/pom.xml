@@ -43,48 +43,15 @@
                 <version>4.4</version>
                 <scope>test</scope>
             </dependency>
- 
-            <dependency>
-                <groupId>javax.activation</groupId>
-                <artifactId>activation</artifactId>
-            </dependency>
 
- 
-            <dependency>
-                <groupId>commons-beanutils</groupId>
-                <artifactId>commons-beanutils</artifactId>
-            </dependency>
-            <dependency>
-                <groupId>commons-codec</groupId>
-                <artifactId>commons-codec</artifactId>
-            </dependency>
-            <dependency>
-                <groupId>commons-collections</groupId>
-                <artifactId>commons-collections</artifactId>
-            </dependency>
             <dependency>
                 <groupId>commons-httpclient</groupId>
                 <artifactId>commons-httpclient</artifactId>
             </dependency>
+
             <dependency>
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
-            </dependency>
-            <dependency>
-                <groupId>commons-lang</groupId>
-                <artifactId>commons-lang</artifactId>
-            </dependency>
-            <dependency>
-                <groupId>commons-logging</groupId>
-                <artifactId>commons-logging</artifactId>
-            </dependency>
-            <dependency>
-                <groupId>org.codehaus.groovy</groupId>
-                <artifactId>groovy-all</artifactId>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss</groupId>
-                <artifactId>javassist</artifactId>
             </dependency>
 
 
@@ -96,55 +63,34 @@
                 <groupId>javax.xml</groupId>
                 <artifactId>jaxb-api</artifactId>
             </dependency>
-            <dependency>
-                <groupId>sun-jaxws</groupId>
-                <artifactId>jaxws-rt</artifactId>
-            </dependency>
-
-            <dependency>
-                <groupId>sun-jaxws</groupId>
-                <artifactId>jaxws-tools</artifactId>
-            </dependency>
-
-            <dependency>
-                <groupId>org.jboss.client</groupId>
-                <artifactId>jbossall-client</artifactId>
-            </dependency>
-            <dependency>
-                <groupId>jboss</groupId>
-                <artifactId>jboss-common</artifactId>
-                <version>4.2.2.GA</version>
-            </dependency>
 
             <dependency>
                 <groupId>jboss</groupId>
                 <artifactId>jboss-container</artifactId>
+                <exclusions>
+                      <exclusion>
+                           <groupId>apache-httpclient</groupId>
+                           <artifactId>commons-httpclient</artifactId>
+                      </exclusion>
+                      <exclusion>
+                           <groupId>jboss</groupId>
+                           <artifactId>jboss-logging-spi</artifactId>
+                      </exclusion>
+               </exclusions>
             </dependency>
 
-
-            <dependency>
-                <groupId>jboss</groupId>
-                <artifactId>jboss-ejb3x</artifactId>
-            </dependency>
-
-            <dependency>
-                <groupId>jboss</groupId>
-                <artifactId>jboss-dependency</artifactId>
-            </dependency>
-
-            <dependency>
-                <groupId>org.jboss.microcontainer</groupId>
-                <artifactId>jboss-container</artifactId>             
-            </dependency>
 
             <dependency>
                 <groupId>jboss</groupId>
                 <artifactId>jboss-kernel</artifactId>
-            </dependency>
+                <exclusions>
 
-            <dependency>
-                <groupId>jboss.jbossws</groupId>
-                <artifactId>jboss-saaj</artifactId>
+                      <exclusion>
+                        <groupId>wutka-dtdparser</groupId>
+                        <artifactId>dtdparser121</artifactId>
+                      </exclusion>
+
+               </exclusions>               
             </dependency>
 
             <dependency>
@@ -155,11 +101,6 @@
             <dependency>
                 <groupId>org.jboss.ws.native</groupId>
                 <artifactId>jbossws-native-client</artifactId>
-            </dependency>
-            
-            <dependency>
-                <groupId>org.jboss.ws.native</groupId>
-                <artifactId>jbossws-native-core</artifactId>
             </dependency>
 
             <dependency>
@@ -178,21 +119,6 @@
             </dependency>
 
             <dependency>
-                <groupId>org.jboss</groupId>
-                <artifactId>jbossxb</artifactId>
-            </dependency>
-
-            <dependency>
-                <groupId>org.jvnet</groupId>
-                <artifactId>mimepull</artifactId>
-            </dependency>
-
-            <dependency>
-                <groupId>log4j</groupId>
-                <artifactId>log4j</artifactId>
-            </dependency>
-
-            <dependency>
                 <groupId>org.milyn</groupId>
                 <artifactId>milyn-smooks-core</artifactId>
             </dependency>
@@ -207,34 +133,12 @@
                 <artifactId>milyn-smooks-javabean</artifactId>
             </dependency>
 
-
-
             <dependency>
                 <groupId>net.jcip</groupId>
                 <artifactId>jcip-annotations</artifactId>
             </dependency>
 
-            <dependency>
-                <groupId>javax.servlet</groupId>
-                <artifactId>servlet-api</artifactId>
-            </dependency>
-
-            <dependency>
-                <groupId>xerces</groupId>
-                <artifactId>xercesImpl</artifactId>
-            </dependency>
-
-            <dependency>
-                <groupId>xml-apis</groupId>
-                <artifactId>xml-apis</artifactId>
-            </dependency>
-
-            <dependency>
-                <groupId>concurrent</groupId>
-                <artifactId>concurrent</artifactId>
-            </dependency>
-
-         <dependency>
+          <dependency>
              <groupId>xalan</groupId>
              <artifactId>xalan</artifactId>
             <scope>test</scope>
@@ -339,16 +243,38 @@
                 <scope>test</scope>
 	</dependency>
 
-
      <dependency>
       <groupId>sun.jdk</groupId>
       <artifactId>tools</artifactId>
       <version>1.5.0</version>
       <scope>system</scope>
       <systemPath>${java.home}/../lib/tools.jar</systemPath>
-    </dependency>
+    </dependency>     
 
-       
     </dependencies>
+
+    <build>
+       <plugins>
+           <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                     <artifactId>maven-javadoc-plugin</artifactId>
+                     <executions>
+                         <execution>
+                             <id>package</id>
+                             <phase>package</phase>
+                             <goals>
+                                 <goal>jar</goal>
+                             </goals>
+                         </execution>
+                     </executions>
+                     <configuration>
+                         <header>JBoss Wise API</header>
+                         <footer>JBoss Wise API</footer>
+                     </configuration>
+                 </plugin>
+      </plugins>
+
+    </build>      
+
 
 </project>

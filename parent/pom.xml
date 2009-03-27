@@ -262,11 +262,6 @@
             </dependency>
 
             <dependency>
-                <groupId>org.jboss.client</groupId>
-                <artifactId>jbossall-client</artifactId>
-                <version>4.2.2.GA</version>
-            </dependency>
-            <dependency>
                 <groupId>jboss</groupId>
                 <artifactId>jboss-common</artifactId>
                 <version>4.2.2.GA</version>
@@ -281,12 +276,6 @@
                 <groupId>jboss</groupId>
                 <artifactId>jboss-kernel</artifactId>
                 <version>2.0.0.Beta</version>
-            </dependency>
-
-            <dependency>
-                <groupId>jboss</groupId>
-                <artifactId>jboss-ejb3x</artifactId>
-                <version>4.2.2.GA</version>
             </dependency>
 
             <dependency>
