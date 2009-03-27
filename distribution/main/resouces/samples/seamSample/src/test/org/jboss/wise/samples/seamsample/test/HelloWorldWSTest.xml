@@ -1,9 +1,0 @@
-<!DOCTYPE suite SYSTEM "http://beust.com/testng/testng-1.0.dtd" >
-
-<suite name="HelloWorldWS Tests" verbose="2" parallel="false">
-   <test name="HelloWorldWS Test">
-     <classes>
-       <class name="org.jboss.wise.samples.seamsample.test.HelloWorldWSTest"/>       
-     </classes>
-   </test>	
-</suite>
