@@ -89,7 +89,7 @@ public class ReflectionEnablerDelegate implements EnablerDelegate {
     public void visitWSSecurity( WSEndpoint endpoint ) throws UnsupportedOperationException, IllegalStateException {
 
         NativeSecurityConfig securityConfig = getSecurityConfigMap() != null ? getSecurityConfigMap().get(endpoint.getName()) : null;
-
+       
         if (securityConfig == null) {
             securityConfig = this.getDefaultSecurityConfig();
         }
@@ -129,11 +129,10 @@ public class ReflectionEnablerDelegate implements EnablerDelegate {
      * set security config Map<String, {@link NativeSecurityConfig}> where keys are {@link WSEndpoint} names. Intended to be used
      * for IOC (jboss-beans.xml)
      * 
-     * @param securityConfigMap Sets securityConfigMap to the specified value.
+     * @param _securityConfigMap Sets securityConfigMap to the specified value.
      */
-    public synchronized final void setSecurityConfigMap( Map<String, NativeSecurityConfig> securityConfigMap ) {
-        this.securityConfigMap.clear();
-        this.securityConfigMap.putAll(securityConfigMap);
+    public synchronized final void setSecurityConfigMap( Map<String, NativeSecurityConfig> _securityConfigMap ) {
+    	this.securityConfigMap.putAll(_securityConfigMap);
     }
 
     /**

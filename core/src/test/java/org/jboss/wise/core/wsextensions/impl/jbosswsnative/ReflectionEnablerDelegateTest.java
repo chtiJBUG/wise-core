@@ -21,7 +21,14 @@
  */
 package org.jboss.wise.core.wsextensions.impl.jbosswsnative;
 
+import static org.junit.matchers.JUnitMatchers.hasItem;
+
+import static org.junit.Assert.assertThat;
+
+import java.util.HashMap;
+
 import static org.hamcrest.core.IsAnything.any;
+import static org.hamcrest.collection.IsMapContaining.hasEntry;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -99,4 +106,14 @@ public class ReflectionEnablerDelegateTest {
     // verify(stub).setConfigName(anyString());
     //    
     // }
+    
+    @Test
+    public void shouldSetSecurityConfigMap() {
+    	HashMap<String, NativeSecurityConfig> inputMap =new HashMap<String, NativeSecurityConfig>();
+    	NativeSecurityConfig config = mock(NativeSecurityConfig.class);
+    	inputMap.put("test", config );
+    	ReflectionEnablerDelegate delegate = new ReflectionEnablerDelegate();
+    	delegate.setSecurityConfigMap(inputMap);
+    	assertThat(delegate.getSecurityConfigMap(), hasEntry("test", config) );
+    }
 }

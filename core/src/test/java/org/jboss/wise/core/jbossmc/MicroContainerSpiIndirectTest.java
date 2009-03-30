@@ -22,11 +22,17 @@
 
 package org.jboss.wise.core.jbossmc;
 
+import static org.hamcrest.core.Is.is;
+
+import static org.hamcrest.core.IsNot.not;
+
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 import org.jboss.wise.core.client.builder.WSDynamicClientBuilder;
 import org.jboss.wise.core.client.factories.WSDynamicClientFactory;
 import org.jboss.wise.core.jbossmc.beans.WiseClientConfiguration;
+import org.jboss.wise.core.wsextensions.EnablerDelegate;
+import org.jboss.wise.core.wsextensions.impl.jbosswsnative.ReflectionEnablerDelegate;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -39,12 +45,16 @@ import org.junit.Test;
 public class MicroContainerSpiIndirectTest {
 
     WiseClientConfiguration config;
+    ReflectionEnablerDelegate delegate;
 
     @Before
     public void before() throws Exception {
         WSDynamicClientFactory factory = MicroContainerSpi.getImplementation(BeansNames.WSDynamicClientFactory,
                                                                              WSDynamicClientFactory.class,
                                                                              null);
+        delegate = MicroContainerSpi.getImplementation(BeansNames.EnablerDelegate,
+        		ReflectionEnablerDelegate.class,
+                null);
 
         config = factory.getConfig();
     }
@@ -63,6 +73,11 @@ public class MicroContainerSpiIndirectTest {
     public void shouldPermitOverridPasswordGotByMC() throws Exception {
         config.setDefaultPassword("newPWD");
         assertThat(config.getDefaultPassword(), equalTo("newPWD"));
+    }
+    
+    @Test
+    public void shouldGetSecurityConfigFromMK() throws Exception {
+        assertThat( delegate.getSecurityConfigMap().size(), not(is(0)) );
     }
 
 }
