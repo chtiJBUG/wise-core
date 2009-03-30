@@ -1,192 +1,242 @@
-<!--
-    Licensed to the Apache Software Foundation (ASF) under one
-    or more contributor license agreements. See the NOTICE file
-    distributed with this work for additional information
-    regarding copyright ownership. The ASF licenses this file
-    to you under the Apache License, Version 2.0 (the
-    "License"); you may not use this file except in compliance
-    with the License. You may obtain a copy of the License at
-    
-    http://www.apache.org/licenses/LICENSE-2.0
-    
-    Unless required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on an
-    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-    KIND, either express or implied. See the License for the
-    specific language governing permissions and limitations
-    under the License.
--->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>org.jboss</groupId>
-    <artifactId>wise-integration</artifactId>
-    <version>1.0-SNAPSHOT</version>
-    <name>Wise Integration Test</name>
-    <url>http://www.jboss.org/wise</url>
 
-    <packaging>jar</packaging>
+	<!--
+		Licensed to the Apache Software Foundation (ASF) under one or more
+		contributor license agreements. See the NOTICE file distributed with
+		this work for additional information regarding copyright ownership.
+		The ASF licenses this file to you under the Apache License, Version
+		2.0 (the "License"); you may not use this file except in compliance
+		with the License. You may obtain a copy of the License at
 
-    <parent>
-        <groupId>org.jboss</groupId>
-        <artifactId>wise-parent</artifactId>
-         <version>1.0-SNAPSHOT</version>
-    </parent>
+		http://www.apache.org/licenses/LICENSE-2.0 Unless required by
+		applicable law or agreed to in writing, software distributed under the
+		License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+		CONDITIONS OF ANY KIND, either express or implied. See the License for
+		the specific language governing permissions and limitations under the
+		License.
+	-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.jboss</groupId>
+	<artifactId>wise-integration</artifactId>
+	<version>1.0-SNAPSHOT</version>
+	<name>Wise Integration Test</name>
+	<url>http://www.jboss.org/wise</url>
 
-    <dependencies>
-            <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <scope>test</scope>
-            </dependency>
-             <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>javax.ejb</groupId>
-                <artifactId>ejb-api</artifactId>
-                <version>3.0</version>
-                <scope>test</scope>
-             </dependency>
-            <dependency>
-                <groupId>org.jboss</groupId>
-                <artifactId>wise-core</artifactId>
-                <version>${version}</version>        
-                <scope>test</scope>
-            </dependency>
+	<packaging>jar</packaging>
 
-            <dependency>
-                <groupId>jboss</groupId>
-                <artifactId>jbossall-client</artifactId>
-                <version>4.2.2.GA</version> 
-                 <scope>test</scope>
-            </dependency>
+	<parent>
+		<groupId>org.jboss</groupId>
+		<artifactId>wise-parent</artifactId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
 
-            <dependency>
-                <groupId>org.jboss</groupId>
-                <artifactId>jbossws-client</artifactId>
-                <scope>test</scope>
-            </dependency>
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.ejb</groupId>
+			<artifactId>ejb-api</artifactId>
+			<version>3.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss</groupId>
+			<artifactId>wise-core</artifactId>
+			<version>${version}</version>
+			<scope>test</scope>
+		</dependency>
 
-         <dependency>
-             <groupId>xalan</groupId>
-             <artifactId>xalan</artifactId>
-            <scope>test</scope>
-         </dependency> 
+		<dependency>
+			<groupId>jboss</groupId>
+			<artifactId>jbossall-client</artifactId>
+			<version>4.2.2.GA</version>
+			<scope>test</scope>
+		</dependency>
 
-    </dependencies>
+		<dependency>
+			<groupId>org.jboss</groupId>
+			<artifactId>jbossws-client</artifactId>
+			<scope>test</scope>
+		</dependency>
 
+		<dependency>
+			<groupId>xalan</groupId>
+			<artifactId>xalan</artifactId>
+			<scope>test</scope>
+		</dependency>
 
-   <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-war-plugin</artifactId>
-          <executions>
-               <execution>
-                  <id>war-it</id>
-                  <phase>test-compile</phase>
-                  <goals>
-                     <goal>war</goal>
-                  </goals>
-                     <configuration>
-                        <webXml>${basedir}/src/test/resources/WEB-INF/basic/web.xml</webXml>
-                        <warName>basic</warName>
-                        <outputDirectory>${basedir}/target/test-classes/</outputDirectory>
-                        <webappDirectory>${basedir}/target/basic</webappDirectory>
-                        <webResources>
-                            <webResource>
-                               <targetPath>WEB-INF/classes</targetPath>
-                               <directory>${basedir}/target/test-classes/</directory>
-                               <includes>
-                                 <include>**/*.class</include>
-                               </includes>
-                            </webResource>           
-                        </webResources>
-                     </configuration>
-                </execution>
-
-               <execution>
-                  <id>war-wsse</id>
-                  <phase>test-compile</phase>
-                  <goals>
-                     <goal>war</goal>
-                  </goals>
-                     <configuration>
-                        <webXml>${basedir}/src/test/resources/WEB-INF/wsse/web.xml</webXml>
-                        <warName>wsse</warName>
-                        <outputDirectory>${basedir}/target/test-classes/</outputDirectory>
-                        <webappDirectory>${basedir}/target/wsse</webappDirectory>
-                        <packagingIncludes></packagingIncludes>
-                        <webResources>
-                            <webResource>
-                               <targetPath>WEB-INF/classes</targetPath>
-                               <directory>${basedir}/target/test-classes/</directory>
-                               <includes>
-                                 <include>**/*.class</include>
-                               </includes>
-                            </webResource>
-
-                           <webResource>
-                               <targetPath>WEB-INF</targetPath>
-                               <directory>${basedir}/src/test/resources/WEB-INF/wsse/</directory>
-                               <includes>
-                                 <include>**/*.*</include>
-                               </includes>
-                            </webResource>           
-                        </webResources>
-                     </configuration>
-                </execution>
+	</dependencies>
 
 
-               <execution>
-                  <id>war-wsaddress</id>
-                  <phase>test-compile</phase>
-                  <goals>
-                     <goal>war</goal>
-                  </goals>
-                     <configuration>
-                        <webXml>${basedir}/src/test/resources/WEB-INF/wsa/web.xml</webXml>
-                        <warName>wsa</warName>
-                        <outputDirectory>${basedir}/target/test-classes/</outputDirectory>
-                        <webappDirectory>${basedir}/target/wsa</webappDirectory>
-                        <packagingIncludes></packagingIncludes>
-                        <webResources>
-                            <webResource>
-                               <targetPath>WEB-INF/classes</targetPath>
-                               <directory>${basedir}/target/test-classes/</directory>
-                               <includes>
-                                 <include>**/*.class</include>
-                               </includes>
-                            </webResource>         
-                        </webResources>
-                     </configuration>
-                </execution>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>war-it</id>
+						<phase>test-compile</phase>
+						<goals>
+							<goal>war</goal>
+						</goals>
+						<configuration>
+							<webXml>${basedir}/src/test/resources/WEB-INF/basic/web.xml
+							</webXml>
+							<warName>basic</warName>
+							<outputDirectory>${basedir}/target/test-classes/
+							</outputDirectory>
+							<webappDirectory>${basedir}/target/basic
+							</webappDirectory>
+							<webResources>
+								<webResource>
+									<targetPath>WEB-INF/classes</targetPath>
+									<directory>${basedir}/target/test-classes/
+									</directory>
+									<includes>
+										<include>**/*.class</include>
+									</includes>
+								</webResource>
+							</webResources>
+						</configuration>
+					</execution>
 
-       </executions>
-      </plugin>
-    </plugins>
-  </build>
-  <profiles> 
-    <profile>
-      <id>skip.tests</id>
-      <activation>
-        <property>
-          <name>!jboss.bind.address</name>
-        </property>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <artifactId>maven-surefire-plugin</artifactId>
-            <configuration>
-              <skipTests>true</skipTests>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
+					<execution>
+						<id>war-wsse</id>
+						<phase>test-compile</phase>
+						<goals>
+							<goal>war</goal>
+						</goals>
+						<configuration>
+							<webXml>${basedir}/src/test/resources/WEB-INF/wsse/web.xml
+							</webXml>
+							<warName>wsse</warName>
+							<outputDirectory>${basedir}/target/test-classes/
+							</outputDirectory>
+							<webappDirectory>${basedir}/target/wsse
+							</webappDirectory>
+							<packagingIncludes></packagingIncludes>
+							<webResources>
+								<webResource>
+									<targetPath>WEB-INF/classes</targetPath>
+									<directory>${basedir}/target/test-classes/
+									</directory>
+									<includes>
+										<include>**/*.class</include>
+									</includes>
+								</webResource>
+
+								<webResource>
+									<targetPath>WEB-INF</targetPath>
+									<directory>${basedir}/src/test/resources/WEB-INF/wsse/
+									</directory>
+									<includes>
+										<include>**/*.*</include>
+									</includes>
+								</webResource>
+							</webResources>
+						</configuration>
+					</execution>
+
+
+					<execution>
+						<id>war-wsaddress</id>
+						<phase>test-compile</phase>
+						<goals>
+							<goal>war</goal>
+						</goals>
+						<configuration>
+							<webXml>${basedir}/src/test/resources/WEB-INF/wsa/web.xml
+							</webXml>
+							<warName>wsa</warName>
+							<outputDirectory>${basedir}/target/test-classes/
+							</outputDirectory>
+							<webappDirectory>${basedir}/target/wsa
+							</webappDirectory>
+							<packagingIncludes></packagingIncludes>
+							<webResources>
+								<webResource>
+									<targetPath>WEB-INF/classes</targetPath>
+									<directory>${basedir}/target/test-classes/
+									</directory>
+									<includes>
+										<include>**/*.class</include>
+									</includes>
+								</webResource>
+							</webResources>
+						</configuration>
+					</execution>
+
+					<execution>
+						<id>war-wsaandwsse</id>
+						<phase>test-compile</phase>
+						<goals>
+							<goal>war</goal>
+						</goals>
+						<configuration>
+							<webXml>${basedir}/src/test/resources/WEB-INF/wsaandwsse/web.xml
+							</webXml>
+							<warName>wsaandwsse</warName>
+							<outputDirectory>${basedir}/target/test-classes/
+							</outputDirectory>
+							<webappDirectory>${basedir}/target/wsaandwsse
+							</webappDirectory>
+							<packagingIncludes></packagingIncludes>
+							<webResources>
+								<webResource>
+									<targetPath>WEB-INF/classes</targetPath>
+									<directory>${basedir}/target/test-classes/
+									</directory>
+									<includes>
+										<include>**/*.class</include>
+									</includes>
+								</webResource>
+								<webResource>
+									<targetPath>WEB-INF</targetPath>
+									<directory>${basedir}/src/test/resources/WEB-INF/wsaandwsse/
+									</directory>
+									<includes>
+										<include>**/*.*</include>
+									</includes>
+								</webResource>
+							</webResources>
+
+						</configuration>
+					</execution>
+
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+	<profiles>
+		<profile>
+			<id>skip.tests</id>
+			<activation>
+				<property>
+					<name>!jboss.bind.address</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-surefire-plugin
+						</artifactId>
+						<configuration>
+							<skipTests>true</skipTests>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
 </project>

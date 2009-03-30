@@ -34,7 +34,13 @@
     <bean name="WSSEHelloWorld"
         class="org.jboss.wise.core.wsextensions.impl.jbosswsnative.NativeSecurityConfig">
         <property name="configFileURL">WEB-INF/wsse/jboss-wsse-client.xml</property>
-        <property name="configName">Standard WSSecurity Endpoint</property>
+        <property name="configName">Standard WSSecurity Client</property>
+    </bean>
+    
+    <bean name="WSAddressingAndSecurityIntegrationTest"
+        class="org.jboss.wise.core.wsextensions.impl.jbosswsnative.NativeSecurityConfig">
+        <property name="configFileURL">WEB-INF/wsaandwsse/jboss-wsse-client.xml</property>
+        <property name="configName">Standard WSSecurity Client</property>
     </bean>
 
     <bean name="WSSEDefault"
@@ -48,17 +54,22 @@
 	<bean name="EnablerDelegate"
 		class="org.jboss.wise.core.wsextensions.impl.jbosswsnative.ReflectionEnablerDelegate">
 		<property name="securityConfigMap">
-			<map class="java.util.HashMap" keyClass="java.lang.String"
-				valueClass="java.lang.String">
+			<map class="java.util.HashMap" keyClass="java.lang.String">
 				<entry>
-					<key>HelloWorldBeanPort</key>
+					<key>HelloImplPort</key>
 					<value>
 						<inject bean="WSSEHelloWorld" />
 					</value>
 				</entry>
+				<entry>
+                    <key>WSAandWSSEImplPort</key>
+                    <value>
+                        <inject bean="WSAddressingAndSecurityIntegrationTest" />
+                    </value>
+                </entry>
 			</map>
 		</property>
-		<property name="defaultSecurityConfig"><inject bean="WSSEDefault" /></property>
+		
 	</bean>
 	
 	
