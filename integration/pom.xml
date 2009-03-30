@@ -212,6 +212,33 @@
 
 						</configuration>
 					</execution>
+                        <execution>
+                        <id>war-smooks</id>
+                        <phase>test-compile</phase>
+                        <goals>
+                            <goal>war</goal>
+                        </goals>
+                        <configuration>
+                            <webXml>${basedir}/src/test/resources/WEB-INF/smooks/web.xml
+                            </webXml>
+                            <warName>smooks</warName>
+                            <outputDirectory>${basedir}/target/test-classes/
+                            </outputDirectory>
+                            <webappDirectory>${basedir}/target/smooks
+                            </webappDirectory>
+                            <webResources>
+                                <webResource>
+                                    <targetPath>WEB-INF/classes</targetPath>
+                                    <directory>${basedir}/target/test-classes/
+                                    </directory>
+                                    <includes>
+                                        <include>**/*.class</include>
+                                    </includes>
+                                </webResource>
+                            </webResources>
+                        </configuration>
+                    </execution>
+
 
 				</executions>
 			</plugin>
