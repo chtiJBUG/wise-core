@@ -45,7 +45,7 @@ public class WSAANDWSSEIntegrationTest extends WiseTest {
 
     @Before
     public void setUp() throws Exception {
-         warUrl = this.getClass().getClassLoader().getResource("wsaandwsse.war");
+        warUrl = this.getClass().getClassLoader().getResource("wsaandwsse.war");
         deployWS(warUrl);
 
     }
@@ -62,7 +62,7 @@ public class WSAANDWSSEIntegrationTest extends WiseTest {
         wsEndpoint.addHandler(new LoggingHandler());
 
         method.getEndpoint().addWSExtension(new WSAddressingEnabler());
-        
+
         Map<String, Object> args = new java.util.HashMap<String, Object>();
         args.put("user", "test");
         InvocationResult result = method.invoke(args, null);
@@ -72,22 +72,22 @@ public class WSAANDWSSEIntegrationTest extends WiseTest {
 
     @Test
     public void shouldRunWithoutMK() throws Exception {
-    	WiseConfig config = new WiseJBWSRefletctionConfig("WEB-INF/wsaandwsse/jboss-wsse-client.xml", "Standard WSSecurity Client",
-                true, true, "/tmp/wise", false);
-		WSDynamicClient client = WSDynamicClientFactory.newInstance(config).getJAXWSClient(getServerHostAndPort() + "/wsaandwsse/WSAandWSSE?wsdl");
-		WSMethod method = client.getWSMethod("WSAandWSSEService", "WSAandWSSEImplPort", "echoUserType");
-		method.getEndpoint().addWSExtension(new WSSecurityEnabler(config));
-		method.getEndpoint().addWSExtension(new WSAddressingEnabler(config));
-		method.getEndpoint().addHandler(new LoggingHandler());
-		HashMap<String, Object> requestMap = new HashMap<String, Object>();
-		requestMap.put("toWhom", "SpiderMan");
-		InvocationResult result = method.invoke(requestMap, null);
-		System.out.println(result.getMapRequestAndResult(null, null));
-		Map<String, Object> results = (Map<String, Object>)result.getMapRequestAndResult(null, null).get("results");
-		Assert.assertEquals("Hello WSAddressingAndWSSecurity", results.get("result"));
+        WiseConfig config = new WiseJBWSRefletctionConfig("WEB-INF/wsaandwsse/jboss-wsse-client.xml",
+                                                          "Standard WSSecurity Client", true, true, "target/temp/wise", false);
+        WSDynamicClient client = WSDynamicClientFactory.newInstance(config).getJAXWSClient(getServerHostAndPort()
+                                                                                           + "/wsaandwsse/WSAandWSSE?wsdl");
+        WSMethod method = client.getWSMethod("WSAandWSSEService", "WSAandWSSEImplPort", "echoUserType");
+        method.getEndpoint().addWSExtension(new WSSecurityEnabler(config));
+        method.getEndpoint().addWSExtension(new WSAddressingEnabler(config));
+        method.getEndpoint().addHandler(new LoggingHandler());
+        HashMap<String, Object> requestMap = new HashMap<String, Object>();
+        requestMap.put("toWhom", "SpiderMan");
+        InvocationResult result = method.invoke(requestMap, null);
+        System.out.println(result.getMapRequestAndResult(null, null));
+        Map<String, Object> results = (Map<String, Object>)result.getMapRequestAndResult(null, null).get("results");
+        Assert.assertEquals("Hello WSAddressingAndWSSecurity", results.get("result"));
     }
-   
-    
+
     @After
     public void tearDown() throws Exception {
         undeployWS(warUrl);

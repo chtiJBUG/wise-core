@@ -29,6 +29,8 @@ import org.jboss.wise.core.client.WSDynamicClient;
 import org.jboss.wise.core.client.WSEndpoint;
 import org.jboss.wise.core.client.WSMethod;
 import org.jboss.wise.core.client.factories.WSDynamicClientFactory;
+import org.jboss.wise.core.config.WiseConfig;
+import org.jboss.wise.core.config.WiseJBWSRefletctionConfig;
 import org.jboss.wise.core.handlers.LoggingHandler;
 import org.jboss.wise.core.test.WiseTest;
 import org.jboss.wise.core.wsextensions.impl.WSAddressingEnabler;
@@ -41,7 +43,6 @@ import org.junit.Test;
  * 
  * @author alessio.soldano@jboss.com
  * @since 23-Dic-2008
- *
  */
 public class WSAddressingIntegrationTest extends WiseTest {
     private URL warUrl = null;
@@ -53,8 +54,8 @@ public class WSAddressingIntegrationTest extends WiseTest {
     }
 
     @Test
-    @SuppressWarnings("unchecked")
-    public void testDeploy() throws Exception {
+    @SuppressWarnings( "unchecked" )
+    public void shouldRunWithMK() throws Exception {
         URL wsdURL = new URL(getServerHostAndPort() + "/wsa/Hello?wsdl");
         WSDynamicClientFactory factory = WSDynamicClientFactory.getInstance();
         WSDynamicClient client = factory.getJAXWSClient(wsdURL.toString());
@@ -62,6 +63,26 @@ public class WSAddressingIntegrationTest extends WiseTest {
         WSEndpoint wsEndpoint = method.getEndpoint();
 
         wsEndpoint.addWSExtension(new WSAddressingEnabler());
+        wsEndpoint.addHandler(new LoggingHandler());
+
+        Map<String, Object> args = new java.util.HashMap<String, Object>();
+        args.put("user", "test");
+        InvocationResult result = method.invoke(args, null);
+        Map<String, Object> results = (Map<String, Object>)result.getMapRequestAndResult(null, null).get("results");
+        Assert.assertEquals("Hello WSAddressing", results.get("result"));
+    }
+
+    @Test
+    @SuppressWarnings( "unchecked" )
+    public void shouldRunWithoutMK() throws Exception {
+        WiseConfig config = new WiseJBWSRefletctionConfig(null, null, true, true, "target/temp/wise", false);
+        URL wsdURL = new URL(getServerHostAndPort() + "/wsa/Hello?wsdl");
+        WSDynamicClientFactory factory = WSDynamicClientFactory.newInstance(config);
+        WSDynamicClient client = factory.getJAXWSClient(wsdURL.toString());
+        WSMethod method = client.getWSMethod("HelloService", "HelloImplPort", "echoUserType");
+        WSEndpoint wsEndpoint = method.getEndpoint();
+
+        wsEndpoint.addWSExtension(new WSAddressingEnabler(config));
         wsEndpoint.addHandler(new LoggingHandler());
 
         Map<String, Object> args = new java.util.HashMap<String, Object>();
