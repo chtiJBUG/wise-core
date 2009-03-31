@@ -85,7 +85,7 @@
 				<executions>
 					<execution>
 						<id>war-it</id>
-						<phase>test-compile</phase>
+						<phase>pre-integration-test</phase>
 						<goals>
 							<goal>war</goal>
 						</goals>
@@ -112,7 +112,7 @@
 
 					<execution>
 						<id>war-wsse</id>
-						<phase>test-compile</phase>
+						<phase>pre-integration-test</phase>
 						<goals>
 							<goal>war</goal>
 						</goals>
@@ -150,7 +150,7 @@
 
 					<execution>
 						<id>war-wsaddress</id>
-						<phase>test-compile</phase>
+						<phase>pre-integration-test</phase>
 						<goals>
 							<goal>war</goal>
 						</goals>
@@ -178,7 +178,7 @@
 
 					<execution>
 						<id>war-wsaandwsse</id>
-						<phase>test-compile</phase>
+						<phase>pre-integration-test</phase>
 						<goals>
 							<goal>war</goal>
 						</goals>
@@ -214,7 +214,7 @@
 					</execution>
                         <execution>
                         <id>war-smooks</id>
-                        <phase>test-compile</phase>
+                        <phase>pre-integration-test</phase>
                         <goals>
                             <goal>war</goal>
                         </goals>
@@ -238,11 +238,24 @@
                             </webResources>
                         </configuration>
                     </execution>
+		 </executions>
+	        </plugin>
 
+                <plugin>
+		      <groupId>org.apache.maven.plugins</groupId>
+		      <artifactId>maven-surefire-plugin</artifactId>
+		       <executions>
+			 <execution>
+			   <id>surefire</id>
+			   <phase>integration-test</phase>
+			   <goals>
+			     <goal>test</goal>
+			   </goals>
+                         </execution>  
+                       </executions>
 
-				</executions>
-			</plugin>
-		</plugins>
+               </plugin>
+        </plugins>    
 	</build>
 	<profiles>
 		<profile>
