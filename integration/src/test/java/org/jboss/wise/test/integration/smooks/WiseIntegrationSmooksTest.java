@@ -66,8 +66,8 @@ public class WiseIntegrationSmooksTest extends WiseTest {
         external.setDate(new Date(0));
         external.setInternal(internal);
         // without smooks debug infos
-        InvocationResult result = method.invoke(external, new SmooksMapper("META-INF/smooks/smooks-config-XMLGregorianCalendar.xml","./smooks-inputReport.html"));
-        Map<String, Object> resultMap =  result.getMappedResult(new SmooksMapper("META-INF/smooks/smooks-response-config.xml","./smooks-outputReport.html"));
+        InvocationResult result = method.invoke(external, new SmooksMapper("META-INF/smooks/smooks-config-XMLGregorianCalendar.xml","./target/smooks-inputReport.html"));
+        Map<String, Object> resultMap =  result.getMappedResult(new SmooksMapper("META-INF/smooks/smooks-response-config.xml","./target/smooks-outputReport.html"));
         assertThat(((ExternalObject) resultMap.get("ExternalObject")).getInternal(), equalTo(internal));
         //just verifying not null, ignoring all annoyance of java TZ
         assertThat(((ExternalObject) resultMap.get("ExternalObject")).getDate(), notNullValue());
