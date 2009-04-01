@@ -46,8 +46,8 @@
 
 
     <distributionManagement>
-         <site>
-             <id>site.deploy</id>
+        <site>
+            <id>site.deploy</id>
             <name>wise site release</name>
             <url></url>
         </site>
