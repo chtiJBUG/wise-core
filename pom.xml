@@ -289,4 +289,13 @@
             </plugin>
         </plugins>
     </reporting>
+
+    <profiles> 
+       <profile>
+           <id>distro</id>
+           <modules> 
+             <module>distribution</module>
+           </modules>
+       </profile>
+    </profiles>  
 </project>
