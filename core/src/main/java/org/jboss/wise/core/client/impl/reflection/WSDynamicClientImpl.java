@@ -70,7 +70,6 @@ public class WSDynamicClientImpl implements WSDynamicClient {
 
     public WSDynamicClientImpl( WSDynamicClientBuilder builder ) throws WiseRuntimeException, MCKernelUnavailableException {
         this(builder, WSConsumer.getInstance(builder.getConfig()));
-        this.servicesMap.clear();
     }
 
     public WSDynamicClientImpl( WSDynamicClientBuilder builder,
@@ -93,6 +92,7 @@ public class WSDynamicClientImpl implements WSDynamicClient {
             throw new WiseRuntimeException("Problem consumig wsdl:" + builder.getWsdlURL(), e);
         }
         this.initClassLoader(outputDir);
+        this.processServices();
     }
 
     /**
@@ -160,9 +160,9 @@ public class WSDynamicClientImpl implements WSDynamicClient {
     public WSMethod getWSMethod( String serviceName,
                                  String portName,
                                  String operationName ) {
-        if (servicesMap.size() == 0) {
-            processServices();
-        }
+        // if (servicesMap.size() == 0) {
+        // processServices();
+        // }
         WSService wsService = servicesMap.get(serviceName);
         return wsService.processEndpoints().get(portName).getWSMethods().get(operationName);
     }

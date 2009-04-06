@@ -67,6 +67,7 @@ public class WSServiceImpl implements WSService {
         this.userName = userName;
         this.password = password;
         endpoints.clear();
+        this.processEndpoints();
     }
 
     /**

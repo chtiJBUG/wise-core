@@ -107,7 +107,7 @@ public class WSDynamicClientFactoryTest {
     public void getJAXWSClientShouldUseCacheIfWiseConfigRequireThat() throws Exception {
         WiseConfig config = new WiseJBWSRefletctionConfig(null, null, false, false, "./target/temp", true);
         WSDynamicClientFactory factory = WSDynamicClientFactory.newInstance(config);
-        URL wsdURL = Thread.currentThread().getContextClassLoader().getResource("./hello_world.wsdl");
+        URL wsdURL = Thread.currentThread().getContextClassLoader().getResource("./AddNumbers.wsdl");
         WSDynamicClient client = factory.getJAXWSClient(wsdURL.toExternalForm());
         assertThat(client, is(factory.getJAXWSClient(wsdURL.toExternalForm())));
     }
@@ -116,7 +116,7 @@ public class WSDynamicClientFactoryTest {
     public void getJAXWSClientShouldNotUseCacheIfWiseConfigRequireThat() throws Exception {
         WiseConfig config = new WiseJBWSRefletctionConfig(null, null, false, false, "./target/temp", false);
         WSDynamicClientFactory factory = WSDynamicClientFactory.newInstance(config);
-        URL wsdURL = Thread.currentThread().getContextClassLoader().getResource("./hello_world.wsdl");
+        URL wsdURL = Thread.currentThread().getContextClassLoader().getResource("./AddNumbers.wsdl");
         WSDynamicClient client = factory.getJAXWSClient(wsdURL.toExternalForm());
         assertThat(client, not(is(factory.getJAXWSClient(wsdURL.toExternalForm()))));
     }
