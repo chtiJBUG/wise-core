@@ -210,70 +210,77 @@
 
 						</configuration>
 					</execution>
-                        <execution>
-                        <id>war-smooks</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>war</goal>
-                        </goals>
-                        <configuration>
-                            <webXml>${basedir}/src/test/resources/WEB-INF/smooks/web.xml
+					<execution>
+						<id>war-smooks</id>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>war</goal>
+						</goals>
+						<configuration>
+							<webXml>${basedir}/src/test/resources/WEB-INF/smooks/web.xml
                             </webXml>
-                            <warName>smooks</warName>
-                            <outputDirectory>${basedir}/target/test-classes/
+							<warName>smooks</warName>
+							<outputDirectory>${basedir}/target/test-classes/
                             </outputDirectory>
-                            <webappDirectory>${basedir}/target/smooks
+							<webappDirectory>${basedir}/target/smooks
                             </webappDirectory>
-                            <webResources>
-                                <webResource>
-                                    <targetPath>WEB-INF/classes</targetPath>
-                                    <directory>${basedir}/target/test-classes/
+							<webResources>
+								<webResource>
+									<targetPath>WEB-INF/classes</targetPath>
+									<directory>${basedir}/target/test-classes/
                                     </directory>
-                                    <includes>
-                                        <include>**/*.class</include>
-                                    </includes>
-                                </webResource>
-                            </webResources>
-                        </configuration>
-                    </execution>
-		 </executions>
-	        </plugin>
+									<includes>
+										<include>**/*.class</include>
+									</includes>
+								</webResource>
+							</webResources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 
-            <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <skip>true</skip>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>unit-tests</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>test</goal>
-                        </goals>
-                        <configuration>
-                            <skip>false</skip>
-                            <excludes>
-                                <exclude>**/*Integration*Test.java</exclude>
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+				<executions>
+					<execution>
+						<id>unit-tests</id>
+						<phase>test</phase>
+						<goals>
+							<goal>test</goal>
+						</goals>
+						<configuration>
+							<skip>false</skip>
+							<excludes>
+								<exclude>**/integration/**/*Test.java</exclude>
+								<exclude>**/*StressTest.java</exclude>
+								<exclude>**/*$*.java</exclude>
+							</excludes>
+						</configuration>
+					</execution>
+					<execution>
+						<id>integration-tests</id>
+						<phase>integration-test</phase>
+						<goals>
+							<goal>test</goal>
+						</goals>
+						<configuration>
+							<skip>false</skip>
+							<excludes>
+                                <exclude>**/*StressTest.java</exclude>
+                                <exclude>**/*$*.java</exclude>
                             </excludes>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>integration-tests</id>
-                        <phase>integration-test</phase>
-                        <goals>
-                            <goal>test</goal>
-                        </goals>
-                        <configuration>
-                            <skip>false</skip>
-                            <includes>
-                                <include>**/*Integration*Test.java</include>
-                            </includes>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>    
+							<includes>
+								<include>**/integration/**/*Test.java</include>
+							</includes>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+
 	</build>
 	<profiles>
 		<profile>
@@ -284,23 +291,74 @@
 				</property>
 			</activation>
 			<build>
-			    <plugins>
-				<plugin>
-				  <artifactId>maven-surefire-plugin</artifactId>
-                                  <executions>
-				    <execution>
-                                      <id>integration-tests</id>
-                                      <phase>integration-test</phase>
-                                      <goals>
-                                       <goal>test</goal>
-                                      </goals>
-                                      <configuration>
-                                        <skip>true</skip>
-                                      </configuration>
-                                    </execution>
-                                 </executions>
-				</plugin>
-			    </plugins>
+				<plugins>
+					<plugin>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>integration-tests</id>
+								<phase>integration-test</phase>
+								<goals>
+									<goal>test</goal>
+								</goals>
+								<configuration>
+									<skip>true</skip>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<profile>
+			<id>stress.tests</id>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-surefire-plugin
+                        </artifactId>
+						<configuration>
+							<systemProperties>
+								<property>
+									<name>wise.stress.threads</name>
+									<value>300</value>
+								</property>
+								<property>
+									<name>wise.stress.threadPoolSize</name>
+									<value>50</value>
+								</property>
+								<property>
+									<name>wise.stress.expensive.threads</name>
+									<value>30</value>
+								</property>
+								<property>
+									<name>wise.stress.expensive.threadPoolSize</name>
+									<value>5</value>
+								</property>
+							</systemProperties>
+							<excludes>
+								<exclude>**/*$*.java</exclude>
+							</excludes>
+							<includes>
+								<include>**/*StressTest.java</include>
+							</includes>
+
+						</configuration>
+
+						<executions>
+							<execution>
+								<id>surefire</id>
+								<phase>integration-test</phase>
+
+								<goals>
+									<goal>test</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+
+				</plugins>
 			</build>
 		</profile>
 	</profiles>

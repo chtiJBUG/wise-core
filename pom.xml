@@ -195,6 +195,7 @@
                         <target>1.5</target>
                         <maxmem>256M</maxmem>
                         <fork>${compiler.fork}</fork>
+                        <debug>true</debug>
                     </configuration>
                 </plugin>
                 <plugin>
