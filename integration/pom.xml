@@ -269,11 +269,11 @@
 						<configuration>
 							<skip>false</skip>
 							<excludes>
-                                <exclude>**/*StressTest.java</exclude>
-                                <exclude>**/*$*.java</exclude>
-                            </excludes>
+								<exclude>**/*StressTest.java</exclude>
+								<exclude>**/*$*.java</exclude>
+							</excludes>
 							<includes>
-								<include>**/integration/**/*Test.java</include>
+								<include>**/*Integration*Test.java</include>
 							</includes>
 						</configuration>
 					</execution>
@@ -316,44 +316,42 @@
 			<build>
 				<plugins>
 					<plugin>
-						<artifactId>maven-surefire-plugin
-                        </artifactId>
-						<configuration>
-							<systemProperties>
-								<property>
-									<name>wise.stress.threads</name>
-									<value>300</value>
-								</property>
-								<property>
-									<name>wise.stress.threadPoolSize</name>
-									<value>50</value>
-								</property>
-								<property>
-									<name>wise.stress.expensive.threads</name>
-									<value>30</value>
-								</property>
-								<property>
-									<name>wise.stress.expensive.threadPoolSize</name>
-									<value>5</value>
-								</property>
-							</systemProperties>
-							<excludes>
-								<exclude>**/*$*.java</exclude>
-							</excludes>
-							<includes>
-								<include>**/*StressTest.java</include>
-							</includes>
-
-						</configuration>
-
+						<artifactId>maven-surefire-plugin</artifactId>
 						<executions>
 							<execution>
-								<id>surefire</id>
-								<phase>integration-test</phase>
-
+								<id>integration-tests</id>
+								<phase>integration-test</phase> 
 								<goals>
 									<goal>test</goal>
 								</goals>
+								<configuration>
+									<systemProperties>
+										<property>
+											<name>wise.stress.threads</name>
+											<value>300</value>
+										</property>
+										<property>
+											<name>wise.stress.threadPoolSize</name>
+											<value>50</value>
+										</property>
+										<property>
+											<name>wise.stress.expensive.threads</name>
+											<value>30</value>
+										</property>
+										<property>
+											<name>wise.stress.expensive.threadPoolSize</name>
+											<value>5</value>
+										</property>
+									</systemProperties>
+									<excludes>
+										<exclude>**/*Integration*Test.java</exclude>
+										<exclude>**/*$*.java</exclude>
+									</excludes>
+									<includes>
+										<include>**/*StressTest.java</include>
+									</includes>
+
+								</configuration>
 							</execution>
 						</executions>
 					</plugin>
