@@ -25,10 +25,12 @@ package org.jboss.wise.core.mapper;
 import java.io.IOException;
 import java.util.Map;
 import javax.xml.transform.Source;
-import net.jcip.annotations.GuardedBy;
+import net.jcip.annotations.Immutable;
 import net.jcip.annotations.ThreadSafe;
 import org.apache.log4j.Logger;
+import org.jboss.wise.core.config.WiseConfig;
 import org.jboss.wise.core.exception.MappingException;
+import org.jboss.wise.core.exception.WiseRuntimeException;
 import org.jboss.wise.core.utils.SmooksCache;
 import org.milyn.Smooks;
 import org.milyn.container.ExecutionContext;
@@ -44,15 +46,13 @@ import org.xml.sax.SAXException;
  * @author stefano.maestri@javalinux.it
  */
 @ThreadSafe
+@Immutable
 public class SmooksMapper implements WiseMapper {
 
-    @GuardedBy( "this" )
-    private String smooksResource;
-
-    @GuardedBy( "this" )
-    private String smooksReport = null;
-
     private final Logger log = Logger.getLogger(SmooksMapper.class);
+
+    private final Smooks smooks;
+    private final String smooksReport;
 
     /**
      * Create this mapper using passed resource
@@ -60,7 +60,7 @@ public class SmooksMapper implements WiseMapper {
      * @param smooksResource URI of smooks resource to use
      */
     public SmooksMapper( String smooksResource ) {
-        this.smooksResource = smooksResource;
+        this(smooksResource, null, null);
     }
 
     /**
@@ -72,8 +72,75 @@ public class SmooksMapper implements WiseMapper {
      */
     public SmooksMapper( String smooksResource,
                          String smooksReport ) {
-        this.smooksResource = smooksResource;
-        this.smooksReport = smooksReport;
+        this(smooksResource, smooksReport, null);
+    }
+
+    /**
+     * Create this mapper using passed resource
+     * 
+     * @param config
+     * @param smooksResource URI of smooks resource to use
+     */
+    public SmooksMapper( String smooksResource,
+                         WiseConfig config ) {
+        this(smooksResource, null, config);
+    }
+
+    /**
+     * Create this mapper using passed resource and passed smooks html report to generate. A SmooksMapper created with this
+     * constructor will create an html smooks report useful for debug.
+     * 
+     * @param config
+     * @param smooksResource URI of smooks resource to use
+     * @param smooksReport the URI of smooks html report to generate.
+     */
+    public SmooksMapper( String smooksResource,
+                         String smooksReport,
+                         WiseConfig config ) {
+        try {
+            smooks = initSmooks(smooksResource, config);
+            this.smooksReport = smooksReport;
+        } catch (Exception e) {
+            throw new WiseRuntimeException("failde to create SmooksMapper", e);
+        }
+    }
+
+    // Package protected for test purpose
+    /*package*/Smooks initSmooks( String smookResources,
+                                   WiseConfig config ) throws IllegalArgumentException, SAXException, IOException {
+        Smooks smooks = null;
+        if (config == null || config.isCacheEnabled()) {
+            smooks = SmooksCache.getInstance().get(smookResources);
+            if (smooks == null) {
+                smooks = new Smooks();
+                smooks.addConfigurations("smooks-resource", new URIResourceLocator().getResource(smookResources));
+                SmooksCache.getInstance().put(smookResources, smooks);
+            }
+        } else {
+            smooks = new Smooks();
+            smooks.addConfigurations("smooks-resource", new URIResourceLocator().getResource(smookResources));
+        }
+        return smooks;
+
+    }
+
+    // package protected for test purpose
+    /*package*/ExecutionContext initExecutionContext( String smooksReport ) {
+        ExecutionContext executionContext = smooks.createExecutionContext();
+        if (smooksReport != null) {
+            try {
+                executionContext.setEventListener(new HtmlReportGenerator(smooksReport));
+            } catch (IOException e) {
+                if (log.isDebugEnabled()) {
+                    log.debug("Error during loading/instanciating Html report generator (" + smooksReport
+                              + ") with exception message: " + e.getMessage());
+                    log.info("Wise will continue without it");
+
+                }
+            }
+        }
+        return executionContext;
+
     }
 
     /**
@@ -85,65 +152,21 @@ public class SmooksMapper implements WiseMapper {
      * @throws MappingException
      */
     public Map<String, Object> applyMapping( Object originalObjects ) throws MappingException {
-
-        Smooks smooks = SmooksCache.getInstance().get(this.getSmooksResource());
-        if (smooks == null) {
-            smooks = new Smooks();
-            try {
-                smooks.addConfigurations("smooks-resource", new URIResourceLocator().getResource(this.getSmooksResource()));
-            } catch (IllegalArgumentException e) {
-                throw new MappingException("Failed to add smooks resource to smooks cahe", e);
-            } catch (SAXException e) {
-                throw new MappingException("Failed to add smooks resource to smooks cahe", e);
-            } catch (IOException e) {
-                throw new MappingException("Failed to add smooks resource to smooks cahe", e);
-            }
-            SmooksCache.getInstance().put(this.getSmooksResource(), smooks);
-        }
-
-        ExecutionContext executionContext = smooks.createExecutionContext();
+        ExecutionContext executionContext = initExecutionContext(smooksReport);
         Source source;
         JavaResult result = new JavaResult();
         // Configure the execution context to generate a report...
-        if (this.getSmooksReport() != null) {
-            try {
-                executionContext.setEventListener(new HtmlReportGenerator(this.getSmooksReport()));
-            } catch (IOException e) {
-                if (log.isDebugEnabled()) {
-                    log.debug("Error during loading/instanciating Html report generator (" + this.getSmooksReport()
-                              + ") with exception message: " + e.getMessage());
-                    log.info("Wise will continue without it");
-
-                }
-            }
-        }
         org.milyn.container.plugin.PayloadProcessor payloadProcessor = new PayloadProcessor(
                                                                                             smooks,
                                                                                             org.milyn.container.plugin.ResultType.JAVA);
         Map<String, Object> returnMap = (Map<String, Object>)payloadProcessor.process(originalObjects, executionContext);
-        // workaround when we would to use smooks to extract a single value
+        // workaround when we should use smooks to extract a single value
         // Have a look to SmooksMapperTest.shouldMapToSingleInput() for an example of use
         if (returnMap.size() == 1 && returnMap.get("singleInput") != null) {
             returnMap = (Map<String, Object>)returnMap.get("singleInput");
         }
         return returnMap;
 
-    }
-
-    public synchronized String getSmooksResource() {
-        return smooksResource;
-    }
-
-    public synchronized void setSmooksResource( String smooksResource ) {
-        this.smooksResource = smooksResource;
-    }
-
-    public synchronized String getSmooksReport() {
-        return smooksReport;
-    }
-
-    public synchronized void setSmooksReport( String smooksReport ) {
-        this.smooksReport = smooksReport;
     }
 
 }

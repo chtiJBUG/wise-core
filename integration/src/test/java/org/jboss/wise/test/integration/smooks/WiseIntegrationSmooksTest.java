@@ -93,7 +93,7 @@ public class WiseIntegrationSmooksTest extends WiseTest {
         assertThat(((ExternalObject)resultMap.get("ExternalObject")).getDate(), notNullValue());
     }
 
-    // @Test
+    @Test
     public void shouldRunWithoutMKNoCache() throws Exception {
         WiseConfig config = new WiseJBWSRefletctionConfig(null, null, true, true, "target/temp/wise", false);
         WSDynamicClient client = WSDynamicClientFactory.newInstance(config).getJAXWSClient(getServerHostAndPort()
@@ -106,9 +106,11 @@ public class WiseIntegrationSmooksTest extends WiseTest {
         external.setDate(new Date(0));
         external.setInternal(internal);
         // without smooks debug infos
+        // passing config to smooks mappers avoid the use of smooks cache, preventing classloading issue
         InvocationResult result = method.invoke(external,
-                                                new SmooksMapper("META-INF/smooks/smooks-config-XMLGregorianCalendar.xml"));
-        Map<String, Object> resultMap = result.getMappedResult(new SmooksMapper("META-INF/smooks/smooks-response-config.xml"));
+                                                new SmooksMapper("META-INF/smooks/smooks-config-XMLGregorianCalendar.xml", config));
+        Map<String, Object> resultMap = result.getMappedResult(new SmooksMapper("META-INF/smooks/smooks-response-config.xml",
+                                                                                config));
         assertThat(((ExternalObject)resultMap.get("ExternalObject")).getInternal(), equalTo(internal));
         // just verifying not null, ignoring all annoyance of java TZ
         assertThat(((ExternalObject)resultMap.get("ExternalObject")).getDate(), notNullValue());
