@@ -76,11 +76,13 @@ public class WSImportImpl extends WSConsumer {
                 wsImporter.setTargetPackage(targetPackage);
             }
 
-            wsImporter.setGenerateSource(true);
+            wsImporter.setGenerateSource(this.isKeepSource());
             wsImporter.setOutputDirectory(outputDir);
             wsImporter.setSourceDirectory(sourceDir);
 
-            wsImporter.setMessageStream(System.out);
+            if (this.isVerbose()) {
+                wsImporter.setMessageStream(System.out);
+            }
             wsImporter.setAdditionalCompilerClassPath(defineAdditionalCompilerClassPath());
 
             if (bindingFiles != null && bindingFiles.size() > 0) {
