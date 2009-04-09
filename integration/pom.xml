@@ -310,6 +310,25 @@
 				</plugins>
 			</build>
 		</profile>
+		
+		<profile>
+			<id>use.endorsed.dir</id>
+			<activation>
+				<property>
+					<name>!endorsed.dir</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+					  <artifactId>maven-surefire-plugin</artifactId>
+					  <configuration>
+					     <argLine>-Djava.endorsed.dirs=${endorsed.dir}</argLine>
+					  </configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 
 		<profile>
 			<id>stress.tests</id>
