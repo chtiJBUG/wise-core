@@ -61,8 +61,8 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.jboss</groupId>
-			<artifactId>jbossws-client</artifactId>
+			<groupId>org.jboss.ws.native</groupId>
+			<artifactId>jbossws-native-client</artifactId>
 			<scope>test</scope>
 		</dependency>
 
