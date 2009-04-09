@@ -298,5 +298,23 @@
              <module>distribution</module>
            </modules>
        </profile>
-    </profiles>  
+       <!--
+       Name:  hudson
+       Descr: Ignore test failures on hudson
+       -->
+       <profile>
+         <id>hudson</id>
+         <build>
+           <plugins>
+             <plugin>
+               <artifactId>maven-surefire-plugin</artifactId>
+               <configuration>
+                 <testFailureIgnore>true</testFailureIgnore>
+               </configuration>
+             </plugin>
+           </plugins>
+         </build>
+       </profile>
+    </profiles>
+
 </project>
