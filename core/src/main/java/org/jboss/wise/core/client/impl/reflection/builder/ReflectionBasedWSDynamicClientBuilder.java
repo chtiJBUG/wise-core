@@ -72,12 +72,11 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
     @GuardedBy("this")
     private File catelog = null;
 
-    // TODO: add defaults
     @GuardedBy("this")
-    private String securityConfigURL;
+    private String securityConfigURL = "WEB-INF/wsaandwsse/jboss-wsse-client.xml";
 
     @GuardedBy("this")
-    private String securityConfigName;
+    private String securityConfigName = "Standard WSSecurity Client";
 
     @GuardedBy("this")
     private boolean keepSource;
