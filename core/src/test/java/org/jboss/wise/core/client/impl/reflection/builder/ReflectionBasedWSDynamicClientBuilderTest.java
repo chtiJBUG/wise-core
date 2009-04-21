@@ -41,10 +41,7 @@ public class ReflectionBasedWSDynamicClientBuilderTest {
 
     @Before
     public void before() throws Exception {
-        WSDynamicClientFactory factory = MicroContainerSpi.getImplementation(BeansNames.WSDynamicClientFactory,
-                                                                             WSDynamicClientFactory.class,
-                                                                             null);
-        builder = factory.createBuilder();
+        builder = WSDynamicClientFactory.getJAXWSClientBuilder();
     }
 
     @Test( expected = IllegalStateException.class )

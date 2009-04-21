@@ -27,11 +27,7 @@ import java.io.FilenameFilter;
 import java.net.MalformedURLException;
 import java.util.LinkedList;
 import java.util.List;
-import org.jboss.wise.core.config.WiseConfig;
-import org.jboss.wise.core.exception.MCKernelUnavailableException;
 import org.jboss.wise.core.exception.WiseRuntimeException;
-import org.jboss.wise.core.jbossmc.BeansNames;
-import org.jboss.wise.core.jbossmc.MicroContainerSpi;
 
 /**
  * @author stefano.maestri@javalinux.it
@@ -48,17 +44,6 @@ public abstract class WSConsumer {
                                                        String targetPackage,
                                                        List<File> bindingFiles,
                                                        File catelog ) throws MalformedURLException, WiseRuntimeException;
-
-    /**
-     * Not a real singleton jus return right instance from MC
-     * 
-     * @param config
-     * @return an instance of concrete class extending {@link #WSConsumer()}
-     * @throws MCKernelUnavailableException
-     */
-    public static synchronized WSConsumer getInstance( WiseConfig config ) throws MCKernelUnavailableException {
-        return MicroContainerSpi.getImplementation(BeansNames.WSConsumer, WSConsumer.class, config);
-    }
 
     /**
      * @return verbose

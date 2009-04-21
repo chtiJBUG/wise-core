@@ -30,7 +30,10 @@ import java.util.Map;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.handler.Handler;
 import javax.xml.ws.soap.SOAPBinding;
+import net.jcip.annotations.GuardedBy;
+import net.jcip.annotations.Immutable;
 import net.jcip.annotations.ThreadSafe;
+import org.apache.xerces.parsers.SecurityConfiguration;
 import org.jboss.wise.core.client.WSEndpoint;
 import org.jboss.wise.core.wsextensions.EnablerDelegate;
 import org.jboss.ws.core.StubExt;
@@ -43,12 +46,22 @@ import org.jboss.ws.extensions.addressing.jaxws.WSAddressingClientHandler;
  * @author stefano.maestri@javalinux.it
  * @author alessio.soldano@jboss.com
  */
-@ThreadSafe
+@Immutable
 public class ReflectionEnablerDelegate implements EnablerDelegate {
 
-    Map<String, NativeSecurityConfig> securityConfigMap = Collections.synchronizedMap(new HashMap<String, NativeSecurityConfig>());
+    private final String configFileURL;
+    private final String configName;
 
-    NativeSecurityConfig defaultSecurityConfig;
+    /**
+     * @param configFileURL
+     * @param configName
+     */
+    public ReflectionEnablerDelegate( String configFileURL,
+                                      String configName ) {
+        super();
+        this.configFileURL = configFileURL;
+        this.configName = configName;
+    }
 
     /**
      * {@inheritDoc}
@@ -78,36 +91,22 @@ public class ReflectionEnablerDelegate implements EnablerDelegate {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
-    /**
-     * {@inheritDoc} Note it uses {@link NativeSecurityConfig} associated to passed endpoint with {@link #getSecurityConfigMap()}.
-     * If there isn't specific configuration associated to this endpoint {@link #getDefaultSecurityConfig()} is used. Note also if
-     * specific configuration doesn't define keystoreLocation or truststoreLocation they are taken form
-     * {@link #defaultSecurityConfig}.
-     * 
-     * @see org.jboss.wise.core.wsextensions.EnablerDelegate#visitWSSecurity(org.jboss.wise.core.client.WSEndpoint)
-     */
     public void visitWSSecurity( WSEndpoint endpoint ) throws UnsupportedOperationException, IllegalStateException {
 
-        NativeSecurityConfig securityConfig = getSecurityConfigMap() != null ? getSecurityConfigMap().get(endpoint.getName()) : null;
-       
-        if (securityConfig == null) {
-            securityConfig = this.getDefaultSecurityConfig();
-        }
-
-        if (securityConfig == null) {
-            throw new IllegalStateException("Configure at least a default NativeSecurityConfig for WSSE in jboss-beans.xml");
+        if (configFileURL == null || configFileURL.length() == 0 || configName == null || configName.length() == 0) {
+            throw new IllegalStateException("configFileURL and configName should not be null");
         }
 
         List<Handler> origHandlerChain = ((BindingProvider)endpoint.getUnderlyingObjectInstance()).getBinding().getHandlerChain();
         ((BindingProvider)endpoint.getUnderlyingObjectInstance()).getBinding().setHandlerChain(new LinkedList<Handler>());
 
         if (endpoint.getUnderlyingObjectInstance() instanceof StubExt) {
-            URL configFile = getClass().getClassLoader().getResource(securityConfig.getConfigFileURL());
+            URL configFile = getClass().getClassLoader().getResource(configFileURL);
             if (configFile == null) {
-                throw new IllegalStateException("Cannot find file: " + securityConfig.getConfigFileURL());
+                throw new IllegalStateException("Cannot find file: " + configFileURL);
             }
             ((StubExt)endpoint.getUnderlyingObjectInstance()).setSecurityConfig(configFile.toExternalForm());
-            ((StubExt)endpoint.getUnderlyingObjectInstance()).setConfigName(securityConfig.getConfigName());
+            ((StubExt)endpoint.getUnderlyingObjectInstance()).setConfigName(configName);
         }
         List<Handler> handlerChain = ((BindingProvider)endpoint.getUnderlyingObjectInstance()).getBinding().getHandlerChain();
         handlerChain.addAll(origHandlerChain);
@@ -115,43 +114,4 @@ public class ReflectionEnablerDelegate implements EnablerDelegate {
 
     }
 
-    /**
-     * get security config Map<String, {@link NativeSecurityConfig}> where keys are {@link WSEndpoint} names. Intended to be used
-     * for IOC (jboss-beans.xml)
-     * 
-     * @return securityConfigMap
-     */
-    public synchronized final Map<String, NativeSecurityConfig> getSecurityConfigMap() {
-        return securityConfigMap;
-    }
-
-    /**
-     * set security config Map<String, {@link NativeSecurityConfig}> where keys are {@link WSEndpoint} names. Intended to be used
-     * for IOC (jboss-beans.xml)
-     * 
-     * @param _securityConfigMap Sets securityConfigMap to the specified value.
-     */
-    public synchronized final void setSecurityConfigMap( Map<String, NativeSecurityConfig> _securityConfigMap ) {
-    	this.securityConfigMap.putAll(_securityConfigMap);
-    }
-
-    /**
-     * get default s {@link NativeSecurityConfig} used when {@link WSEndpoint} on which this visitor is enabling extensions isn't
-     * find in {@link #getSecurityConfigMap()} Intended to be used for IOC (jboss-beans.xml)
-     * 
-     * @return defaultSecurityConfig
-     */
-    public synchronized final NativeSecurityConfig getDefaultSecurityConfig() {
-        return defaultSecurityConfig;
-    }
-
-    /**
-     * set default s {@link NativeSecurityConfig} used when {@link WSEndpoint} on which this visitor is enabling extensions isn't
-     * find in {@link #getSecurityConfigMap()} Intended to be used for IOC (jboss-beans.xml)
-     * 
-     * @param defaultSecurityConfig Sets defaultSecurityConfig to the specified value.
-     */
-    public synchronized final void setDefaultSecurityConfig( NativeSecurityConfig defaultSecurityConfig ) {
-        this.defaultSecurityConfig = defaultSecurityConfig;
-    }
 }

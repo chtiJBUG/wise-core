@@ -21,6 +21,8 @@
  */
 package org.jboss.wise.core.mapper;
 
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.mock;
 import static org.hamcrest.collection.IsMapContaining.hasEntry;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -30,9 +32,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import javax.xml.datatype.XMLGregorianCalendar;
+import org.jboss.wise.core.client.WSDynamicClient;
 import org.jboss.wise.core.mapper.mappingObject.ExternalObject;
 import org.jboss.wise.core.mapper.mappingObject.InternalObject;
 import org.junit.Test;
+import org.milyn.Smooks;
 
 /**
  * @author stefano.maestri@javalinux.it
@@ -42,7 +46,9 @@ public class SmooksMapperTest {
 
     @Test
     public void shouldMapComplexObjectModel() throws Exception {
-        WiseMapper mapper = new SmooksMapper("./smooks/smooks-config.xml", "target/smooks-report/report.html");
+        WSDynamicClient client = mock(WSDynamicClient.class);
+        when(client.getSmooksInstance()).thenReturn(new Smooks());
+        WiseMapper mapper = new SmooksMapper("./smooks/smooks-config.xml", "target/smooks-report/report.html", client);
         Map<String, Object> originalObjects = new HashMap<String, Object>();
         ExternalObject external = new ExternalObject();
         InternalObject internal = new InternalObject();
@@ -63,7 +69,9 @@ public class SmooksMapperTest {
 
     @Test
     public void shouldMapObjectContainingXMLGregorianCalendarField() throws Exception {
-        WiseMapper mapper = new SmooksMapper("./smooks/smooks-config-XMLGregorianCalendar.xml");
+        WSDynamicClient client = mock(WSDynamicClient.class);
+        when(client.getSmooksInstance()).thenReturn(new Smooks());
+        WiseMapper mapper = new SmooksMapper("./smooks/smooks-config-XMLGregorianCalendar.xml", client);
         Map<String, Object> originalObjects = new HashMap<String, Object>();
         ExternalObject external = new ExternalObject();
         String dateString = "2007-03-07T04:27:00";
@@ -80,7 +88,9 @@ public class SmooksMapperTest {
 
     @Test
     public void shouldMapToSingleInput() throws Exception {
-        WiseMapper mapper = new SmooksMapper("./smooks/smooks-single-input.xml");
+        WSDynamicClient client = mock(WSDynamicClient.class);
+        when(client.getSmooksInstance()).thenReturn(new Smooks());
+        WiseMapper mapper = new SmooksMapper("./smooks/smooks-single-input.xml", client);
         Map<String, Object> originalObjects = new HashMap<String, Object>();
         InternalObject internal = new InternalObject();
         internal.setNumber(Integer.valueOf(1));

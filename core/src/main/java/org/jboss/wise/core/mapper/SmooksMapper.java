@@ -28,17 +28,15 @@ import javax.xml.transform.Source;
 import net.jcip.annotations.Immutable;
 import net.jcip.annotations.ThreadSafe;
 import org.apache.log4j.Logger;
-import org.jboss.wise.core.config.WiseConfig;
+import org.jboss.wise.core.client.WSDynamicClient;
 import org.jboss.wise.core.exception.MappingException;
 import org.jboss.wise.core.exception.WiseRuntimeException;
-import org.jboss.wise.core.utils.SmooksCache;
 import org.milyn.Smooks;
 import org.milyn.container.ExecutionContext;
 import org.milyn.container.plugin.PayloadProcessor;
 import org.milyn.event.report.HtmlReportGenerator;
 import org.milyn.payload.JavaResult;
 import org.milyn.resource.URIResourceLocator;
-import org.xml.sax.SAXException;
 
 /**
  * A WiseMapper based on smooks
@@ -54,74 +52,21 @@ public class SmooksMapper implements WiseMapper {
     private final Smooks smooks;
     private final String smooksReport;
 
-    /**
-     * Create this mapper using passed resource
-     * 
-     * @param smooksResource URI of smooks resource to use
-     */
-    public SmooksMapper( String smooksResource ) {
-        this(smooksResource, null, null);
-    }
-
-    /**
-     * Create this mapper using passed resource and passed smooks html report to generate. A SmooksMapper created with this
-     * constructor will create an html smooks report useful for debug.
-     * 
-     * @param smooksResource URI of smooks resource to use
-     * @param smooksReport the URI of smooks html report to generate.
-     */
     public SmooksMapper( String smooksResource,
-                         String smooksReport ) {
-        this(smooksResource, smooksReport, null);
+                         WSDynamicClient client ) {
+        this(smooksResource, null, client);
     }
 
-    /**
-     * Create this mapper using passed resource
-     * 
-     * @param config
-     * @param smooksResource URI of smooks resource to use
-     */
-    public SmooksMapper( String smooksResource,
-                         WiseConfig config ) {
-        this(smooksResource, null, config);
-    }
-
-    /**
-     * Create this mapper using passed resource and passed smooks html report to generate. A SmooksMapper created with this
-     * constructor will create an html smooks report useful for debug.
-     * 
-     * @param config
-     * @param smooksResource URI of smooks resource to use
-     * @param smooksReport the URI of smooks html report to generate.
-     */
     public SmooksMapper( String smooksResource,
                          String smooksReport,
-                         WiseConfig config ) {
+                         WSDynamicClient client ) {
         try {
-            smooks = initSmooks(smooksResource, config);
+            smooks = client.getSmooksInstance();
+            smooks.addConfigurations("smooks-resource", new URIResourceLocator().getResource(smooksResource));
             this.smooksReport = smooksReport;
         } catch (Exception e) {
             throw new WiseRuntimeException("failde to create SmooksMapper", e);
         }
-    }
-
-    // Package protected for test purpose
-    /*package*/Smooks initSmooks( String smookResources,
-                                   WiseConfig config ) throws IllegalArgumentException, SAXException, IOException {
-        Smooks smooks = null;
-        if (config == null || config.isCacheEnabled()) {
-            smooks = SmooksCache.getInstance().get(smookResources);
-            if (smooks == null) {
-                smooks = new Smooks();
-                smooks.addConfigurations("smooks-resource", new URIResourceLocator().getResource(smookResources));
-                SmooksCache.getInstance().put(smookResources, smooks);
-            }
-        } else {
-            smooks = new Smooks();
-            smooks.addConfigurations("smooks-resource", new URIResourceLocator().getResource(smookResources));
-        }
-        return smooks;
-
     }
 
     // package protected for test purpose

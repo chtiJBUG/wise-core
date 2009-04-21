@@ -27,7 +27,6 @@ import java.net.ConnectException;
 import java.util.List;
 import net.jcip.annotations.ThreadSafe;
 import org.jboss.wise.core.client.WSDynamicClient;
-import org.jboss.wise.core.config.WiseConfig;
 import org.jboss.wise.core.exception.WiseRuntimeException;
 
 /**
@@ -41,15 +40,9 @@ public interface WSDynamicClientBuilder {
 
     public WSDynamicClient build() throws IllegalStateException, ConnectException, WiseRuntimeException;
 
-    public String getWsdlURL();
-
     public WSDynamicClientBuilder wsdlURL( String wsdlURL );
 
-    public String getUserName();
-
     public WSDynamicClientBuilder userName( String userName );
-
-    public String getPassword();
 
     public WSDynamicClientBuilder password( String password );
 
@@ -61,6 +54,20 @@ public interface WSDynamicClientBuilder {
 
     public WSDynamicClientBuilder catalogFile( File catelog );
 
+    public WSDynamicClientBuilder securityConfigUrl( String url );
+
+    public WSDynamicClientBuilder securityConfigName( String name );
+
+    public WSDynamicClientBuilder keepSource( boolean bool );
+
+    public WSDynamicClientBuilder verbose( boolean bool );
+
+    public String getWsdlURL();
+
+    public String getUserName();
+
+    public String getPassword();
+
     public String getTmpDir();
 
     public String getTargetPackage();
@@ -69,5 +76,12 @@ public interface WSDynamicClientBuilder {
 
     public File getCatelogFile();
 
-    public WiseConfig getConfig();
+    public String getSecurityConfigFileURL();
+
+    public String getSecurityConfigName();
+
+    public boolean isKeepSource();
+
+    public boolean isVerbose();
+
 }

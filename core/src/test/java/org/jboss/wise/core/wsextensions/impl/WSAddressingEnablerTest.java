@@ -25,12 +25,14 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import org.jboss.wise.core.client.WSDynamicClient;
 import org.jboss.wise.core.client.impl.reflection.WSEndpointImpl;
-import org.jboss.wise.core.config.WiseConfig;
-import org.jboss.wise.core.config.WiseJBWSRefletctionConfig;
 import org.jboss.wise.core.wsextensions.EnablerDelegate;
 import org.jboss.wise.core.wsextensions.WSExtensionEnabler;
 import org.jboss.wise.core.wsextensions.impl.jbosswsnative.ReflectionEnablerDelegate;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -38,24 +40,26 @@ import org.junit.Test;
  */
 public class WSAddressingEnablerTest {
 
-    @Test
-    public void shouldFindVisitorImplWithIOC() {
-        WSExtensionEnabler enabler = new WSAddressingEnabler();
-        assertThat(enabler.getDelegate(), is(ReflectionEnablerDelegate.class));
+    private WSDynamicClient client;
+    private EnablerDelegate delegate;
+
+    @Before
+    public void before() {
+        client = mock(WSDynamicClient.class);
+        delegate = mock(ReflectionEnablerDelegate.class);
+        when(client.getWSExtensionEnablerDelegate()).thenReturn(delegate);
     }
 
     @Test
-    public void shouldFindVisitorImplWithWiseConfig() {
-        WiseConfig config = new WiseJBWSRefletctionConfig("", "", false, false, "", false);
-        WSExtensionEnabler enabler = new WSAddressingEnabler(config);
+    public void shouldFindVisitorImpl() {
+        WSExtensionEnabler enabler = new WSAddressingEnabler(client);
         assertThat(enabler.getDelegate(), is(ReflectionEnablerDelegate.class));
     }
 
     @Test
     public void shouldDelegateToVisitor() {
-        EnablerDelegate delegate = mock(EnablerDelegate.class);
         WSEndpointImpl ep = mock(WSEndpointImpl.class);
-        WSExtensionEnabler enabler = new WSAddressingEnabler(null, delegate);
+        WSExtensionEnabler enabler = new WSAddressingEnabler(client);
         enabler.enable(ep);
         verify(delegate).visitWSAddressing(ep);
 

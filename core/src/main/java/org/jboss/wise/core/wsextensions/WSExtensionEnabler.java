@@ -23,7 +23,6 @@ package org.jboss.wise.core.wsextensions;
 
 import net.jcip.annotations.ThreadSafe;
 import org.jboss.wise.core.client.WSEndpoint;
-import org.jboss.wise.core.config.WiseConfig;
 
 /**
  * It is an interface defining a WSExtension to be enabled on an endpoint using wise-core client APIs. The basic idea is to add
@@ -51,10 +50,5 @@ public interface WSExtensionEnabler {
      * @return visitor
      */
     public EnablerDelegate getDelegate();
-
-    /**
-     * @return config
-     */
-    public WiseConfig getConfig();
 
 }

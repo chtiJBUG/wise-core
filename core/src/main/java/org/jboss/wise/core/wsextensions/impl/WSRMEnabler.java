@@ -23,10 +23,8 @@ package org.jboss.wise.core.wsextensions.impl;
 
 import net.jcip.annotations.Immutable;
 import net.jcip.annotations.ThreadSafe;
+import org.jboss.wise.core.client.WSDynamicClient;
 import org.jboss.wise.core.client.WSEndpoint;
-import org.jboss.wise.core.config.WiseConfig;
-import org.jboss.wise.core.jbossmc.BeansNames;
-import org.jboss.wise.core.jbossmc.MicroContainerSpi;
 import org.jboss.wise.core.wsextensions.EnablerDelegate;
 import org.jboss.wise.core.wsextensions.WSExtensionEnabler;
 
@@ -39,24 +37,10 @@ import org.jboss.wise.core.wsextensions.WSExtensionEnabler;
 @Immutable
 public class WSRMEnabler implements WSExtensionEnabler {
 
-    private final WiseConfig config;
-
     private final EnablerDelegate delegate;
 
-    public WSRMEnabler() {
-        this.config = null;
-        delegate = MicroContainerSpi.getImplementation(BeansNames.EnablerDelegate, EnablerDelegate.class, config);
-    }
-
-    public WSRMEnabler( WiseConfig config ) {
-        this.config = config;
-        delegate = MicroContainerSpi.getImplementation(BeansNames.EnablerDelegate, EnablerDelegate.class, config);
-    }
-
-    protected WSRMEnabler( WiseConfig config,
-                           EnablerDelegate delegate ) {
-        this.config = config;
-        this.delegate = delegate;
+    public WSRMEnabler( WSDynamicClient client ) {
+        delegate = client.getWSExtensionEnablerDelegate();
     }
 
     /**
@@ -66,15 +50,6 @@ public class WSRMEnabler implements WSExtensionEnabler {
      */
     public void enable( WSEndpoint endpoint ) throws UnsupportedOperationException {
         delegate.visitWSRM(endpoint);
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.jboss.wise.core.wsextensions.WSExtensionEnabler#getConfig()
-     */
-    public WiseConfig getConfig() {
-        return config;
     }
 
     /**

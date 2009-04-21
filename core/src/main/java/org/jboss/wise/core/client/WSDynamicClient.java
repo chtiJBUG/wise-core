@@ -24,6 +24,8 @@ package org.jboss.wise.core.client;
 
 import java.net.URLClassLoader;
 import java.util.Map;
+import org.jboss.wise.core.wsextensions.EnablerDelegate;
+import org.milyn.Smooks;
 import net.jcip.annotations.ThreadSafe;
 
 /**
@@ -60,5 +62,9 @@ public interface WSDynamicClient {
     public WSMethod getWSMethod( String serviceName,
                                  String portName,
                                  String operationName );
+
+    public EnablerDelegate getWSExtensionEnablerDelegate();
+
+    public Smooks getSmooksInstance();
 
 }

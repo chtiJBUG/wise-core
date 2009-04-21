@@ -25,14 +25,13 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import java.util.HashMap;
+import static org.mockito.Mockito.when;
+import org.jboss.wise.core.client.WSDynamicClient;
 import org.jboss.wise.core.client.impl.reflection.WSEndpointImpl;
-import org.jboss.wise.core.config.WiseConfig;
-import org.jboss.wise.core.config.WiseJBWSRefletctionConfig;
 import org.jboss.wise.core.wsextensions.EnablerDelegate;
 import org.jboss.wise.core.wsextensions.WSExtensionEnabler;
-import org.jboss.wise.core.wsextensions.impl.jbosswsnative.NativeSecurityConfig;
 import org.jboss.wise.core.wsextensions.impl.jbosswsnative.ReflectionEnablerDelegate;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -41,23 +40,21 @@ import org.junit.Test;
 public class WSSecurityEnablerTest {
 
     @Test
-    public void shouldFindVisitorImplWithIOC() {
-        WSExtensionEnabler enabler = new WSSecurityEnabler();
-        assertThat(enabler.getDelegate(), is(ReflectionEnablerDelegate.class));
-    }
-
-    @Test
-    public void shouldFindVisitorImplWithWiseConfig() {
-        WiseConfig config = new WiseJBWSRefletctionConfig("", "", false, false, "", false);
-        WSExtensionEnabler enabler = new WSSecurityEnabler(config);
+    public void shouldFindVisitorImpl() {
+        WSDynamicClient client = mock(WSDynamicClient.class);
+        EnablerDelegate delegate = mock(ReflectionEnablerDelegate.class);
+        when(client.getWSExtensionEnablerDelegate()).thenReturn(delegate);
+        WSExtensionEnabler enabler = new WSSecurityEnabler(client);
         assertThat(enabler.getDelegate(), is(ReflectionEnablerDelegate.class));
     }
 
     @Test
     public void shouldDelegateToVisitor() {
+        WSDynamicClient client = mock(WSDynamicClient.class);
         EnablerDelegate delegate = mock(EnablerDelegate.class);
+        when(client.getWSExtensionEnablerDelegate()).thenReturn(delegate);
         WSEndpointImpl ep = mock(WSEndpointImpl.class);
-        WSExtensionEnabler enabler = new WSSecurityEnabler(null, delegate);
+        WSExtensionEnabler enabler = new WSSecurityEnabler(client);
         enabler.enable(ep);
         verify(delegate).visitWSSecurity(ep);
 
@@ -65,11 +62,10 @@ public class WSSecurityEnablerTest {
 
     @Test( expected = IllegalStateException.class )
     public void shouldThrowIllegalStateExceptionIfNoConfigSet() {
-        ReflectionEnablerDelegate delegate = new ReflectionEnablerDelegate();
-        delegate.setSecurityConfigMap(new HashMap<String, NativeSecurityConfig>());
-        delegate.setDefaultSecurityConfig(null);
+        WSDynamicClient client = mock(WSDynamicClient.class);
+        when(client.getWSExtensionEnablerDelegate()).thenReturn(new ReflectionEnablerDelegate(null, null));
         WSEndpointImpl ep = mock(WSEndpointImpl.class);
-        WSExtensionEnabler enabler = new WSSecurityEnabler(null, delegate);
+        WSExtensionEnabler enabler = new WSSecurityEnabler(client);
         enabler.enable(ep);
     }
 }

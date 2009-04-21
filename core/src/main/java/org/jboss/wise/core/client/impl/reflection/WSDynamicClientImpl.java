@@ -40,11 +40,13 @@ import org.jboss.wise.core.client.WSDynamicClient;
 import org.jboss.wise.core.client.WSMethod;
 import org.jboss.wise.core.client.WSService;
 import org.jboss.wise.core.client.builder.WSDynamicClientBuilder;
-import org.jboss.wise.core.config.WiseConfig;
 import org.jboss.wise.core.consumer.WSConsumer;
-import org.jboss.wise.core.exception.MCKernelUnavailableException;
+import org.jboss.wise.core.consumer.impl.jbosswsnative.WSImportImpl;
 import org.jboss.wise.core.exception.WiseRuntimeException;
 import org.jboss.wise.core.utils.JavaUtils;
+import org.jboss.wise.core.wsextensions.EnablerDelegate;
+import org.jboss.wise.core.wsextensions.impl.jbosswsnative.ReflectionEnablerDelegate;
+import org.milyn.Smooks;
 
 /**
  * This is the Wise core, i.e. the JAX-WS client that handles wsdl retrieval & parsing, invocations, etc.
@@ -63,20 +65,36 @@ public class WSDynamicClientImpl implements WSDynamicClient {
     private final String userName;
     private final String password;
 
+    private final EnablerDelegate wsExtensionEnablerDelegate;
+
     private final CopyOnWriteArrayList<String> classNames = new CopyOnWriteArrayList<String>();
     private final Map<String, WSService> servicesMap = Collections.synchronizedMap(new HashMap<String, WSService>());
 
-    private final WiseConfig config;
+    private final Smooks smooksInstance = new Smooks();
 
-    public WSDynamicClientImpl( WSDynamicClientBuilder builder ) throws WiseRuntimeException, MCKernelUnavailableException {
-        this(builder, WSConsumer.getInstance(builder.getConfig()));
+    /**
+     * @param builder
+     * @return consumer
+     */
+    private static WSConsumer createConsumer( WSDynamicClientBuilder builder ) {
+        // TODO: add SPI
+        WSConsumer consumer = new WSImportImpl();
+        consumer.setKeepSource(builder.isKeepSource());
+        consumer.setVerbose(builder.isVerbose());
+        return consumer;
+    }
+
+    public WSDynamicClientImpl( WSDynamicClientBuilder builder ) throws WiseRuntimeException {
+        this(builder, createConsumer(builder));
     }
 
     public WSDynamicClientImpl( WSDynamicClientBuilder builder,
                                 WSConsumer consumer ) throws WiseRuntimeException {
-        config = builder.getConfig();
         userName = builder.getUserName();
         password = builder.getPassword();
+        wsExtensionEnablerDelegate = new ReflectionEnablerDelegate(builder.getSecurityConfigFileURL(),
+                                                                   builder.getSecurityConfigName());
+
         final String symbolicName = this.getSymlicName(builder.getWsdlURL());
         File outputDir = new File(builder.getTmpDir() + "/" + symbolicName + "/");
         File sourceDir = new File(builder.getTmpDir() + "/src/" + symbolicName + "/");
@@ -92,6 +110,7 @@ public class WSDynamicClientImpl implements WSDynamicClient {
             throw new WiseRuntimeException("Problem consumig wsdl:" + builder.getWsdlURL(), e);
         }
         this.initClassLoader(outputDir);
+
         this.processServices();
     }
 
@@ -177,6 +196,22 @@ public class WSDynamicClientImpl implements WSDynamicClient {
 
     private String getSymlicName( String wsdlURL ) {
         return DigestUtils.md5Hex(wsdlURL);
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see org.jboss.wise.core.client.WSDynamicClient#getWSExtensionEnablerDelegate()
+     */
+    public EnablerDelegate getWSExtensionEnablerDelegate() {
+        return wsExtensionEnablerDelegate;
+    }
+
+    /**
+     * @return smooksInstance
+     */
+    public Smooks getSmooksInstance() {
+        return smooksInstance;
     }
 
 }

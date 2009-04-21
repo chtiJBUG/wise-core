@@ -22,11 +22,8 @@
 package org.jboss.wise.core.wsextensions.impl.jbosswsnative;
 
 import static org.junit.matchers.JUnitMatchers.hasItem;
-
 import static org.junit.Assert.assertThat;
-
 import java.util.HashMap;
-
 import static org.hamcrest.core.IsAnything.any;
 import static org.hamcrest.collection.IsMapContaining.hasEntry;
 import static org.mockito.Matchers.argThat;
@@ -51,7 +48,7 @@ public class ReflectionEnablerDelegateTest {
      */
     @Test
     public void visitMTOMShouldSetMTOMOnBiding() {
-        ReflectionEnablerDelegate delegate = new ReflectionEnablerDelegate();
+        ReflectionEnablerDelegate delegate = new ReflectionEnablerDelegate(null, null);
         WSEndpoint endpoint = mock(WSEndpoint.class);
         BindingProvider bindingProvider = mock(BindingProvider.class);
         SOAPBinding binding = mock(SOAPBinding.class);
@@ -68,7 +65,7 @@ public class ReflectionEnablerDelegateTest {
      */
     @Test
     public void visitWSAddressingShouldAddRightHandler() {
-        ReflectionEnablerDelegate delegate = new ReflectionEnablerDelegate();
+        ReflectionEnablerDelegate delegate = new ReflectionEnablerDelegate(null, null);
         WSEndpoint endpoint = mock(WSEndpoint.class);
         delegate.visitWSAddressing(endpoint);
         verify(endpoint).addHandler(argThat(any(WSAddressingClientHandler.class)));
@@ -81,7 +78,7 @@ public class ReflectionEnablerDelegateTest {
      */
     @Test( expected = UnsupportedOperationException.class )
     public void visitWSRMShouldThrowUnsupportedOperationException() {
-        ReflectionEnablerDelegate delegate = new ReflectionEnablerDelegate();
+        ReflectionEnablerDelegate delegate = new ReflectionEnablerDelegate(null, null);
         WSEndpoint endpoint = mock(WSEndpoint.class);
         delegate.visitWSRM(endpoint);
 
@@ -106,14 +103,5 @@ public class ReflectionEnablerDelegateTest {
     // verify(stub).setConfigName(anyString());
     //    
     // }
-    
-    @Test
-    public void shouldSetSecurityConfigMap() {
-    	HashMap<String, NativeSecurityConfig> inputMap =new HashMap<String, NativeSecurityConfig>();
-    	NativeSecurityConfig config = mock(NativeSecurityConfig.class);
-    	inputMap.put("test", config );
-    	ReflectionEnablerDelegate delegate = new ReflectionEnablerDelegate();
-    	delegate.setSecurityConfigMap(inputMap);
-    	assertThat(delegate.getSecurityConfigMap(), hasEntry("test", config) );
-    }
+
 }

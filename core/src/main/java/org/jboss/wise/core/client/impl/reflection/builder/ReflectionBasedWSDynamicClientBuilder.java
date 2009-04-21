@@ -38,8 +38,6 @@ import org.apache.log4j.Logger;
 import org.jboss.wise.core.client.WSDynamicClient;
 import org.jboss.wise.core.client.builder.WSDynamicClientBuilder;
 import org.jboss.wise.core.client.impl.reflection.WSDynamicClientImpl;
-import org.jboss.wise.core.config.WiseConfig;
-import org.jboss.wise.core.exception.MCKernelUnavailableException;
 import org.jboss.wise.core.exception.WiseRuntimeException;
 import org.jboss.wise.core.utils.IDGenerator;
 import org.jboss.wise.core.utils.IOUtils;
@@ -65,15 +63,18 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
     private List<File> bindingFiles = null;
     @GuardedBy( "this" )
     private File catelog = null;
+    // TODO: add defaults
+    @GuardedBy( "this" )
+    private String securityConfigURL;
+    @GuardedBy( "this" )
+    private String securityConfigName;
+    @GuardedBy( "this" )
+    private boolean keepSource;
+    @GuardedBy( "this" )
+    private boolean verbose;
 
-    private final WiseConfig config;
-
-    /**
-     * @param config
-     */
-    public ReflectionBasedWSDynamicClientBuilder( WiseConfig config ) {
+    public ReflectionBasedWSDynamicClientBuilder() {
         super();
-        this.config = config;
     }
 
     /**
@@ -85,18 +86,14 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
         if (this.getWsdlURL() != null && this.getWsdlURL().startsWith("http://")) {
             this.setWsdlURL(this.transferWSDL(getUserNameAndPasswordForBasicAuthentication()));
         }
-        logger.debug("Get usable WSDL :" + wsdlURL);
+        logger.debug("Get usable WSDL :" + this.getWsdlURL());
 
         if (this.getWsdlURL() == null || this.getWsdlURL().trim().length() == 0) {
             throw new IllegalStateException("wsdlURL cannot be null");
         }
 
-        try {
-            return new WSDynamicClientImpl(this);
-        } catch (MCKernelUnavailableException e) {
-            throw new WiseRuntimeException(
-                                           "Problem consumig wsdl caused by not founded WSConsumer instance in MC. Check your jboss-beans.xml file");
-        }
+        return new WSDynamicClientImpl(this);
+
     }
 
     /**
@@ -360,10 +357,79 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
     }
 
     /**
-     * @return config
+     * {@inheritDoc}
+     * 
+     * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#getSecurityConfigFileURL()
      */
-    public synchronized final WiseConfig getConfig() {
-        return config;
+    public synchronized String getSecurityConfigFileURL() {
+        return securityConfigURL;
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#getSecurityConfigName()
+     */
+    public synchronized String getSecurityConfigName() {
+        return securityConfigName;
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#isKeepSource()
+     */
+    public synchronized boolean isKeepSource() {
+        return keepSource;
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#isVerbose()
+     */
+    public synchronized boolean isVerbose() {
+        return verbose;
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#keepSource(boolean)
+     */
+    public synchronized WSDynamicClientBuilder keepSource( boolean bool ) {
+        this.keepSource = bool;
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#securityConfigName(java.lang.String)
+     */
+    public synchronized WSDynamicClientBuilder securityConfigName( String name ) {
+        this.securityConfigName = name;
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#securityConfigUrl(java.lang.String)
+     */
+    public synchronized WSDynamicClientBuilder securityConfigUrl( String url ) {
+        this.securityConfigURL = url;
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#verbose(boolean)
+     */
+    public synchronized WSDynamicClientBuilder verbose( boolean bool ) {
+        this.verbose = bool;
+        return this;
     }
 
 }

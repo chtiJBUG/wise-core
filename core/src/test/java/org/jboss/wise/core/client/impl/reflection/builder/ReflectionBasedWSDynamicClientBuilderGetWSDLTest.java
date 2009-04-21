@@ -16,7 +16,7 @@ import sun.misc.BASE64Encoder;
 
 public class ReflectionBasedWSDynamicClientBuilderGetWSDLTest {
 
-    private final ReflectionBasedWSDynamicClientBuilder builder = new ReflectionBasedWSDynamicClientBuilder(null);
+    private final ReflectionBasedWSDynamicClientBuilder builder = new ReflectionBasedWSDynamicClientBuilder();
 
     @Test
     public void userNameAndPasswordForBasicAuthenticationShouldReturnNullForNullUserOrPassword() throws Exception {
