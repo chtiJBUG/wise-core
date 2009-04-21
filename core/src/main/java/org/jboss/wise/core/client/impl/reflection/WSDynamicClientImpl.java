@@ -49,7 +49,8 @@ import org.jboss.wise.core.wsextensions.impl.jbosswsnative.ReflectionEnablerDele
 import org.milyn.Smooks;
 
 /**
- * This is the Wise core, i.e. the JAX-WS client that handles wsdl retrieval & parsing, invocations, etc.
+ * This is the Wise core, i.e. the JAX-WS client that handles wsdl retrieval &
+ * parsing, invocations, etc.
  * 
  * @author Stefano Maestri, stefano.maestri@javalinux.it
  * @since
@@ -58,16 +59,20 @@ import org.milyn.Smooks;
 public class WSDynamicClientImpl implements WSDynamicClient {
 
     private static final long serialVersionUID = -7185945063107035243L;
+
     private final Logger log = Logger.getLogger(WSDynamicClientImpl.class);
 
-    @GuardedBy( "this" )
+    @GuardedBy("this")
     private URLClassLoader classLoader;
+
     private final String userName;
+
     private final String password;
 
     private final EnablerDelegate wsExtensionEnablerDelegate;
 
     private final CopyOnWriteArrayList<String> classNames = new CopyOnWriteArrayList<String>();
+
     private final Map<String, WSService> servicesMap = Collections.synchronizedMap(new HashMap<String, WSService>());
 
     private final Smooks smooksInstance = new Smooks();
@@ -76,42 +81,36 @@ public class WSDynamicClientImpl implements WSDynamicClient {
      * @param builder
      * @return consumer
      */
-    private static WSConsumer createConsumer( WSDynamicClientBuilder builder ) {
-        // TODO: add SPI
-        WSConsumer consumer = new WSImportImpl();
-        consumer.setKeepSource(builder.isKeepSource());
-        consumer.setVerbose(builder.isVerbose());
-        return consumer;
+    private static WSConsumer createConsumer(WSDynamicClientBuilder builder) {
+	// TODO: add SPI
+	WSConsumer consumer = new WSImportImpl();
+	consumer.setKeepSource(builder.isKeepSource());
+	consumer.setVerbose(builder.isVerbose());
+	return consumer;
     }
 
-    public WSDynamicClientImpl( WSDynamicClientBuilder builder ) throws WiseRuntimeException {
-        this(builder, createConsumer(builder));
+    public WSDynamicClientImpl(WSDynamicClientBuilder builder) throws WiseRuntimeException {
+	this(builder, createConsumer(builder));
     }
 
-    public WSDynamicClientImpl( WSDynamicClientBuilder builder,
-                                WSConsumer consumer ) throws WiseRuntimeException {
-        userName = builder.getUserName();
-        password = builder.getPassword();
-        wsExtensionEnablerDelegate = new ReflectionEnablerDelegate(builder.getSecurityConfigFileURL(),
-                                                                   builder.getSecurityConfigName());
+    public WSDynamicClientImpl(WSDynamicClientBuilder builder, WSConsumer consumer) throws WiseRuntimeException {
+	userName = builder.getUserName();
+	password = builder.getPassword();
+	wsExtensionEnablerDelegate = new ReflectionEnablerDelegate(builder.getSecurityConfigFileURL(), builder
+		.getSecurityConfigName());
 
-        final String symbolicName = this.getSymlicName(builder.getWsdlURL());
-        File outputDir = new File(builder.getTmpDir() + "/" + symbolicName + "/");
-        File sourceDir = new File(builder.getTmpDir() + "/src/" + symbolicName + "/");
+	File outputDir = new File(builder.getTmpDir() + "/classes/");
+	File sourceDir = new File(builder.getTmpDir() + "/src/");
 
-        try {
-            classNames.addAll(consumer.importObjectFromWsdl(builder.getWsdlURL(),
-                                                            outputDir,
-                                                            sourceDir,
-                                                            builder.getTargetPackage(),
-                                                            builder.getBindingFiles(),
-                                                            builder.getCatelogFile()));
-        } catch (MalformedURLException e) {
-            throw new WiseRuntimeException("Problem consumig wsdl:" + builder.getWsdlURL(), e);
-        }
-        this.initClassLoader(outputDir);
+	try {
+	    classNames.addAll(consumer.importObjectFromWsdl(builder.getWsdlURL(), outputDir, sourceDir, builder
+		    .getTargetPackage(), builder.getBindingFiles(), builder.getCatelogFile()));
+	} catch (MalformedURLException e) {
+	    throw new WiseRuntimeException("Problem consumig wsdl:" + builder.getWsdlURL(), e);
+	}
+	this.initClassLoader(outputDir);
 
-        this.processServices();
+	this.processServices();
     }
 
     /**
@@ -119,25 +118,26 @@ public class WSDynamicClientImpl implements WSDynamicClient {
      * @throws WiseRuntimeException
      */
 
-    private void initClassLoader( File outputDir ) throws WiseRuntimeException {
-        try {
+    private synchronized void initClassLoader(File outputDir) throws WiseRuntimeException {
+	try {
 
-            // we need a custom classloader pointing the temp dir
-            // in order to load the generated classes on the fly
-            this.setClassLoader(new URLClassLoader(new URL[] {outputDir.toURL(),}, Thread.currentThread().getContextClassLoader()));
-            ClassLoader oldLoader = Thread.currentThread().getContextClassLoader();
+	    // we need a custom classloader pointing the temp dir
+	    // in order to load the generated classes on the fly
+	    this.setClassLoader(new URLClassLoader(new URL[] { outputDir.toURL(), }, Thread.currentThread()
+		    .getContextClassLoader()));
+	    ClassLoader oldLoader = Thread.currentThread().getContextClassLoader();
 
-            try {
-                Thread.currentThread().setContextClassLoader(this.getClassLoader());
-                JavaUtils.loadJavaType("com.sun.xml.ws.spi.ProviderImpl", this.getClassLoader());
-            } finally {
-                // restore the original classloader
-                Thread.currentThread().setContextClassLoader(oldLoader);
-            }
-        } catch (Exception e) {
-            throw new WiseRuntimeException("Error occurred while setting up classloader for generated class in directory: "
-                                           + outputDir, e);
-        }
+	    try {
+		Thread.currentThread().setContextClassLoader(this.getClassLoader());
+		JavaUtils.loadJavaType("com.sun.xml.ws.spi.ProviderImpl", this.getClassLoader());
+	    } finally {
+		// restore the original classloader
+		Thread.currentThread().setContextClassLoader(oldLoader);
+	    }
+	} catch (Exception e) {
+	    throw new WiseRuntimeException(
+		    "Error occurred while setting up classloader for generated class in directory: " + outputDir, e);
+	}
     }
 
     /**
@@ -145,30 +145,31 @@ public class WSDynamicClientImpl implements WSDynamicClient {
      * 
      * @see org.jboss.wise.core.client.WSDynamicClient#processServices()
      */
-    public Map<String, WSService> processServices() throws IllegalStateException {
-        ClassLoader oldLoader = Thread.currentThread().getContextClassLoader();
+    public synchronized Map<String, WSService> processServices() throws IllegalStateException {
+	ClassLoader oldLoader = Thread.currentThread().getContextClassLoader();
 
-        try {
-            Thread.currentThread().setContextClassLoader(this.getClassLoader());
-            for (String className : classNames) {
-                try {
-                    Class clazz = JavaUtils.loadJavaType(className, this.getClassLoader());
-                    Annotation annotation = clazz.getAnnotation(WebServiceClient.class);
-                    if (annotation != null) {
-                        WSService service = new WSServiceImpl(clazz, this.getClassLoader(), clazz.newInstance(), userName,
-                                                              password);
-                        servicesMap.put(((WebServiceClient)annotation).name(), service);
-                    }
-                } catch (Exception e) {
-                    throw new IllegalStateException("Error during loading/instanciating class:" + className
-                                                    + " with exception message: " + e.getMessage());
-                }
-            }
-        } finally {
-            // restore the original classloader
-            Thread.currentThread().setContextClassLoader(oldLoader);
-        }
-        return servicesMap;
+	try {
+	    Thread.currentThread().setContextClassLoader(this.getClassLoader());
+	    for (String className : classNames) {
+		try {
+		    Class clazz = JavaUtils.loadJavaType(className, this.getClassLoader());
+		    Annotation annotation = clazz.getAnnotation(WebServiceClient.class);
+		    if (annotation != null) {
+			WSService service = new WSServiceImpl(clazz, this.getClassLoader(), clazz.newInstance(), userName,
+				password);
+			servicesMap.put(((WebServiceClient) annotation).name(), service);
+		    }
+		} catch (Exception e) {
+		    throw new IllegalStateException(
+			    "Error during loading/instanciating class:" + className + " with exception message: " + e
+				    .getMessage());
+		}
+	    }
+	} finally {
+	    // restore the original classloader
+	    Thread.currentThread().setContextClassLoader(oldLoader);
+	}
+	return servicesMap;
     }
 
     /**
@@ -176,26 +177,20 @@ public class WSDynamicClientImpl implements WSDynamicClient {
      * 
      * @see org.jboss.wise.core.client.WSDynamicClient#processServices()
      */
-    public WSMethod getWSMethod( String serviceName,
-                                 String portName,
-                                 String operationName ) {
-        // if (servicesMap.size() == 0) {
-        // processServices();
-        // }
-        WSService wsService = servicesMap.get(serviceName);
-        return wsService.processEndpoints().get(portName).getWSMethods().get(operationName);
+    public WSMethod getWSMethod(String serviceName, String portName, String operationName) {
+	// if (servicesMap.size() == 0) {
+	// processServices();
+	// }
+	WSService wsService = servicesMap.get(serviceName);
+	return wsService.processEndpoints().get(portName).getWSMethods().get(operationName);
     }
 
     public synchronized final URLClassLoader getClassLoader() {
-        return classLoader;
+	return classLoader;
     }
 
-    public synchronized final void setClassLoader( URLClassLoader classLoader ) {
-        this.classLoader = classLoader;
-    }
-
-    private String getSymlicName( String wsdlURL ) {
-        return DigestUtils.md5Hex(wsdlURL);
+    public synchronized final void setClassLoader(URLClassLoader classLoader) {
+	this.classLoader = classLoader;
     }
 
     /**
@@ -204,14 +199,14 @@ public class WSDynamicClientImpl implements WSDynamicClient {
      * @see org.jboss.wise.core.client.WSDynamicClient#getWSExtensionEnablerDelegate()
      */
     public EnablerDelegate getWSExtensionEnablerDelegate() {
-        return wsExtensionEnablerDelegate;
+	return wsExtensionEnablerDelegate;
     }
 
     /**
      * @return smooksInstance
      */
     public Smooks getSmooksInstance() {
-        return smooksInstance;
+	return smooksInstance;
     }
 
 }

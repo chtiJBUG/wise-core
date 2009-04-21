@@ -33,6 +33,7 @@ import java.util.List;
 import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
 import org.apache.commons.httpclient.HttpConnection;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.jboss.wise.core.client.WSDynamicClient;
@@ -49,32 +50,43 @@ import sun.misc.BASE64Encoder;
 @ThreadSafe
 public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBuilder {
     private static Logger logger = Logger.getLogger(ReflectionBasedWSDynamicClientBuilder.class);
-    @GuardedBy( "this" )
+
+    @GuardedBy("this")
     private String wsdlURL;
-    @GuardedBy( "this" )
+
+    @GuardedBy("this")
     private String userName;
-    @GuardedBy( "this" )
+
+    @GuardedBy("this")
     private String password;
-    @GuardedBy( "this" )
-    private String tmpDir;
-    @GuardedBy( "this" )
+
+    @GuardedBy("this")
+    private String tmpDir = "/tmp";
+
+    @GuardedBy("this")
     private String targetPackage;
-    @GuardedBy( "this" )
+
+    @GuardedBy("this")
     private List<File> bindingFiles = null;
-    @GuardedBy( "this" )
+
+    @GuardedBy("this")
     private File catelog = null;
+
     // TODO: add defaults
-    @GuardedBy( "this" )
+    @GuardedBy("this")
     private String securityConfigURL;
-    @GuardedBy( "this" )
+
+    @GuardedBy("this")
     private String securityConfigName;
-    @GuardedBy( "this" )
+
+    @GuardedBy("this")
     private boolean keepSource;
-    @GuardedBy( "this" )
+
+    @GuardedBy("this")
     private boolean verbose;
 
     public ReflectionBasedWSDynamicClientBuilder() {
-        super();
+	super();
     }
 
     /**
@@ -82,17 +94,29 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * 
      * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#build()
      */
-    public WSDynamicClient build() throws IllegalStateException, ConnectException, WiseRuntimeException {
-        if (this.getWsdlURL() != null && this.getWsdlURL().startsWith("http://")) {
-            this.setWsdlURL(this.transferWSDL(getUserNameAndPasswordForBasicAuthentication()));
-        }
-        logger.debug("Get usable WSDL :" + this.getWsdlURL());
+    public synchronized WSDynamicClient build() throws IllegalStateException, WiseRuntimeException {
+	if (this.getTmpDir() != null) {
+	    String clientSpecificTmpDir = new StringBuffer(this.getTmpDir()).append("/Wise").append(IDGenerator.nextVal())
+		    .toString();
+	    File tmpDirFile = new File(clientSpecificTmpDir);
+	    try {
+		FileUtils.forceMkdir(tmpDirFile);
+	    } catch (IOException e) {
+		throw new IllegalStateException("unable to create tmp dir:" + clientSpecificTmpDir);
+	    }
+	    setTmpDir(clientSpecificTmpDir);
+	}
 
-        if (this.getWsdlURL() == null || this.getWsdlURL().trim().length() == 0) {
-            throw new IllegalStateException("wsdlURL cannot be null");
-        }
+	if (this.getWsdlURL() != null && this.getWsdlURL().startsWith("http://")) {
+	    this.setWsdlURL(this.transferWSDL(getUserNameAndPasswordForBasicAuthentication()));
+	}
+	logger.debug("Get usable WSDL :" + this.getWsdlURL());
 
-        return new WSDynamicClientImpl(this);
+	if (this.getWsdlURL() == null || this.getWsdlURL().trim().length() == 0) {
+	    throw new IllegalStateException("wsdlURL cannot be null");
+	}
+
+	return new WSDynamicClientImpl(this);
 
     }
 
@@ -102,7 +126,7 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#getWsdlURL()
      */
     public synchronized final String getWsdlURL() {
-        return wsdlURL;
+	return wsdlURL;
     }
 
     /**
@@ -110,9 +134,9 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * 
      * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#wsdlURL(java.lang.String)
      */
-    public synchronized final WSDynamicClientBuilder wsdlURL( String wsdlURL ) {
-        this.wsdlURL = wsdlURL;
-        return this;
+    public synchronized final WSDynamicClientBuilder wsdlURL(String wsdlURL) {
+	this.wsdlURL = wsdlURL;
+	return this;
     }
 
     /**
@@ -121,7 +145,7 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#getUserName()
      */
     public synchronized final String getUserName() {
-        return userName;
+	return userName;
     }
 
     /**
@@ -129,9 +153,9 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * 
      * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#userName(java.lang.String)
      */
-    public synchronized WSDynamicClientBuilder userName( String userName ) {
-        this.userName = userName;
-        return this;
+    public synchronized WSDynamicClientBuilder userName(String userName) {
+	this.userName = userName;
+	return this;
     }
 
     /**
@@ -140,7 +164,7 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#getPassword()
      */
     public synchronized final String getPassword() {
-        return password;
+	return password;
     }
 
     /**
@@ -148,9 +172,9 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * 
      * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#password(java.lang.String)
      */
-    public synchronized WSDynamicClientBuilder password( String password ) {
-        this.password = password;
-        return this;
+    public synchronized WSDynamicClientBuilder password(String password) {
+	this.password = password;
+	return this;
     }
 
     /**
@@ -159,7 +183,7 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#getTmpDir()
      */
     public synchronized final String getTmpDir() {
-        return tmpDir;
+	return tmpDir;
     }
 
     /**
@@ -168,56 +192,59 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#getTargetPackage()
      */
     public synchronized final String getTargetPackage() {
-        return targetPackage;
+	return targetPackage;
     }
 
     public synchronized final List<File> getBindingFiles() {
-        return this.bindingFiles;
+	return this.bindingFiles;
     }
 
     public synchronized final File getCatelogFile() {
-        return this.catelog;
+	return this.catelog;
     }
 
     /**
-     * setter method used only by MC. Even if they are usable also by code is much more convenient to use intrface's defined
-     * method {@link #wsdlURL(String)} since it return current instance and permit concatenation like
-     * instace.wsdlURL(wsdl).symbolycName(name);
+     * setter method used only by MC. Even if they are usable also by code is
+     * much more convenient to use intrface's defined method
+     * {@link #wsdlURL(String)} since it return current instance and permit
+     * concatenation like instace.wsdlURL(wsdl).symbolycName(name);
      * 
      * @param wsdlURL
      */
-    public synchronized final void setWsdlURL( String wsdlURL ) {
-        this.wsdlURL = wsdlURL;
+    public synchronized final void setWsdlURL(String wsdlURL) {
+	this.wsdlURL = wsdlURL;
     }
 
     /**
-     * setter method used only by MC. Even if they are usable also by code is much more convenient to use intrface's defined
-     * method {@link #userName(String)} since it return current instance and permit concatenation like
-     * instace.wsdlURL(wsdl).symbolycName(name);
+     * setter method used only by MC. Even if they are usable also by code is
+     * much more convenient to use intrface's defined method
+     * {@link #userName(String)} since it return current instance and permit
+     * concatenation like instace.wsdlURL(wsdl).symbolycName(name);
      * 
      * @param userName
      */
-    public synchronized final void setUserName( String userName ) {
-        this.userName = userName;
+    public synchronized final void setUserName(String userName) {
+	this.userName = userName;
     }
 
     /**
-     * setter method used only by MC. Even if they are usable also by code is much more convenient to use intrface's defined
-     * method {@link #password(String)} since it return current instance and permit concatenation like
-     * instace.wsdlURL(wsdl).symbolycName(name);
+     * setter method used only by MC. Even if they are usable also by code is
+     * much more convenient to use intrface's defined method
+     * {@link #password(String)} since it return current instance and permit
+     * concatenation like instace.wsdlURL(wsdl).symbolycName(name);
      * 
      * @param password
      */
-    public synchronized final void setPassword( String password ) {
-        this.password = password;
+    public synchronized final void setPassword(String password) {
+	this.password = password;
     }
 
-    public synchronized final void setBindingFiles( List<File> bindings ) {
-        this.bindingFiles = bindings;
+    public synchronized final void setBindingFiles(List<File> bindings) {
+	this.bindingFiles = bindings;
     }
 
-    public synchronized final void setCatelogFile( File catelog ) {
-        this.catelog = catelog;
+    public synchronized final void setCatelogFile(File catelog) {
+	this.catelog = catelog;
     }
 
     /**
@@ -225,9 +252,9 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * 
      * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#targetPackage(java.lang.String)
      */
-    public synchronized WSDynamicClientBuilder targetPackage( String targetPackage ) {
-        this.targetPackage = targetPackage;
-        return this;
+    public synchronized WSDynamicClientBuilder targetPackage(String targetPackage) {
+	this.targetPackage = targetPackage;
+	return this;
     }
 
     /**
@@ -235,27 +262,27 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * 
      * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#tmpDir(java.lang.String)
      */
-    public synchronized WSDynamicClientBuilder tmpDir( String tmpDir ) {
-        this.tmpDir = tmpDir;
-        return this;
+    public synchronized WSDynamicClientBuilder tmpDir(String tmpDir) {
+	this.tmpDir = tmpDir;
+	return this;
     }
 
-    public synchronized WSDynamicClientBuilder bindingFiles( List<File> bindings ) {
-        this.bindingFiles = bindings;
-        return this;
+    public synchronized WSDynamicClientBuilder bindingFiles(List<File> bindings) {
+	this.bindingFiles = bindings;
+	return this;
     }
 
-    public synchronized WSDynamicClientBuilder catalogFile( File catelogFile ) {
-        catelog = catelogFile;
-        return this;
+    public synchronized WSDynamicClientBuilder catalogFile(File catelogFile) {
+	catelog = catelogFile;
+	return this;
     }
 
     synchronized String getUserNameAndPasswordForBasicAuthentication() {
-        if (StringUtils.trimToNull(userName) == null || StringUtils.trimToNull(password) == null) {
-            return null;
-        } else {
-            return new StringBuffer(userName).append(":").append(password).toString();
-        }
+	if (StringUtils.trimToNull(userName) == null || StringUtils.trimToNull(password) == null) {
+	    return null;
+	} else {
+	    return new StringBuffer(userName).append(":").append(password).toString();
+	}
     }
 
     /*
@@ -263,12 +290,12 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * 
      * @throws WiseConnectionException If the wsdl cannot be retrieved
      */
-    private String transferWSDL( String usernameAndPassword ) throws WiseRuntimeException {
-        try {
-            return this.transferWSDL(usernameAndPassword, IOUtils.newInstance());
-        } catch (IOException e) {
-            throw new WiseRuntimeException(e);
-        }
+    private String transferWSDL(String usernameAndPassword) throws WiseRuntimeException {
+	try {
+	    return this.transferWSDL(usernameAndPassword, IOUtils.newInstance());
+	} catch (IOException e) {
+	    throw new WiseRuntimeException(e);
+	}
 
     }
 
@@ -277,35 +304,35 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * 
      * @throws WiseConnectionException If the wsdl cannot be retrieved
      */
-    String transferWSDL( String usernameAndPassword,
-                         IOUtils ioUtils ) throws IOException, WiseRuntimeException {
-        HttpURLConnection conn = openAndInitConnection(usernameAndPassword, new URL(this.getWsdlURL()));
-        File file = new File(this.getTmpDir(), new StringBuffer("Wise").append(IDGenerator.nextVal()).append(".xml").toString());
-        ioUtils.copyStreamAndClose(new FileOutputStream(file), getWsdlInputStream(conn));
-        return file.getPath();
+    String transferWSDL(String usernameAndPassword, IOUtils ioUtils) throws IOException, WiseRuntimeException {
+	HttpURLConnection conn = openAndInitConnection(usernameAndPassword, new URL(this.getWsdlURL()));
+	File file = new File(this.getTmpDir(), new StringBuffer("Wise").append(IDGenerator.nextVal()).append(".xml").toString());
+	ioUtils.copyStreamAndClose(new FileOutputStream(file), getWsdlInputStream(conn));
+	return file.getPath();
 
     }
 
     /**
-     * It opens an input stream for passed {@link HttpConnection}. Note that callers should take care of resource closing.
+     * It opens an input stream for passed {@link HttpConnection}. Note that
+     * callers should take care of resource closing.
      * 
      * @param conn
      * @return an InputStream if httconn went well, or throw an exception
      * @throws WiseRuntimeException
      */
-    InputStream getWsdlInputStream( HttpURLConnection conn ) throws WiseRuntimeException {
-        try {
-            InputStream is = null;
-            if (conn.getResponseCode() == 200) {
-                is = conn.getInputStream();
-            } else {
+    InputStream getWsdlInputStream(HttpURLConnection conn) throws WiseRuntimeException {
+	try {
+	    InputStream is = null;
+	    if (conn.getResponseCode() == 200) {
+		is = conn.getInputStream();
+	    } else {
 
-                throw new ConnectException("Remote server's response is an error: " + conn.getResponseCode());
-            }
-            return is;
-        } catch (Exception e) {
-            throw new WiseRuntimeException(e);
-        }
+		throw new ConnectException("Remote server's response is an error: " + conn.getResponseCode());
+	    }
+	    return is;
+	} catch (Exception e) {
+	    throw new WiseRuntimeException(e);
+	}
 
     }
 
@@ -315,15 +342,14 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * @return a connection prepared to download the wsdl
      * @throws WiseRuntimeException
      */
-    HttpURLConnection openAndInitConnection( String usernameAndPassword,
-                                             URL url ) throws WiseRuntimeException {
-        HttpURLConnection conn;
-        try {
-            conn = (HttpURLConnection)url.openConnection();
-        } catch (IOException e) {
-            throw new WiseRuntimeException(e);
-        }
-        return this.initConnection(usernameAndPassword, conn);
+    HttpURLConnection openAndInitConnection(String usernameAndPassword, URL url) throws WiseRuntimeException {
+	HttpURLConnection conn;
+	try {
+	    conn = (HttpURLConnection) url.openConnection();
+	} catch (IOException e) {
+	    throw new WiseRuntimeException(e);
+	}
+	return this.initConnection(usernameAndPassword, conn);
     }
 
     /**
@@ -332,28 +358,27 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * @return a connection prepared to download the wsdl
      * @throws WiseRuntimeException
      */
-    HttpURLConnection initConnection( String usernameAndPassword,
-                                      HttpURLConnection conn ) throws WiseRuntimeException {
-        try {
+    HttpURLConnection initConnection(String usernameAndPassword, HttpURLConnection conn) throws WiseRuntimeException {
+	try {
 
-            conn.setDoOutput(false);
-            conn.setDoInput(true);
-            conn.setUseCaches(false);
-            conn.setRequestMethod("GET");
-            conn.setRequestProperty("Accept",
-                                    "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5");
-            // set Connection close, otherwise we get a keep-alive
-            // connection
-            // that gives us fragmented answers.
-            conn.setRequestProperty("Connection", "close");
-            // BASIC AUTH
-            if (usernameAndPassword != null && usernameAndPassword.length() != 0) {
-                conn.setRequestProperty("Authorization", "Basic " + (new BASE64Encoder()).encode(usernameAndPassword.getBytes()));
-            }
-            return conn;
-        } catch (Exception e) {
-            throw new WiseRuntimeException(e);
-        }
+	    conn.setDoOutput(false);
+	    conn.setDoInput(true);
+	    conn.setUseCaches(false);
+	    conn.setRequestMethod("GET");
+	    conn
+		    .setRequestProperty("Accept", "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5");
+	    // set Connection close, otherwise we get a keep-alive
+	    // connection
+	    // that gives us fragmented answers.
+	    conn.setRequestProperty("Connection", "close");
+	    // BASIC AUTH
+	    if (usernameAndPassword != null && usernameAndPassword.length() != 0) {
+		conn.setRequestProperty("Authorization", "Basic " + (new BASE64Encoder()).encode(usernameAndPassword.getBytes()));
+	    }
+	    return conn;
+	} catch (Exception e) {
+	    throw new WiseRuntimeException(e);
+	}
     }
 
     /**
@@ -362,7 +387,7 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#getSecurityConfigFileURL()
      */
     public synchronized String getSecurityConfigFileURL() {
-        return securityConfigURL;
+	return securityConfigURL;
     }
 
     /**
@@ -371,7 +396,7 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#getSecurityConfigName()
      */
     public synchronized String getSecurityConfigName() {
-        return securityConfigName;
+	return securityConfigName;
     }
 
     /**
@@ -380,7 +405,7 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#isKeepSource()
      */
     public synchronized boolean isKeepSource() {
-        return keepSource;
+	return keepSource;
     }
 
     /**
@@ -389,7 +414,7 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#isVerbose()
      */
     public synchronized boolean isVerbose() {
-        return verbose;
+	return verbose;
     }
 
     /**
@@ -397,9 +422,9 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * 
      * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#keepSource(boolean)
      */
-    public synchronized WSDynamicClientBuilder keepSource( boolean bool ) {
-        this.keepSource = bool;
-        return this;
+    public synchronized WSDynamicClientBuilder keepSource(boolean bool) {
+	this.keepSource = bool;
+	return this;
     }
 
     /**
@@ -407,9 +432,9 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * 
      * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#securityConfigName(java.lang.String)
      */
-    public synchronized WSDynamicClientBuilder securityConfigName( String name ) {
-        this.securityConfigName = name;
-        return this;
+    public synchronized WSDynamicClientBuilder securityConfigName(String name) {
+	this.securityConfigName = name;
+	return this;
     }
 
     /**
@@ -417,9 +442,9 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * 
      * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#securityConfigUrl(java.lang.String)
      */
-    public synchronized WSDynamicClientBuilder securityConfigUrl( String url ) {
-        this.securityConfigURL = url;
-        return this;
+    public synchronized WSDynamicClientBuilder securityConfigUrl(String url) {
+	this.securityConfigURL = url;
+	return this;
     }
 
     /**
@@ -427,9 +452,17 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * 
      * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#verbose(boolean)
      */
-    public synchronized WSDynamicClientBuilder verbose( boolean bool ) {
-        this.verbose = bool;
-        return this;
+    public synchronized WSDynamicClientBuilder verbose(boolean bool) {
+	this.verbose = bool;
+	return this;
+    }
+
+    /**
+     * @param tmpDir
+     *            Sets tmpDir to the specified value.
+     */
+    private synchronized void setTmpDir(String tmpDir) {
+	this.tmpDir = tmpDir;
     }
 
 }

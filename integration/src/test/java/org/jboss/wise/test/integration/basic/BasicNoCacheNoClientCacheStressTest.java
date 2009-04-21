@@ -28,12 +28,12 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
+
 import org.jboss.wise.core.client.InvocationResult;
 import org.jboss.wise.core.client.WSDynamicClient;
 import org.jboss.wise.core.client.WSMethod;
+import org.jboss.wise.core.client.builder.WSDynamicClientBuilder;
 import org.jboss.wise.core.client.factories.WSDynamicClientFactory;
-import org.jboss.wise.core.config.WiseConfig;
-import org.jboss.wise.core.config.WiseJBWSRefletctionConfig;
 import org.jboss.wise.core.test.WiseTest;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -46,38 +46,46 @@ public class BasicNoCacheNoClientCacheStressTest extends WiseTest {
 
     // limit thread for expensive operations
     private static final int THREADS = Integer.valueOf(System.getProperty("wise.stress.expensive.threads"));
+
     private static final int THREAD_POOL_SIZE = Integer.valueOf(System.getProperty("wise.stress.expensive.threadPoolSize"));
 
     @Before
     public void setUp() throws Exception {
-        warUrl = this.getClass().getClassLoader().getResource("basic.war");
-        deployWS(warUrl);
+	warUrl = this.getClass().getClassLoader().getResource("basic.war");
+	deployWS(warUrl);
 
     }
 
     @Test
     public void shouldRunWithoutMKNoCacheStressTest() throws Exception {
-        System.out.println("running NOMK with THREADS=" + THREADS);
-        WiseConfig config = new WiseJBWSRefletctionConfig(null, null, false, false, "target/temp/wise", false);
+	System.out.println("running NOMK with THREADS=" + THREADS);
+	URL wsdlURL = new URL(getServerHostAndPort() + "/basic/HelloWorld?wsdl");
 
-        URL wsdlURL = new URL(getServerHostAndPort() + "/basic/HelloWorld?wsdl");
+	WSDynamicClientBuilder clientBuilder = WSDynamicClientFactory.getJAXWSClientBuilder();
 
-        WSDynamicClientFactory factory = WSDynamicClientFactory.newInstance(config);
+	// Note Wise do not provide any Cache, client is expected to take
+	// care of using a single client instance or
+	// other caching mechanism. Initialising client is very expensive!!
+	// You have a proof of here in BasicNoCacheNoClientCacheStressTest.java
+	// The purpose of this test is just to make a stress test of expansive
+	// client creation
+	// * DON'T USE WISE IN THIS WAY IN YOUR APPLICATIONS *
+	clientBuilder.tmpDir("target/temp/wise").verbose(true).keepSource(true).wsdlURL(wsdlURL.toString());
 
-        ExecutorService es = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
-        FutureTask<String>[] tasks = new FutureTask[THREADS];
-        for (int i = 0; i < THREADS; i++) {
-            tasks[i] = new FutureTask<String>(new NoMKCallableTest(factory, wsdlURL.toString(), i));
-            es.submit(tasks[i]);
+	ExecutorService es = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
+	FutureTask<String>[] tasks = new FutureTask[THREADS];
+	for (int i = 0; i < THREADS; i++) {
+	    tasks[i] = new FutureTask<String>(new NoMKCallableTest(clientBuilder, i));
+	    es.submit(tasks[i]);
 
-        }
-        for (int i = 0; i < THREADS; i++) {
-            String result = tasks[i].get();
-            System.out.println(i + ") " + result);
-            Assert.assertEquals("from-wise-client thread #" + i, result);
+	}
+	for (int i = 0; i < THREADS; i++) {
+	    String result = tasks[i].get();
+	    System.out.println(i + ") " + result);
+	    Assert.assertEquals("from-wise-client thread #" + i, result);
 
-        }
-        es.shutdown();
+	}
+	es.shutdown();
 
     }
 
@@ -87,34 +95,31 @@ public class BasicNoCacheNoClientCacheStressTest extends WiseTest {
 
     public class NoMKCallableTest implements Callable<String> {
 
-        private final WSDynamicClientFactory factory;
-        private final int count;
-        private final String wsdlURLString;
+	private final WSDynamicClientBuilder clientBuilder;
 
-        public NoMKCallableTest( WSDynamicClientFactory factory,
-                                 String wsdlURLString,
-                                 int count ) {
-            this.factory = factory;
-            this.wsdlURLString = wsdlURLString;
-            this.count = count;
-        }
+	private final int count;
 
-        /**
-         * {@inheritDoc}
-         * 
-         * @see java.util.concurrent.Callable#call()
-         */
-        public String call() throws Exception {
-            WSDynamicClient client = factory.getJAXWSClient(wsdlURLString);
-            WSMethod method = client.getWSMethod("HelloService", "HelloWorldBeanPort", "echo");
-            Map<String, Object> args = new java.util.HashMap<String, Object>();
-            args.put("arg0", "from-wise-client thread #" + count);
-            InvocationResult result = method.invoke(args, null);
-            Map<String, Object> res = result.getMapRequestAndResult(null, null);
-            Map<String, Object> test = (Map<String, Object>)res.get("results");
-            return (String)test.get("result");
+	public NoMKCallableTest(WSDynamicClientBuilder clientBuilder, int count) {
+	    this.clientBuilder = clientBuilder;
+	    this.count = count;
+	}
 
-        }
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see java.util.concurrent.Callable#call()
+	 */
+	public String call() throws Exception {
+	    WSDynamicClient client = clientBuilder.build();
+	    WSMethod method = client.getWSMethod("HelloService", "HelloWorldBeanPort", "echo");
+	    Map<String, Object> args = new java.util.HashMap<String, Object>();
+	    args.put("arg0", "from-wise-client thread #" + count);
+	    InvocationResult result = method.invoke(args, null);
+	    Map<String, Object> res = result.getMapRequestAndResult(null, null);
+	    Map<String, Object> test = (Map<String, Object>) res.get("results");
+	    return (String) test.get("result");
+
+	}
     }
 
 }

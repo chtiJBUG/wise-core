@@ -23,14 +23,15 @@ package org.jboss.wise.test.integration.wsse;
 
 import java.net.URL;
 import java.util.Map;
+
 import junit.framework.Assert;
+
 import org.jboss.wise.core.client.InvocationResult;
 import org.jboss.wise.core.client.WSDynamicClient;
 import org.jboss.wise.core.client.WSEndpoint;
 import org.jboss.wise.core.client.WSMethod;
+import org.jboss.wise.core.client.builder.WSDynamicClientBuilder;
 import org.jboss.wise.core.client.factories.WSDynamicClientFactory;
-import org.jboss.wise.core.config.WiseConfig;
-import org.jboss.wise.core.config.WiseJBWSRefletctionConfig;
 import org.jboss.wise.core.handlers.LoggingHandler;
 import org.jboss.wise.core.test.WiseTest;
 import org.jboss.wise.core.wsextensions.impl.WSSecurityEnabler;
@@ -43,53 +44,36 @@ public class WSSEIntegrationTest extends WiseTest {
 
     @Before
     public void setUp() throws Exception {
-        warUrl = this.getClass().getClassLoader().getResource("wsse.war");
-        deployWS(warUrl);
+	warUrl = this.getClass().getClassLoader().getResource("wsse.war");
+	deployWS(warUrl);
 
-    }
-
-    @Test
-    public void shouldRunWithMK() throws Exception {
-        URL wsdURL = new URL(getServerHostAndPort() + "/wsse/HelloWorld?wsdl");
-        WSDynamicClientFactory factory = WSDynamicClientFactory.getInstance();
-        WSDynamicClient client = factory.getJAXWSClient(wsdURL.toString());
-        WSMethod method = client.getWSMethod("HelloService", "HelloImplPort", "echoUserType");
-        WSEndpoint wsEndpoint = method.getEndpoint();
-
-        wsEndpoint.addHandler(new LoggingHandler());
-
-        wsEndpoint.addWSExtension(new WSSecurityEnabler());
-
-        Map<String, Object> args = new java.util.HashMap<String, Object>();
-        args.put("user", "test");
-        InvocationResult result = method.invoke(args, null);
-        Map<String, Object> results = (Map<String, Object>)result.getMapRequestAndResult(null, null).get("results");
-        Assert.assertEquals("Hello WSSecurity", results.get("result"));
     }
 
     @Test
     public void shouldRunWithoutMK() throws Exception {
-        WiseConfig config = new WiseJBWSRefletctionConfig("WEB-INF/wsse/jboss-wsse-client.xml", "Standard WSSecurity Client",
-                                                          true, true, "target/temp/wise", false);
-        URL wsdURL = new URL(getServerHostAndPort() + "/wsse/HelloWorld?wsdl");
-        WSDynamicClientFactory factory = WSDynamicClientFactory.newInstance(config);
-        WSDynamicClient client = factory.getJAXWSClient(wsdURL.toString());
-        WSMethod method = client.getWSMethod("HelloService", "HelloImplPort", "echoUserType");
-        WSEndpoint wsEndpoint = method.getEndpoint();
+	URL wsdlURL = new URL(getServerHostAndPort() + "/wsse/HelloWorld?wsdl");
 
-        wsEndpoint.addHandler(new LoggingHandler());
+	WSDynamicClientBuilder clientBuilder = WSDynamicClientFactory.getJAXWSClientBuilder();
+	WSDynamicClient client = clientBuilder.tmpDir("target/temp/wise").verbose(true).keepSource(true)
+		.securityConfigUrl("WEB-INF/wsaandwsse/jboss-wsse-client.xml").securityConfigName("Standard WSSecurity Client")
+		.wsdlURL(wsdlURL.toString()).build();
 
-        wsEndpoint.addWSExtension(new WSSecurityEnabler(config));
+	WSMethod method = client.getWSMethod("HelloService", "HelloImplPort", "echoUserType");
+	WSEndpoint wsEndpoint = method.getEndpoint();
 
-        Map<String, Object> args = new java.util.HashMap<String, Object>();
-        args.put("user", "test");
-        InvocationResult result = method.invoke(args, null);
-        Map<String, Object> results = (Map<String, Object>)result.getMapRequestAndResult(null, null).get("results");
-        Assert.assertEquals("Hello WSSecurity", results.get("result"));
+	wsEndpoint.addHandler(new LoggingHandler());
+
+	wsEndpoint.addWSExtension(new WSSecurityEnabler(client));
+
+	Map<String, Object> args = new java.util.HashMap<String, Object>();
+	args.put("user", "test");
+	InvocationResult result = method.invoke(args, null);
+	Map<String, Object> results = (Map<String, Object>) result.getMapRequestAndResult(null, null).get("results");
+	Assert.assertEquals("Hello WSSecurity", results.get("result"));
     }
 
     @After
     public void tearDown() throws Exception {
-        undeployWS(warUrl);
+	undeployWS(warUrl);
     }
 }

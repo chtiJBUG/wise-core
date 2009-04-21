@@ -25,15 +25,16 @@ package org.jboss.wise.test.integration.smooks;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertThat;
+
 import java.net.URL;
 import java.util.Date;
 import java.util.Map;
+
 import org.jboss.wise.core.client.InvocationResult;
 import org.jboss.wise.core.client.WSDynamicClient;
 import org.jboss.wise.core.client.WSMethod;
+import org.jboss.wise.core.client.builder.WSDynamicClientBuilder;
 import org.jboss.wise.core.client.factories.WSDynamicClientFactory;
-import org.jboss.wise.core.config.WiseConfig;
-import org.jboss.wise.core.config.WiseJBWSRefletctionConfig;
 import org.jboss.wise.core.mapper.SmooksMapper;
 import org.jboss.wise.core.test.WiseTest;
 import org.jboss.wise.test.integration.smooks.pojo.clientside.ExternalObject;
@@ -47,77 +48,38 @@ public class WiseIntegrationSmooksTest extends WiseTest {
 
     @Before
     public void setUp() throws Exception {
-        warUrl = this.getClass().getClassLoader().getResource("smooks.war");
-        deployWS(warUrl);
+	warUrl = this.getClass().getClassLoader().getResource("smooks.war");
+	deployWS(warUrl);
 
-    }
-
-    @Test
-    public void shouldRunWithMK() throws Exception {
-        WSDynamicClient client = WSDynamicClientFactory.getInstance().getJAXWSClient(getServerHostAndPort()
-                                                                                     + "/smooks/ComplexWS?wsdl");
-        WSMethod method = client.getWSMethod("ComplexWSService", "ComplexWSPort", "ping");
-        InternalObject internal = new InternalObject();
-        internal.setNumber(new Integer(1));
-        internal.setText("aa");
-        ExternalObject external = new ExternalObject();
-        external.setDate(new Date(0));
-        external.setInternal(internal);
-        // without smooks debug infos
-        InvocationResult result = method.invoke(external,
-                                                new SmooksMapper("META-INF/smooks/smooks-config-XMLGregorianCalendar.xml"));
-        Map<String, Object> resultMap = result.getMappedResult(new SmooksMapper("META-INF/smooks/smooks-response-config.xml"));
-        assertThat(((ExternalObject)resultMap.get("ExternalObject")).getInternal(), equalTo(internal));
-        // just verifying not null, ignoring all annoyance of java TZ
-        assertThat(((ExternalObject)resultMap.get("ExternalObject")).getDate(), notNullValue());
-    }
-
-    @Test
-    public void shouldRunWithoutMK() throws Exception {
-        WiseConfig config = new WiseJBWSRefletctionConfig(null, null, true, true, "target/temp/wise", true);
-        WSDynamicClient client = WSDynamicClientFactory.newInstance(config).getJAXWSClient(getServerHostAndPort()
-                                                                                           + "/smooks/ComplexWS?wsdl");
-        WSMethod method = client.getWSMethod("ComplexWSService", "ComplexWSPort", "ping");
-        InternalObject internal = new InternalObject();
-        internal.setNumber(new Integer(1));
-        internal.setText("aa");
-        ExternalObject external = new ExternalObject();
-        external.setDate(new Date(0));
-        external.setInternal(internal);
-        // without smooks debug infos
-        InvocationResult result = method.invoke(external,
-                                                new SmooksMapper("META-INF/smooks/smooks-config-XMLGregorianCalendar.xml"));
-        Map<String, Object> resultMap = result.getMappedResult(new SmooksMapper("META-INF/smooks/smooks-response-config.xml"));
-        assertThat(((ExternalObject)resultMap.get("ExternalObject")).getInternal(), equalTo(internal));
-        // just verifying not null, ignoring all annoyance of java TZ
-        assertThat(((ExternalObject)resultMap.get("ExternalObject")).getDate(), notNullValue());
     }
 
     @Test
     public void shouldRunWithoutMKNoCache() throws Exception {
-        WiseConfig config = new WiseJBWSRefletctionConfig(null, null, true, true, "target/temp/wise", false);
-        WSDynamicClient client = WSDynamicClientFactory.newInstance(config).getJAXWSClient(getServerHostAndPort()
-                                                                                           + "/smooks/ComplexWS?wsdl");
-        WSMethod method = client.getWSMethod("ComplexWSService", "ComplexWSPort", "ping");
-        InternalObject internal = new InternalObject();
-        internal.setNumber(new Integer(1));
-        internal.setText("aa");
-        ExternalObject external = new ExternalObject();
-        external.setDate(new Date(0));
-        external.setInternal(internal);
-        // without smooks debug infos
-        // passing config to smooks mappers avoid the use of smooks cache, preventing classloading issue
-        InvocationResult result = method.invoke(external,
-                                                new SmooksMapper("META-INF/smooks/smooks-config-XMLGregorianCalendar.xml", config));
-        Map<String, Object> resultMap = result.getMappedResult(new SmooksMapper("META-INF/smooks/smooks-response-config.xml",
-                                                                                config));
-        assertThat(((ExternalObject)resultMap.get("ExternalObject")).getInternal(), equalTo(internal));
-        // just verifying not null, ignoring all annoyance of java TZ
-        assertThat(((ExternalObject)resultMap.get("ExternalObject")).getDate(), notNullValue());
+	URL wsdlURL = new URL(getServerHostAndPort() + "/smooks/ComplexWS?wsdl");
+
+	WSDynamicClientBuilder clientBuilder = WSDynamicClientFactory.getJAXWSClientBuilder();
+	WSDynamicClient client = clientBuilder.tmpDir("target/temp/wise").verbose(true).keepSource(true).wsdlURL(wsdlURL
+		.toString()).build();
+
+	WSMethod method = client.getWSMethod("ComplexWSService", "ComplexWSPort", "ping");
+	InternalObject internal = new InternalObject();
+	internal.setNumber(new Integer(1));
+	internal.setText("aa");
+	ExternalObject external = new ExternalObject();
+	external.setDate(new Date(0));
+	external.setInternal(internal);
+	// without smooks debug infos
+	InvocationResult result = method.invoke(external, new SmooksMapper(
+		"META-INF/smooks/smooks-config-XMLGregorianCalendar.xml", "/home/oracle/inputRep.html", client));
+	Map<String, Object> resultMap = result.getMappedResult(new SmooksMapper("META-INF/smooks/smooks-response-config.xml",
+		"/home/oracle/outputRep.html", client));
+	assertThat(((ExternalObject) resultMap.get("ExternalObject")).getInternal(), equalTo(internal));
+	// just verifying not null, ignoring all annoyance of java TZ
+	assertThat(((ExternalObject) resultMap.get("ExternalObject")).getDate(), notNullValue());
     }
 
     @After
     public void tearDown() throws Exception {
-        undeployWS(warUrl);
+	undeployWS(warUrl);
     }
 }

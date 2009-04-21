@@ -27,9 +27,8 @@ import java.util.Map;
 import org.jboss.wise.core.client.InvocationResult;
 import org.jboss.wise.core.client.WSDynamicClient;
 import org.jboss.wise.core.client.WSMethod;
+import org.jboss.wise.core.client.builder.WSDynamicClientBuilder;
 import org.jboss.wise.core.client.factories.WSDynamicClientFactory;
-import org.jboss.wise.core.config.WiseConfig;
-import org.jboss.wise.core.config.WiseJBWSRefletctionConfig;
 import org.jboss.wise.core.test.WiseTest;
 import org.junit.After;
 import org.junit.Assert;
@@ -41,45 +40,30 @@ public class WiseIntegrationBasicTest extends WiseTest {
 
     @Before
     public void setUp() throws Exception {
-        warUrl = this.getClass().getClassLoader().getResource("basic.war");
-        deployWS(warUrl);
+	warUrl = this.getClass().getClassLoader().getResource("basic.war");
+	deployWS(warUrl);
 
-    }
-
-    @Test
-    public void shouldRunWithMK() throws Exception {
-        URL wsdURL = new URL(getServerHostAndPort() + "/basic/HelloWorld?wsdl");
-
-        WSDynamicClientFactory factory = WSDynamicClientFactory.getInstance();
-        WSDynamicClient client = factory.getJAXWSClient(wsdURL.toString());
-        WSMethod method = client.getWSMethod("HelloService", "HelloWorldBeanPort", "echo");
-        Map<String, Object> args = new java.util.HashMap<String, Object>();
-        args.put("arg0", "from-wise-client");
-        InvocationResult result = method.invoke(args, null);
-        Map<String, Object> res = result.getMapRequestAndResult(null, null);
-        Map<String, Object> test = (Map<String, Object>)res.get("results");
-        Assert.assertEquals("from-wise-client", test.get("result"));
     }
 
     @Test
     public void shouldRunWithoutMK() throws Exception {
-        WiseConfig config = new WiseJBWSRefletctionConfig(null, null, true, true, "/tmp/wise", false);
 
-        URL wsdURL = new URL(getServerHostAndPort() + "/basic/HelloWorld?wsdl");
+	URL wsdlURL = new URL(getServerHostAndPort() + "/basic/HelloWorld?wsdl");
 
-        WSDynamicClientFactory factory = WSDynamicClientFactory.newInstance(config);
-        WSDynamicClient client = factory.getJAXWSClient(wsdURL.toString());
-        WSMethod method = client.getWSMethod("HelloService", "HelloWorldBeanPort", "echo");
-        Map<String, Object> args = new java.util.HashMap<String, Object>();
-        args.put("arg0", "from-wise-client");
-        InvocationResult result = method.invoke(args, null);
-        Map<String, Object> res = result.getMapRequestAndResult(null, null);
-        Map<String, Object> test = (Map<String, Object>)res.get("results");
-        Assert.assertEquals("from-wise-client", test.get("result"));
+	WSDynamicClientBuilder clientBuilder = WSDynamicClientFactory.getJAXWSClientBuilder();
+	WSDynamicClient client = clientBuilder.tmpDir("target/temp/wise").verbose(true).keepSource(true).wsdlURL(wsdlURL
+		.toString()).build();
+	WSMethod method = client.getWSMethod("HelloService", "HelloWorldBeanPort", "echo");
+	Map<String, Object> args = new java.util.HashMap<String, Object>();
+	args.put("arg0", "from-wise-client");
+	InvocationResult result = method.invoke(args, null);
+	Map<String, Object> res = result.getMapRequestAndResult(null, null);
+	Map<String, Object> test = (Map<String, Object>) res.get("results");
+	Assert.assertEquals("from-wise-client", test.get("result"));
     }
 
     @After
     public void tearDown() throws Exception {
-        undeployWS(warUrl);
+	undeployWS(warUrl);
     }
 }
