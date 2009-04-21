@@ -69,6 +69,7 @@ public class WSSEIntegrationTest extends WiseTest {
 	args.put("user", "test");
 	InvocationResult result = method.invoke(args, null);
 	Map<String, Object> results = (Map<String, Object>) result.getMapRequestAndResult(null, null).get("results");
+	client.close();
 	Assert.assertEquals("Hello WSSecurity", results.get("result"));
     }
 

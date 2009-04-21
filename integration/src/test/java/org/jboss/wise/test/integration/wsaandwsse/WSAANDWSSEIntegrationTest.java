@@ -69,6 +69,7 @@ public class WSAANDWSSEIntegrationTest extends WiseTest {
 	InvocationResult result = method.invoke(requestMap, null);
 	System.out.println(result.getMapRequestAndResult(null, null));
 	Map<String, Object> results = (Map<String, Object>) result.getMapRequestAndResult(null, null).get("results");
+	client.close();
 	Assert.assertEquals("Hello WSAddressingAndWSSecurity", results.get("result"));
     }
 

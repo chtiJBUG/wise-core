@@ -22,6 +22,10 @@
 
 package org.jboss.wise.core.client.impl.reflection;
 
+import static org.mockito.Mockito.verify;
+
+import static org.mockito.Mockito.spy;
+
 import static org.hamcrest.collection.IsCollectionContaining.hasItem;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -45,6 +49,7 @@ import org.jboss.wise.core.client.impl.reflection.builder.ReflectionBasedWSDynam
 import org.jboss.wise.core.consumer.WSConsumer;
 import org.junit.Before;
 import org.junit.Test;
+import org.milyn.Smooks;
 
 /**
  * This is the Wise core, i.e. the JAX-WS client that handles wsdl retrieval &
@@ -61,7 +66,7 @@ public class WSDynamicClientImplTest {
     @Before
     public void before() {
 	builder = new ReflectionBasedWSDynamicClientBuilder();
-	builder.wsdlURL("foo").tmpDir("/tmp").targetPackage("org.jboss.wise.test.mocks");
+	builder.wsdlURL("foo").tmpDir("target/temp").targetPackage("org.jboss.wise.test.mocks");
     }
 
     @Test
@@ -72,7 +77,7 @@ public class WSDynamicClientImplTest {
 		.importObjectFromWsdl(anyString(), (File) anyObject(), (File) anyObject(), anyString(), (List) anyObject(), (File) anyObject()))
 		.thenReturn(new LinkedList<String>());
 	WSDynamicClientImpl client = new WSDynamicClientImpl(builder, consumerMock);
-	File expectedOutPutDir = new File("/tmp/classes");
+	File expectedOutPutDir = new File("target/temp/classes");
 	assertThat(client.getClassLoader().getURLs().length, is(1));
 	assertThat(client.getClassLoader().getURLs()[0], equalTo(expectedOutPutDir.toURL()));
     }
@@ -105,6 +110,19 @@ public class WSDynamicClientImplTest {
 
 	WSMethod wsMethod = client.getWSMethod("ServiceName1", "Port1", "testMethod");
 	assertNotNull("Should get WsMethod through getWSMethod api", wsMethod);
+
+    }
+
+    @Test
+    public void shouldRemoveTmpDirAndCloseSMooksInvokingClose() {
+	WSConsumer consumerMock = mock(WSConsumer.class);
+	Smooks smook = mock(Smooks.class);
+
+	WSDynamicClientImpl client = new WSDynamicClientImpl(builder, consumerMock, smook);
+	String tmpDir = client.getTmpDir();
+	client.close();
+	verify(smook).close();
+	assertThat(new File(tmpDir).exists(), is(false));
 
     }
 

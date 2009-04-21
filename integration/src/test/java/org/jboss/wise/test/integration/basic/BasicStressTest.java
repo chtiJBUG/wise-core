@@ -84,6 +84,7 @@ public class BasicStressTest extends WiseTest {
 
 	}
 	es.shutdown();
+	client.close();
 
     }
 

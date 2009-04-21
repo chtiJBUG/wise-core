@@ -23,6 +23,7 @@
 package org.jboss.wise.core.client.impl.reflection;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -31,10 +32,13 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
+
 import javax.xml.ws.WebServiceClient;
+
 import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
-import org.apache.commons.codec.digest.DigestUtils;
+
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.jboss.wise.core.client.WSDynamicClient;
 import org.jboss.wise.core.client.WSMethod;
@@ -75,7 +79,9 @@ public class WSDynamicClientImpl implements WSDynamicClient {
 
     private final Map<String, WSService> servicesMap = Collections.synchronizedMap(new HashMap<String, WSService>());
 
-    private final Smooks smooksInstance = new Smooks();
+    private final Smooks smooksInstance;
+
+    private final String tmpDir;
 
     /**
      * @param builder
@@ -90,17 +96,22 @@ public class WSDynamicClientImpl implements WSDynamicClient {
     }
 
     public WSDynamicClientImpl(WSDynamicClientBuilder builder) throws WiseRuntimeException {
-	this(builder, createConsumer(builder));
+	this(builder, createConsumer(builder), new Smooks());
     }
 
-    public WSDynamicClientImpl(WSDynamicClientBuilder builder, WSConsumer consumer) throws WiseRuntimeException {
+    protected WSDynamicClientImpl(WSDynamicClientBuilder builder, WSConsumer consumer) throws WiseRuntimeException {
+	this(builder, consumer, new Smooks());
+    }
+
+    protected WSDynamicClientImpl(WSDynamicClientBuilder builder, WSConsumer consumer, Smooks smooks) throws WiseRuntimeException {
+	this.smooksInstance = smooks;
 	userName = builder.getUserName();
 	password = builder.getPassword();
 	wsExtensionEnablerDelegate = new ReflectionEnablerDelegate(builder.getSecurityConfigFileURL(), builder
 		.getSecurityConfigName());
-
-	File outputDir = new File(builder.getTmpDir() + "/classes/");
-	File sourceDir = new File(builder.getTmpDir() + "/src/");
+	tmpDir = builder.getTmpDir();
+	File outputDir = new File(tmpDir + "/classes/");
+	File sourceDir = new File(tmpDir + "/src/");
 
 	try {
 	    classNames.addAll(consumer.importObjectFromWsdl(builder.getWsdlURL(), outputDir, sourceDir, builder
@@ -207,6 +218,22 @@ public class WSDynamicClientImpl implements WSDynamicClient {
      */
     public Smooks getSmooksInstance() {
 	return smooksInstance;
+    }
+
+    public synchronized void close() {
+	smooksInstance.close();
+	try {
+	    FileUtils.forceDelete(new File(tmpDir));
+	} catch (IOException e) {
+	    Logger.getLogger(WSDynamicClientImpl.class).info("unable to remove tmpDir:" + tmpDir);
+	}
+    }
+
+    /**
+     * @return tmpDir
+     */
+    public synchronized String getTmpDir() {
+	return tmpDir;
     }
 
 }

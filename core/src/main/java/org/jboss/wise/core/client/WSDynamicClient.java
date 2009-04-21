@@ -29,8 +29,9 @@ import org.milyn.Smooks;
 import net.jcip.annotations.ThreadSafe;
 
 /**
- * This is the Wise core class responsible to invoke the JAX-WS tools that handles wsdl retrieval & parsing. It is used to build
- * the list of WSService representing the serices availabe in parsed wsdl.
+ * This is the Wise core class responsible to invoke the JAX-WS tools that
+ * handles wsdl retrieval & parsing. It is used to build the list of WSService
+ * representing the serices availabe in parsed wsdl.
  * 
  * @author Stefano Maestri, stefano.maestri@javalinux.it
  */
@@ -41,7 +42,9 @@ public interface WSDynamicClient {
      * Create the services' map and gives it back.
      * 
      * @return The Map of WSEndpoint with symbolic names as keys
-     * @throws IllegalStateException thrown if method can't process or load generated classes to find a service
+     * @throws IllegalStateException
+     *             thrown if method can't process or load generated classes to
+     *             find a service
      */
     public Map<String, WSService> processServices() throws IllegalStateException;
 
@@ -51,20 +54,22 @@ public interface WSDynamicClient {
     public URLClassLoader getClassLoader();
 
     /**
-     * It return directly the method to invoke the specified action on specified port of specified service. It is the base method
-     * for "one line of code invocation" (see "Wise-core Programmers guide" for more information)
+     * It return directly the method to invoke the specified action on specified
+     * port of specified service. It is the base method for
+     * "one line of code invocation" (see "Wise-core Programmers guide" for more
+     * information)
      * 
      * @param serviceName
      * @param portName
      * @param operationName
      * @return the WSMethod class to use for effective service invocation
      */
-    public WSMethod getWSMethod( String serviceName,
-                                 String portName,
-                                 String operationName );
+    public WSMethod getWSMethod(String serviceName, String portName, String operationName);
 
     public EnablerDelegate getWSExtensionEnablerDelegate();
 
     public Smooks getSmooksInstance();
+
+    public void close();
 
 }

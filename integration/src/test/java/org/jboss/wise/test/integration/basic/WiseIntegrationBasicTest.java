@@ -59,6 +59,7 @@ public class WiseIntegrationBasicTest extends WiseTest {
 	InvocationResult result = method.invoke(args, null);
 	Map<String, Object> res = result.getMapRequestAndResult(null, null);
 	Map<String, Object> test = (Map<String, Object>) res.get("results");
+	client.close();
 	Assert.assertEquals("from-wise-client", test.get("result"));
     }
 
