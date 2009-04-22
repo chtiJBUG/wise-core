@@ -30,8 +30,9 @@ import org.jboss.wise.core.client.WSDynamicClient;
 import org.jboss.wise.core.exception.WiseRuntimeException;
 
 /**
- * {@link WSDynamicClientBuilder} is an interface to define builder for various kind of implementation of WiseDynamicClient
- * Indirect build permit to easy inject different implementation of {@link WSDynamicClient}.
+ * {@link WSDynamicClientBuilder} is an interface to define builder for various
+ * kind of implementation of WiseDynamicClient Indirect build permit to easy
+ * inject different implementation of {@link WSDynamicClient}.
  * 
  * @author stefano.maestri@javalinux.it
  */
@@ -40,27 +41,27 @@ public interface WSDynamicClientBuilder {
 
     public WSDynamicClient build() throws IllegalStateException, ConnectException, WiseRuntimeException;
 
-    public WSDynamicClientBuilder wsdlURL( String wsdlURL );
+    public WSDynamicClientBuilder wsdlURL(String wsdlURL);
 
-    public WSDynamicClientBuilder userName( String userName );
+    public WSDynamicClientBuilder userName(String userName);
 
-    public WSDynamicClientBuilder password( String password );
+    public WSDynamicClientBuilder password(String password);
 
-    public WSDynamicClientBuilder tmpDir( String tmpDir );
+    public WSDynamicClientBuilder tmpDir(String tmpDir);
 
-    public WSDynamicClientBuilder targetPackage( String targetPackage );
+    public WSDynamicClientBuilder targetPackage(String targetPackage);
 
-    public WSDynamicClientBuilder bindingFiles( List<File> bindings );
+    public WSDynamicClientBuilder bindingFiles(List<File> bindings);
 
-    public WSDynamicClientBuilder catalogFile( File catelog );
+    public WSDynamicClientBuilder catalogFile(File catelog);
 
-    public WSDynamicClientBuilder securityConfigUrl( String url );
+    public WSDynamicClientBuilder securityConfigUrl(String url);
 
-    public WSDynamicClientBuilder securityConfigName( String name );
+    public WSDynamicClientBuilder securityConfigName(String name);
 
-    public WSDynamicClientBuilder keepSource( boolean bool );
+    public WSDynamicClientBuilder keepSource(boolean bool);
 
-    public WSDynamicClientBuilder verbose( boolean bool );
+    public WSDynamicClientBuilder verbose(boolean bool);
 
     public String getWsdlURL();
 
@@ -83,5 +84,9 @@ public interface WSDynamicClientBuilder {
     public boolean isKeepSource();
 
     public boolean isVerbose();
+
+    public String getNormalizedWsdlUrl();
+
+    public String getClientSpecificTmpDir();
 
 }

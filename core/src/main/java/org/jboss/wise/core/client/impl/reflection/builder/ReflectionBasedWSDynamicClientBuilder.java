@@ -84,6 +84,12 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
     @GuardedBy("this")
     private boolean verbose;
 
+    @GuardedBy("this")
+    private String normalizedWsdlUrl;
+
+    @GuardedBy("this")
+    private String clientSpecificTmpDir;
+
     public ReflectionBasedWSDynamicClientBuilder() {
 	super();
     }
@@ -94,24 +100,27 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#build()
      */
     public synchronized WSDynamicClient build() throws IllegalStateException, WiseRuntimeException {
-	if (this.getTmpDir() != null) {
-	    String clientSpecificTmpDir = new StringBuffer(this.getTmpDir()).append("/Wise").append(IDGenerator.nextVal())
-		    .toString();
+	clientSpecificTmpDir = tmpDir;
+	if (clientSpecificTmpDir != null) {
+	    String id = IDGenerator.nextVal();
+	    clientSpecificTmpDir = tmpDir + "/Wise" + id;
 	    File tmpDirFile = new File(clientSpecificTmpDir);
 	    try {
 		FileUtils.forceMkdir(tmpDirFile);
 	    } catch (IOException e) {
 		throw new IllegalStateException("unable to create tmp dir:" + clientSpecificTmpDir);
 	    }
-	    setTmpDir(clientSpecificTmpDir);
+
 	}
 
 	if (this.getWsdlURL() != null && this.getWsdlURL().startsWith("http://")) {
-	    this.setWsdlURL(this.transferWSDL(getUserNameAndPasswordForBasicAuthentication()));
+	    this.setNormalizedWsdlUrl(this.transferWSDL(getUserNameAndPasswordForBasicAuthentication(), clientSpecificTmpDir));
+	} else {
+	    this.setNormalizedWsdlUrl(this.getWsdlURL());
 	}
 	logger.debug("Get usable WSDL :" + this.getWsdlURL());
 
-	if (this.getWsdlURL() == null || this.getWsdlURL().trim().length() == 0) {
+	if (this.getNormalizedWsdlUrl() == null || this.getNormalizedWsdlUrl().trim().length() == 0) {
 	    throw new IllegalStateException("wsdlURL cannot be null");
 	}
 
@@ -289,9 +298,9 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * 
      * @throws WiseConnectionException If the wsdl cannot be retrieved
      */
-    private String transferWSDL(String usernameAndPassword) throws WiseRuntimeException {
+    private synchronized String transferWSDL(String usernameAndPassword, String clientSpecificTmp) throws WiseRuntimeException {
 	try {
-	    return this.transferWSDL(usernameAndPassword, IOUtils.newInstance());
+	    return this.transferWSDL(usernameAndPassword, IOUtils.newInstance(), clientSpecificTmp);
 	} catch (IOException e) {
 	    throw new WiseRuntimeException(e);
 	}
@@ -303,9 +312,9 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * 
      * @throws WiseConnectionException If the wsdl cannot be retrieved
      */
-    String transferWSDL(String usernameAndPassword, IOUtils ioUtils) throws IOException, WiseRuntimeException {
+    String transferWSDL(String usernameAndPassword, IOUtils ioUtils, String clientSpecificTmp) throws IOException, WiseRuntimeException {
 	HttpURLConnection conn = openAndInitConnection(usernameAndPassword, new URL(this.getWsdlURL()));
-	File file = new File(this.getTmpDir(), new StringBuffer("Wise").append(IDGenerator.nextVal()).append(".xml").toString());
+	File file = new File(clientSpecificTmp, new StringBuffer("WiseWsdl").append(".xml").toString());
 	ioUtils.copyStreamAndClose(new FileOutputStream(file), getWsdlInputStream(conn));
 	return file.getPath();
 
@@ -457,11 +466,25 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
     }
 
     /**
-     * @param tmpDir
-     *            Sets tmpDir to the specified value.
+     * @return normalizedWsdlUrl
      */
-    private synchronized void setTmpDir(String tmpDir) {
-	this.tmpDir = tmpDir;
+    public synchronized String getNormalizedWsdlUrl() {
+	return normalizedWsdlUrl;
+    }
+
+    /**
+     * @param normalizedWsdlUrl
+     *            Sets normalizedWsdlUrl to the specified value.
+     */
+    private synchronized void setNormalizedWsdlUrl(String normalizedWsdlUrl) {
+	this.normalizedWsdlUrl = normalizedWsdlUrl;
+    }
+
+    /**
+     * @return clientSpecificTmpDir
+     */
+    public synchronized String getClientSpecificTmpDir() {
+	return clientSpecificTmpDir;
     }
 
 }

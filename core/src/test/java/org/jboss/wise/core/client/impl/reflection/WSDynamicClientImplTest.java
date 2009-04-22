@@ -65,8 +65,10 @@ public class WSDynamicClientImplTest {
 
     @Before
     public void before() {
-	builder = new ReflectionBasedWSDynamicClientBuilder();
-	builder.wsdlURL("foo").tmpDir("target/temp").targetPackage("org.jboss.wise.test.mocks");
+	WSDynamicClientBuilder realBuilder = new ReflectionBasedWSDynamicClientBuilder();
+	realBuilder.wsdlURL("foo").tmpDir("target/temp").targetPackage("org.jboss.wise.test.mocks");
+	builder = spy(realBuilder);
+	when(builder.getClientSpecificTmpDir()).thenReturn("target/temp/foo");
     }
 
     @Test
@@ -77,7 +79,7 @@ public class WSDynamicClientImplTest {
 		.importObjectFromWsdl(anyString(), (File) anyObject(), (File) anyObject(), anyString(), (List) anyObject(), (File) anyObject()))
 		.thenReturn(new LinkedList<String>());
 	WSDynamicClientImpl client = new WSDynamicClientImpl(builder, consumerMock);
-	File expectedOutPutDir = new File("target/temp/classes");
+	File expectedOutPutDir = new File("target/temp/foo/classes");
 	assertThat(client.getClassLoader().getURLs().length, is(1));
 	assertThat(client.getClassLoader().getURLs()[0], equalTo(expectedOutPutDir.toURL()));
     }

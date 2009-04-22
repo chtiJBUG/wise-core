@@ -109,12 +109,12 @@ public class WSDynamicClientImpl implements WSDynamicClient {
 	password = builder.getPassword();
 	wsExtensionEnablerDelegate = new ReflectionEnablerDelegate(builder.getSecurityConfigFileURL(), builder
 		.getSecurityConfigName());
-	tmpDir = builder.getTmpDir();
+	this.tmpDir = builder.getClientSpecificTmpDir();
 	File outputDir = new File(tmpDir + "/classes/");
 	File sourceDir = new File(tmpDir + "/src/");
 
 	try {
-	    classNames.addAll(consumer.importObjectFromWsdl(builder.getWsdlURL(), outputDir, sourceDir, builder
+	    classNames.addAll(consumer.importObjectFromWsdl(builder.getNormalizedWsdlUrl(), outputDir, sourceDir, builder
 		    .getTargetPackage(), builder.getBindingFiles(), builder.getCatelogFile()));
 	} catch (MalformedURLException e) {
 	    throw new WiseRuntimeException("Problem consumig wsdl:" + builder.getWsdlURL(), e);
