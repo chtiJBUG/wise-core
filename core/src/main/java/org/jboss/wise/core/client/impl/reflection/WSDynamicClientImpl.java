@@ -40,6 +40,7 @@ import net.jcip.annotations.ThreadSafe;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
+import org.jboss.wise.core.client.SpiLoader;
 import org.jboss.wise.core.client.WSDynamicClient;
 import org.jboss.wise.core.client.WSMethod;
 import org.jboss.wise.core.client.WSService;
@@ -88,10 +89,8 @@ public class WSDynamicClientImpl implements WSDynamicClient {
      * @return consumer
      */
     private static WSConsumer createConsumer(WSDynamicClientBuilder builder) {
-	// TODO: add SPI
-	WSConsumer consumer = new WSImportImpl();
-	consumer.setKeepSource(builder.isKeepSource());
-	consumer.setVerbose(builder.isVerbose());
+	WSConsumer consumer = (WSConsumer) SpiLoader
+		.loadService("org.jboss.wise.consumer.WSConsumer", "org.jboss.wise.core.consumer.impl.jbosswsnative.WSImportImpl");
 	return consumer;
     }
 

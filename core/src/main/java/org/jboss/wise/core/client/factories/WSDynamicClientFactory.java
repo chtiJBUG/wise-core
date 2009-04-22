@@ -28,10 +28,12 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.apache.log4j.helpers.NullEnumeration;
 import org.apache.log4j.xml.DOMConfigurator;
+import org.jboss.wise.core.client.SpiLoader;
 import org.jboss.wise.core.client.builder.WSDynamicClientBuilder;
 import org.jboss.wise.core.client.impl.reflection.builder.ReflectionBasedWSDynamicClientBuilder;
 import org.jboss.wise.core.client.jaxrs.RSDynamicClient;
 import org.jboss.wise.core.client.jaxrs.impl.RSDynamicClientImpl;
+import org.jboss.wise.core.consumer.WSConsumer;
 import org.jboss.wise.core.exception.MCKernelUnavailableException;
 
 /**
@@ -41,37 +43,39 @@ import org.jboss.wise.core.exception.MCKernelUnavailableException;
 public abstract class WSDynamicClientFactory {
     private static final String WISE_LOG_CONFIG = "wise-log4j.xml";
 
-    public static void initLog4j( String configFile ) throws MCKernelUnavailableException {
-        synchronized (WSDynamicClientFactory.class) {
-            // If the logger has not been configured
-            if (Logger.getRootLogger().getAllAppenders() instanceof NullEnumeration) {
-                // Use default log configuraiton to startup jbossmc
-                ClassLoader cl = Thread.currentThread().getContextClassLoader();
-                URL url = cl.getResource("META-INF/" + WISE_LOG_CONFIG);
-                if (url != null) {
-                    DOMConfigurator.configure(url);
-                }
-            }
+    public static void initLog4j(String configFile) throws MCKernelUnavailableException {
+	synchronized (WSDynamicClientFactory.class) {
+	    // If the logger has not been configured
+	    if (Logger.getRootLogger().getAllAppenders() instanceof NullEnumeration) {
+		// Use default log configuraiton to startup jbossmc
+		ClassLoader cl = Thread.currentThread().getContextClassLoader();
+		URL url = cl.getResource("META-INF/" + WISE_LOG_CONFIG);
+		if (url != null) {
+		    DOMConfigurator.configure(url);
+		}
+	    }
 
-            if (configFile != null) {
-                if (configFile.endsWith(".xml")) {
-                    DOMConfigurator.configure(configFile);
-                } else {
-                    PropertyConfigurator.configure(configFile);
-                }
-            }
+	    if (configFile != null) {
+		if (configFile.endsWith(".xml")) {
+		    DOMConfigurator.configure(configFile);
+		} else {
+		    PropertyConfigurator.configure(configFile);
+		}
+	    }
 
-        }
+	}
 
     }
 
     public static WSDynamicClientBuilder getJAXWSClientBuilder() {
-        // TODO: spi
-        return new ReflectionBasedWSDynamicClientBuilder();
+	return (WSDynamicClientBuilder) SpiLoader
+		.loadService("org.jboss.wise.client.builder.WSDynamicClientBuilder", "org.jboss.wise.core.client.impl.reflection.builder.ReflectionBasedWSDynamicClientBuilder");
+
     }
 
     /**
-     * Return an instance of RSDynamicClient taken from cache if possible, generate and initialise if not.
+     * Return an instance of RSDynamicClient taken from cache if possible,
+     * generate and initialise if not.
      * 
      * @param endpointURL
      * @param produceMediaTypes
@@ -79,32 +83,27 @@ public abstract class WSDynamicClientFactory {
      * @param httpMethod
      * @param userName
      * @param password
-     * @return an instance of {@link RSDynamicClient} already initialized, ready to be called
+     * @return an instance of {@link RSDynamicClient} already initialized, ready
+     *         to be called
      */
-    public static RSDynamicClient getJAXRSClient( String endpointURL,
-                                                  RSDynamicClient.HttpMethod httpMethod,
-                                                  String produceMediaTypes,
-                                                  String consumeMediaTypes,
-                                                  String userName,
-                                                  String password ) {
-        RSDynamicClient client = new RSDynamicClientImpl(endpointURL, produceMediaTypes, consumeMediaTypes, httpMethod);
-        return client;
+    public static RSDynamicClient getJAXRSClient(String endpointURL, RSDynamicClient.HttpMethod httpMethod, String produceMediaTypes, String consumeMediaTypes, String userName, String password) {
+	RSDynamicClient client = new RSDynamicClientImpl(endpointURL, produceMediaTypes, consumeMediaTypes, httpMethod);
+	return client;
     }
 
     /**
-     * Return an instance of RSDynamicClient taken from cache if possible, generate and initialise if not.
+     * Return an instance of RSDynamicClient taken from cache if possible,
+     * generate and initialise if not.
      * 
      * @param endpointURL
      * @param produceMediaTypes
      * @param consumeMediaTypes
      * @param httpMethod
-     * @return an instance of {@link RSDynamicClient} already initialized, ready to be called
+     * @return an instance of {@link RSDynamicClient} already initialized, ready
+     *         to be called
      */
-    public static RSDynamicClient getJAXRSClient( String endpointURL,
-                                                  RSDynamicClient.HttpMethod httpMethod,
-                                                  String produceMediaTypes,
-                                                  String consumeMediaTypes ) {
-        return getJAXRSClient(endpointURL, httpMethod, produceMediaTypes, consumeMediaTypes, null, null);
+    public static RSDynamicClient getJAXRSClient(String endpointURL, RSDynamicClient.HttpMethod httpMethod, String produceMediaTypes, String consumeMediaTypes) {
+	return getJAXRSClient(endpointURL, httpMethod, produceMediaTypes, consumeMediaTypes, null, null);
 
     }
 
