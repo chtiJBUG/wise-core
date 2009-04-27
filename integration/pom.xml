@@ -19,7 +19,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.jboss</groupId>
 	<artifactId>wise-integration</artifactId>
-	<version>1.0-SNAPSHOT</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<name>Wise Integration Test</name>
 	<url>http://www.jboss.org/wise</url>
 
@@ -28,7 +28,7 @@
 	<parent>
 		<groupId>org.jboss</groupId>
 		<artifactId>wise-parent</artifactId>
-		<version>1.0-SNAPSHOT</version>
+		<version>1.0.1-SNAPSHOT</version>
 	</parent>
 
 	<dependencies>
