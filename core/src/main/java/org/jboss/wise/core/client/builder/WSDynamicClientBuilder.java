@@ -75,7 +75,7 @@ public interface WSDynamicClientBuilder {
 
     public List<File> getBindingFiles();
 
-    public File getCatelogFile();
+    public File getCatalogFile();
 
     public String getSecurityConfigFileURL();
 

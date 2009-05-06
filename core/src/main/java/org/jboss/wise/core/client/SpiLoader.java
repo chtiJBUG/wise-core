@@ -61,10 +61,10 @@ public class SpiLoader {
      * @return the instance
      */
     public static Object loadService(String propertyName, String defaultFactory) {
-	Object factory = loadFromSystemProperty(propertyName, defaultFactory);
+	Object factory = loadFromSystemProperty(propertyName);
 
 	if (factory == null) {
-	    factory = loadFromServices(propertyName, null);
+	    factory = loadFromServices(propertyName);
 	}
 	if (factory == null) {
 	    factory = loadDefault(defaultFactory);
@@ -78,10 +78,9 @@ public class SpiLoader {
      * available, to determine the classname.
      * 
      * @param propertyName
-     * @param defaultFactory
      * @return the instance
      */
-    public static Object loadFromServices(String propertyName, String defaultFactory) {
+    public static Object loadFromServices(String propertyName) {
 	Object factory = null;
 	String factoryName = null;
 	ClassLoader loader = Thread.currentThread().getContextClassLoader();
@@ -111,10 +110,9 @@ public class SpiLoader {
      * Use the system property
      * 
      * @param propertyName
-     * @param defaultFactory
      * @return the instance
      */
-    public static Object loadFromSystemProperty(String propertyName, String defaultFactory) {
+    public static Object loadFromSystemProperty(String propertyName) {
 	Object factory = null;
 	ClassLoader loader = Thread.currentThread().getContextClassLoader();
 
@@ -154,6 +152,7 @@ public class SpiLoader {
     }
 
     private static class PropertyAccessAction implements PrivilegedAction {
+
 	private final String name;
 
 	PropertyAccessAction(String name) {
@@ -166,6 +165,7 @@ public class SpiLoader {
     }
 
     private static class PropertyFileAccessAction implements PrivilegedAction {
+
 	private final String filename;
 
 	PropertyFileAccessAction(String filename) {

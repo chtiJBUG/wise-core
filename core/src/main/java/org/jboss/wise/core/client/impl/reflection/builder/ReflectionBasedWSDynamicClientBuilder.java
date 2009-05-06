@@ -49,6 +49,7 @@ import sun.misc.BASE64Encoder;
  */
 @ThreadSafe
 public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBuilder {
+
     private static Logger logger = Logger.getLogger(ReflectionBasedWSDynamicClientBuilder.class);
 
     @GuardedBy("this")
@@ -70,7 +71,7 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
     private List<File> bindingFiles = null;
 
     @GuardedBy("this")
-    private File catelog = null;
+    private File catalog = null;
 
     @GuardedBy("this")
     private String securityConfigURL = "WEB-INF/wsaandwsse/jboss-wsse-client.xml";
@@ -207,8 +208,8 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
 	return this.bindingFiles;
     }
 
-    public synchronized final File getCatelogFile() {
-	return this.catelog;
+    public synchronized final File getCatalogFile() {
+	return this.catalog;
     }
 
     /**
@@ -251,8 +252,8 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
 	this.bindingFiles = bindings;
     }
 
-    public synchronized final void setCatelogFile(File catelog) {
-	this.catelog = catelog;
+    public synchronized final void setCatelogFile(File catalog) {
+	this.catalog = catalog;
     }
 
     /**
@@ -280,8 +281,8 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
 	return this;
     }
 
-    public synchronized WSDynamicClientBuilder catalogFile(File catelogFile) {
-	catelog = catelogFile;
+    public synchronized WSDynamicClientBuilder catalogFile(File catalogFile) {
+	catalog = catalogFile;
 	return this;
     }
 
