@@ -44,6 +44,7 @@ import org.milyn.container.ExecutionContext;
 import org.milyn.container.plugin.PayloadProcessor;
 import org.milyn.event.report.HtmlReportGenerator;
 import org.milyn.payload.JavaResult;
+import org.milyn.payload.JavaSource;
 import org.milyn.profile.DefaultProfileSet;
 import org.milyn.profile.ProfileStore;
 import org.milyn.profile.UnknownProfileMemberException;
@@ -130,12 +131,13 @@ public class SmooksMapper implements WiseMapper {
      */
     public Map<String, Object> applyMapping(Object originalObjects) throws MappingException {
 	ExecutionContext executionContext = initExecutionContext(smooksReport);
-	Source source;
+	Source source = new JavaSource(originalObjects);
 	JavaResult result = new JavaResult();
-	// Configure the execution context to generate a report...
-	org.milyn.container.plugin.PayloadProcessor payloadProcessor = new PayloadProcessor(smooks,
-		org.milyn.container.plugin.ResultType.JAVA);
-	Map<String, Object> returnMap = (Map<String, Object>) payloadProcessor.process(originalObjects, executionContext);
+
+	smooks.filter(source, result, executionContext);
+
+	Map<String, Object> returnMap = result.getResultMap();
+
 	// workaround when we should use smooks to extract a single value
 	// Have a look to SmooksMapperTest.shouldMapToSingleInput() for an
 	// example of use
