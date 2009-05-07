@@ -31,6 +31,7 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -42,12 +43,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import net.jcip.annotations.ThreadSafe;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.jboss.wise.core.client.WSMethod;
 import org.jboss.wise.core.client.WSService;
 import org.jboss.wise.core.client.builder.WSDynamicClientBuilder;
 import org.jboss.wise.core.client.impl.reflection.builder.ReflectionBasedWSDynamicClientBuilder;
 import org.jboss.wise.core.consumer.WSConsumer;
+import org.jboss.wise.core.exception.ResourceNotAvailableException;
+import org.jboss.wise.core.exception.WiseRuntimeException;
 import org.junit.Before;
 import org.junit.Test;
 import org.milyn.Smooks;
@@ -113,7 +115,24 @@ public class WSDynamicClientImplTest {
 
 	WSMethod wsMethod = client.getWSMethod("ServiceName1", "Port1", "testMethod");
 	assertNotNull("Should get WsMethod through getWSMethod api", wsMethod);
-
+	try {
+	    client.getWSMethod("ServiceName1", "Port1", "testWrongMethod");
+	    fail("Should have failed because of method not found!");
+	} catch (ResourceNotAvailableException e) {
+	    //OK
+	}
+	try {
+	    client.getWSMethod("ServiceName1", "Port2", "testMethod");
+	    fail("Should have failed because of port not found!");
+	} catch (ResourceNotAvailableException e) {
+	    //OK
+	}
+	try {
+	    client.getWSMethod("ServiceName5", "Port1", "testWrongMethod");
+	    fail("Should have failed because of service not found!");
+	} catch (ResourceNotAvailableException e) {
+	    //OK
+	}
     }
 
     @Test

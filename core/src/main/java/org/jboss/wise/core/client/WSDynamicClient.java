@@ -24,6 +24,8 @@ package org.jboss.wise.core.client;
 
 import java.net.URLClassLoader;
 import java.util.Map;
+
+import org.jboss.wise.core.exception.ResourceNotAvailableException;
 import org.jboss.wise.core.wsextensions.EnablerDelegate;
 import org.milyn.Smooks;
 import net.jcip.annotations.ThreadSafe;
@@ -62,9 +64,10 @@ public interface WSDynamicClient {
      * @param serviceName
      * @param portName
      * @param operationName
+     * @throws ResourceNotAvailableException when the specified service, port or operation can not be found
      * @return the WSMethod class to use for effective service invocation
      */
-    public WSMethod getWSMethod(String serviceName, String portName, String operationName);
+    public WSMethod getWSMethod(String serviceName, String portName, String operationName) throws ResourceNotAvailableException;
 
     public EnablerDelegate getWSExtensionEnablerDelegate();
 

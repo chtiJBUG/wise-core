@@ -42,11 +42,13 @@ import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.jboss.wise.core.client.SpiLoader;
 import org.jboss.wise.core.client.WSDynamicClient;
+import org.jboss.wise.core.client.WSEndpoint;
 import org.jboss.wise.core.client.WSMethod;
 import org.jboss.wise.core.client.WSService;
 import org.jboss.wise.core.client.builder.WSDynamicClientBuilder;
 import org.jboss.wise.core.consumer.WSConsumer;
 import org.jboss.wise.core.consumer.impl.jbosswsnative.WSImportImpl;
+import org.jboss.wise.core.exception.ResourceNotAvailableException;
 import org.jboss.wise.core.exception.WiseRuntimeException;
 import org.jboss.wise.core.utils.JavaUtils;
 import org.jboss.wise.core.wsextensions.EnablerDelegate;
@@ -185,14 +187,22 @@ public class WSDynamicClientImpl implements WSDynamicClient {
     /**
      * {@inheritDoc}
      * 
-     * @see org.jboss.wise.core.client.WSDynamicClient#processServices()
+     * @see org.jboss.wise.core.client.WSDynamicClient#getWSMethod()
      */
-    public WSMethod getWSMethod(String serviceName, String portName, String operationName) {
-	// if (servicesMap.size() == 0) {
-	// processServices();
-	// }
+    public WSMethod getWSMethod(String serviceName, String portName, String operationName) throws ResourceNotAvailableException {
 	WSService wsService = servicesMap.get(serviceName);
-	return wsService.processEndpoints().get(portName).getWSMethods().get(operationName);
+	if (wsService == null) {
+	    throw new ResourceNotAvailableException("Cannot find requested service: " + serviceName);
+	}
+	WSEndpoint wsEndpoint = wsService.processEndpoints().get(portName);
+	if (wsEndpoint == null) {
+	    throw new ResourceNotAvailableException("Cannot find requested endpoint (port): " + portName);
+	}
+	WSMethod wsMethod = wsEndpoint.getWSMethods().get(operationName);
+	if (wsMethod == null) {
+	    throw new ResourceNotAvailableException("Cannot find requested method (operation): " + operationName);
+	}
+	return wsMethod;
     }
 
     public synchronized final URLClassLoader getClassLoader() {
