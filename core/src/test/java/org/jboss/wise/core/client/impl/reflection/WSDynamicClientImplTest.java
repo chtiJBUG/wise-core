@@ -36,6 +36,7 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import java.io.File;
+import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -76,7 +77,7 @@ public class WSDynamicClientImplTest {
 	WSConsumer consumerMock = mock(WSConsumer.class);
 
 	when(consumerMock
-		.importObjectFromWsdl(anyString(), (File) anyObject(), (File) anyObject(), anyString(), (List) anyObject(), (File) anyObject()))
+		.importObjectFromWsdl(anyString(), (File) anyObject(), (File) anyObject(), anyString(), (List) anyObject(), (PrintStream) anyObject(), (File) anyObject()))
 		.thenReturn(new LinkedList<String>());
 	WSDynamicClientImpl client = new WSDynamicClientImpl(builder, consumerMock);
 	File expectedOutPutDir = new File("target/temp/foo/classes");
@@ -90,7 +91,7 @@ public class WSDynamicClientImplTest {
 	String[] classes = { "org.jboss.wise.test.mocks.Service1", "org.jboss.wise.test.mocks.Service2" };
 
 	when(consumerMock
-		.importObjectFromWsdl(anyString(), (File) anyObject(), (File) anyObject(), anyString(), (List) anyObject(), (File) anyObject()))
+		.importObjectFromWsdl(anyString(), (File) anyObject(), (File) anyObject(), anyString(), (List) anyObject(), (PrintStream) anyObject(), (File) anyObject()))
 		.thenReturn(Arrays.asList(classes));
 	WSDynamicClientImpl client = new WSDynamicClientImpl(builder, consumerMock);
 
@@ -106,7 +107,7 @@ public class WSDynamicClientImplTest {
 	String[] classes = { "org.jboss.wise.test.mocks.Service1", "org.jboss.wise.test.mocks.Service2" };
 
 	when(consumerMock
-		.importObjectFromWsdl(anyString(), (File) anyObject(), (File) anyObject(), anyString(), (List) anyObject(), (File) anyObject()))
+		.importObjectFromWsdl(anyString(), (File) anyObject(), (File) anyObject(), anyString(), (List) anyObject(), (PrintStream) anyObject(), (File) anyObject()))
 		.thenReturn(Arrays.asList(classes));
 	WSDynamicClientImpl client = new WSDynamicClientImpl(builder, consumerMock);
 

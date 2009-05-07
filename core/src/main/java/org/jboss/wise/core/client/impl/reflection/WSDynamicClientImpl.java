@@ -114,9 +114,9 @@ public class WSDynamicClientImpl implements WSDynamicClient {
 
 	try {
 	    classNames.addAll(consumer.importObjectFromWsdl(builder.getNormalizedWsdlUrl(), outputDir, sourceDir, builder
-		    .getTargetPackage(), builder.getBindingFiles(), builder.getCatalogFile()));
+		    .getTargetPackage(), builder.getBindingFiles(), builder.getMessageStream(), builder.getCatalogFile()));
 	} catch (MalformedURLException e) {
-	    throw new WiseRuntimeException("Problem consumig wsdl:" + builder.getWsdlURL(), e);
+	    throw new WiseRuntimeException("Problem consuming wsdl:" + builder.getWsdlURL(), e);
 	}
 	this.initClassLoader(outputDir);
 

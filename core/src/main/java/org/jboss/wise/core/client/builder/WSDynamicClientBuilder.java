@@ -23,9 +23,12 @@
 package org.jboss.wise.core.client.builder;
 
 import java.io.File;
+import java.io.PrintStream;
 import java.net.ConnectException;
 import java.util.List;
+
 import net.jcip.annotations.ThreadSafe;
+
 import org.jboss.wise.core.client.WSDynamicClient;
 import org.jboss.wise.core.exception.WiseRuntimeException;
 
@@ -62,6 +65,8 @@ public interface WSDynamicClientBuilder {
     public WSDynamicClientBuilder keepSource(boolean bool);
 
     public WSDynamicClientBuilder verbose(boolean bool);
+    
+    public WSDynamicClientBuilder messageStream(PrintStream messageStream);
 
     public String getWsdlURL();
 
@@ -84,6 +89,8 @@ public interface WSDynamicClientBuilder {
     public boolean isKeepSource();
 
     public boolean isVerbose();
+    
+    public PrintStream getMessageStream();
 
     public String getNormalizedWsdlUrl();
 

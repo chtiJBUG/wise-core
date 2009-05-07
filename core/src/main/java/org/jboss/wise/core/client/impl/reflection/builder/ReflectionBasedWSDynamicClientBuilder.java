@@ -26,12 +26,15 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintStream;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
+
 import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
+
 import org.apache.commons.httpclient.HttpConnection;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
@@ -90,6 +93,9 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
 
     @GuardedBy("this")
     private String clientSpecificTmpDir;
+    
+    @GuardedBy("this")
+    private PrintStream messageStream = System.out;
 
     public ReflectionBasedWSDynamicClientBuilder() {
 	super();
@@ -486,6 +492,15 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      */
     public synchronized String getClientSpecificTmpDir() {
 	return clientSpecificTmpDir;
+    }
+
+    public PrintStream getMessageStream() {
+	return messageStream;
+    }
+
+    public WSDynamicClientBuilder messageStream(PrintStream messageStream) {
+	this.messageStream = messageStream;
+	return this;
     }
 
 }

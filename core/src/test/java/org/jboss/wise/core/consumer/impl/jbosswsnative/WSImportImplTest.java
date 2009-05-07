@@ -46,7 +46,7 @@ public class WSImportImplTest {
         File outputDir = new File(url.getFile());
         URL wsdURL = Thread.currentThread().getContextClassLoader().getResource("./hello_world.wsdl");
         WSImportImpl importer = new WSImportImpl();
-        importer.importObjectFromWsdl(wsdURL.toExternalForm(), outputDir, outputDir, null, null, null);
+        importer.importObjectFromWsdl(wsdURL.toExternalForm(), outputDir, outputDir, null, null, System.out, null);
     }
 
     @Test
@@ -56,7 +56,7 @@ public class WSImportImplTest {
         URL wsdURL = Thread.currentThread().getContextClassLoader().getResource("./hello_world.wsdl");
         WSImportImpl.ProviderChanger providerChanger = mock(WSImportImpl.ProviderChanger.class);
         WSImportImpl importer = new WSImportImpl(providerChanger);
-        importer.importObjectFromWsdl(wsdURL.toExternalForm(), outputDir, outputDir, null, null, null);
+        importer.importObjectFromWsdl(wsdURL.toExternalForm(), outputDir, outputDir, null, null, System.out, null);
         verify(providerChanger).changeProvider();
         verify(providerChanger).restoreDefaultProvider();
 
@@ -69,7 +69,7 @@ public class WSImportImplTest {
         URL wsdURL = Thread.currentThread().getContextClassLoader().getResource("./hello_world.wsdl");
         WSImportImpl importer = new WSImportImpl();
         String defaultProvider = System.getProperty("javax.xml.ws.spi.Provider");
-        importer.importObjectFromWsdl(wsdURL.toExternalForm(), outputDir, outputDir, null, null, null);
+        importer.importObjectFromWsdl(wsdURL.toExternalForm(), outputDir, outputDir, null, null, System.out, null);
         assertThat(System.getProperty("javax.xml.ws.spi.Provider"), equalTo(defaultProvider));
 
     }
@@ -84,7 +84,7 @@ public class WSImportImplTest {
         List<File> bindings = new java.util.ArrayList<File>();
         bindings.add(bindFile);
         WSImportImpl importer = new WSImportImpl();
-        importer.importObjectFromWsdl(wsdURL.toExternalForm(), outputDir, outputDir, null, bindings, null);
+        importer.importObjectFromWsdl(wsdURL.toExternalForm(), outputDir, outputDir, null, bindings, System.out, null);
         File generatedClass = new File(url.getFile(), "org/mytest");
         assertTrue(generatedClass.exists());
     }
@@ -95,7 +95,7 @@ public class WSImportImplTest {
         File outputDir = new File(url.getFile());
         URL wsdURL = Thread.currentThread().getContextClassLoader().getResource("./hello_world.wsdl");
         WSImportImpl importer = new WSImportImpl();
-        importer.importObjectFromWsdl(wsdURL.toExternalForm(), outputDir, outputDir, "org.jboss.wise", null, null);
+        importer.importObjectFromWsdl(wsdURL.toExternalForm(), outputDir, outputDir, "org.jboss.wise", null, System.out, null);
     }
 
     @Test( )

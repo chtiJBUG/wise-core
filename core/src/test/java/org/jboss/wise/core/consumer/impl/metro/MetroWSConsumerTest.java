@@ -35,7 +35,7 @@ public class MetroWSConsumerTest {
         URL url = Thread.currentThread().getContextClassLoader().getResource(".");
         File outputDir = new File(url.getFile());
         URL wsdURL = Thread.currentThread().getContextClassLoader().getResource("./AddNumbers.wsdl");
-        consumer.importObjectFromWsdl(wsdURL.toExternalForm(), outputDir, outputDir, "org.jimma", null, null);
+        consumer.importObjectFromWsdl(wsdURL.toExternalForm(), outputDir, outputDir, "org.jimma", null, System.out, null);
 
         // Uncomment it when Metro jars are available
         // File codeGenDir = new File(outputDir, "org/jimma/");

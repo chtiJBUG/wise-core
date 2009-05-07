@@ -23,6 +23,7 @@
 package org.jboss.wise.core.consumer.impl.jbosswsnative;
 
 import java.io.File;
+import java.io.PrintStream;
 import java.net.MalformedURLException;
 import java.util.LinkedList;
 import java.util.List;
@@ -66,6 +67,7 @@ public class WSImportImpl extends WSConsumer {
                                                            File sourceDir,
                                                            String targetPackage,
                                                            List<File> bindingFiles,
+                                                           PrintStream messageStream,
                                                            File catelog ) throws MalformedURLException, WiseRuntimeException {
         try {
             // NEEDED for WISE-36 issue
@@ -79,6 +81,9 @@ public class WSImportImpl extends WSConsumer {
             wsImporter.setGenerateSource(this.isKeepSource());
             wsImporter.setOutputDirectory(outputDir);
             wsImporter.setSourceDirectory(sourceDir);
+            if (messageStream != null) {
+        	wsImporter.setMessageStream(messageStream);
+            }
 
             if (this.isVerbose()) {
                 wsImporter.setMessageStream(System.out);

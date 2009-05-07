@@ -24,6 +24,7 @@ package org.jboss.wise.core.consumer;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.PrintStream;
 import java.net.MalformedURLException;
 import java.util.LinkedList;
 import java.util.List;
@@ -36,14 +37,14 @@ public abstract class WSConsumer {
 
     private boolean keepSource;
     private boolean verbose;
-    private List<String> additionalJar;
 
     public abstract List<String> importObjectFromWsdl( String wsdlURL,
                                                        File outputDir,
                                                        File sourceDir,
                                                        String targetPackage,
                                                        List<File> bindingFiles,
-                                                       File catelog ) throws MalformedURLException, WiseRuntimeException;
+                                                       PrintStream messageStream,
+                                                       File catalog ) throws MalformedURLException, WiseRuntimeException;
 
     /**
      * @return verbose

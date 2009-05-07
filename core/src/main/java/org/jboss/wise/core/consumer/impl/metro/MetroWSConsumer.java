@@ -24,6 +24,7 @@ package org.jboss.wise.core.consumer.impl.metro;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.PrintStream;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -42,6 +43,7 @@ public class MetroWSConsumer extends WSConsumer {
                                               File sourceDir,
                                               String targetPackage,
                                               List<File> bindingFiles,
+                                              PrintStream messageStream,
                                               File catelog) throws MalformedURLException, WiseRuntimeException {
         ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader();
         LocalFirstClassLoader metroClassLoader = new LocalFirstClassLoader(getMertroJars(), oldClassLoader);
