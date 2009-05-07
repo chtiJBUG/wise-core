@@ -65,7 +65,7 @@ public class BasicNoCacheNoClientCacheStressTest extends WiseTest {
 
 	// Note Wise do not provide any Cache, client is expected to take
 	// care of using a single client instance or
-	// other caching mechanism. Initialising client is very expensive!!
+	// other caching mechanism. Initializing client is very expensive!!
 	// You have a proof of here in BasicNoCacheNoClientCacheStressTest.java
 	// The purpose of this test is just to make a stress test of expansive
 	// client creation

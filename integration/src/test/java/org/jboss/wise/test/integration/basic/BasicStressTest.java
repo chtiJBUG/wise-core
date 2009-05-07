@@ -65,7 +65,7 @@ public class BasicStressTest extends WiseTest {
 
 	// Note Wise do not provide any Cache, client is expected to take
 	// care of using a single client instance or
-	// other caching mechanism. Initialising client is very expensive!!
+	// other caching mechanism. Initializing client is very expensive!!
 	// You have a proof of that in BasicNoCacheNoClientCacheStressTest.java
 	WSDynamicClient client = clientBuilder.tmpDir("target/temp/wise").verbose(true).keepSource(true).wsdlURL(wsdlURL
 		.toString()).build();
