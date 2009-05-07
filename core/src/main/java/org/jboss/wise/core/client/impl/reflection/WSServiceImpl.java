@@ -81,19 +81,21 @@ public class WSServiceImpl implements WSService {
         }
 
         for (Method method : this.getServiceClass().getMethods()) {
-            WebEndpoint annotation = method.getAnnotation(WebEndpoint.class);
-            if (annotation != null) {
-                WSEndpoint ep;
-                try {
-                    ep = this.getWiseEndpoint(method, annotation.name());
+	    WebEndpoint annotation = method.getAnnotation(WebEndpoint.class);
+	    if (annotation != null) {
+		WSEndpoint ep;
+		try {
+		    if (method.getParameterTypes().length == 0) // required to support JAX-WS 2.1, as you get 2 @WebEndpoint -> exclude the one with WebServiceFeatures for now
+		    {
+			ep = this.getWiseEndpoint(method, annotation.name());
+			endpoints.put(annotation.name(), ep);
+		    }
+		} catch (WiseRuntimeException e) {
+		    e.printStackTrace();
+		}
 
-                    endpoints.put(annotation.name(), ep);
-                } catch (WiseRuntimeException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        }
+	    }
+	}
         return endpoints;
     }
 
