@@ -62,7 +62,7 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
     private String password;
 
     @GuardedBy("this")
-    private String tmpDir = "/tmp";
+    private String tmpDir = System.getProperty("java.io.tmpdir");
 
     @GuardedBy("this")
     private String targetPackage;
@@ -74,10 +74,10 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
     private File catalog = null;
 
     @GuardedBy("this")
-    private String securityConfigURL = "WEB-INF/wsaandwsse/jboss-wsse-client.xml";
+    private String securityConfigURL;
 
     @GuardedBy("this")
-    private String securityConfigName = "Standard WSSecurity Client";
+    private String securityConfigName;
 
     @GuardedBy("this")
     private boolean keepSource;
@@ -109,9 +109,10 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
 	    try {
 		FileUtils.forceMkdir(tmpDirFile);
 	    } catch (IOException e) {
-		throw new IllegalStateException("unable to create tmp dir:" + clientSpecificTmpDir);
+		throw new IllegalStateException("unable to create tmp dir:" + clientSpecificTmpDir + ". Please provide a valid temp dir if you didn't.");
 	    }
-
+	} else {
+	    throw new IllegalStateException("temp dir cannot be null!");
 	}
 
 	if (this.getWsdlURL() != null && this.getWsdlURL().startsWith("http://")) {
@@ -377,8 +378,7 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
 	    conn
 		    .setRequestProperty("Accept", "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5");
 	    // set Connection close, otherwise we get a keep-alive
-	    // connection
-	    // that gives us fragmented answers.
+	    // connection that gives us fragmented answers.
 	    conn.setRequestProperty("Connection", "close");
 	    // BASIC AUTH
 	    if (usernameAndPassword != null && usernameAndPassword.length() != 0) {

@@ -92,7 +92,7 @@ public class WiseTest {
         try {
              return JBossWSTestHelper.getServer().getAttribute(new ObjectName(WS_SERVER_CONFIG), "WebServicePort").toString();
          } catch (Exception e) {
-             logger.warn("WARNING: Failed to get server port and use default 8080");
+             logger.warn("WARNING: Failed to get server port; using default 8080");
              return "8080";
          } 
     }
