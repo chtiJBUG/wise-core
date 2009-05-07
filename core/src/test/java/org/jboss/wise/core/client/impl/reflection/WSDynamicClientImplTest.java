@@ -120,18 +120,24 @@ public class WSDynamicClientImplTest {
 	    fail("Should have failed because of method not found!");
 	} catch (ResourceNotAvailableException e) {
 	    //OK
+	} catch (Exception e) {
+	    fail("Wrong exception caught!");
 	}
 	try {
 	    client.getWSMethod("ServiceName1", "Port2", "testMethod");
 	    fail("Should have failed because of port not found!");
 	} catch (ResourceNotAvailableException e) {
 	    //OK
+	} catch (Exception e) {
+	    fail("Wrong exception caught!");
 	}
 	try {
 	    client.getWSMethod("ServiceName5", "Port1", "testWrongMethod");
 	    fail("Should have failed because of service not found!");
 	} catch (ResourceNotAvailableException e) {
 	    //OK
+	} catch (Exception e) {
+	    fail("Wrong exception caught!");
 	}
     }
 
