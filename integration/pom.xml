@@ -101,8 +101,11 @@
 									<directory>${basedir}/target/test-classes/
 									</directory>
 									<includes>
-										<include>**/*.class</include>
+										<include>**/basic/*.class</include>
 									</includes>
+									<excludes>
+									    <exclude>**/*Test.class</exclude>
+									</excludes>
 								</webResource>
 							</webResources>
 						</configuration>
@@ -129,8 +132,11 @@
 									<directory>${basedir}/target/test-classes/
 									</directory>
 									<includes>
-										<include>**/*.class</include>
+										<include>**/wsse/*.class</include>
 									</includes>
+									<excludes>
+									    <exclude>**/*Test.class</exclude>
+									</excludes>
 								</webResource>
 
 								<webResource>
@@ -167,8 +173,11 @@
 									<directory>${basedir}/target/test-classes/
 									</directory>
 									<includes>
-										<include>**/*.class</include>
+										<include>**/wsaddressing/*.class</include>
 									</includes>
+									<excludes>
+									    <exclude>**/*Test.class</exclude>
+									</excludes>
 								</webResource>
 							</webResources>
 						</configuration>
@@ -195,8 +204,11 @@
 									<directory>${basedir}/target/test-classes/
 									</directory>
 									<includes>
-										<include>**/*.class</include>
+										<include>**/wsaandwsse/*.class</include>
 									</includes>
+									<excludes>
+									    <exclude>**/*Test.class</exclude>
+									</excludes>
 								</webResource>
 								<webResource>
 									<targetPath>WEB-INF</targetPath>
@@ -230,8 +242,11 @@
 									<directory>${basedir}/target/test-classes/
                                     </directory>
 									<includes>
-										<include>**/*.class</include>
+										<include>**/smooks/**/*.class</include>
 									</includes>
+									<excludes>
+									    <exclude>**/*Test.class</exclude>
+									</excludes>
 								</webResource>
 							</webResources>
 						</configuration>
