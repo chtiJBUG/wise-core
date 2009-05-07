@@ -31,7 +31,6 @@ import org.jboss.wise.core.client.impl.reflection.WSEndpointImpl;
 import org.jboss.wise.core.wsextensions.EnablerDelegate;
 import org.jboss.wise.core.wsextensions.WSExtensionEnabler;
 import org.jboss.wise.core.wsextensions.impl.jbosswsnative.ReflectionEnablerDelegate;
-import org.junit.Before;
 import org.junit.Test;
 
 /**

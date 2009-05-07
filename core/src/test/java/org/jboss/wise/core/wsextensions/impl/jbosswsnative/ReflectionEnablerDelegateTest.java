@@ -21,17 +21,15 @@
  */
 package org.jboss.wise.core.wsextensions.impl.jbosswsnative;
 
-import static org.junit.matchers.JUnitMatchers.hasItem;
-import static org.junit.Assert.assertThat;
-import java.util.HashMap;
 import static org.hamcrest.core.IsAnything.any;
-import static org.hamcrest.collection.IsMapContaining.hasEntry;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.soap.SOAPBinding;
+
 import org.jboss.wise.core.client.WSEndpoint;
 import org.jboss.ws.extensions.addressing.jaxws.WSAddressingClientHandler;
 import org.junit.Test;
