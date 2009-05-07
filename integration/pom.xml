@@ -77,6 +77,30 @@
 
 	<build>
 		<plugins>
+		    <plugin>
+		        <groupId>org.apache.maven.plugins</groupId>
+		        <artifactId>maven-jar-plugin</artifactId>
+		        <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                             <goal>test-jar</goal>
+                        </goals>
+                        <configuration>
+                             <finalName>mtom</finalName>
+                             <outputDirectory>${basedir}/target/test-classes/</outputDirectory>
+                             <testClassesDirectory>${basedir}/target/test-classes/</testClassesDirectory>
+                             <includes>
+                                  <include>**/mtom/*</include>
+                             </includes>
+                             <excludes>
+                                  <exclude>**/*Test.class</exclude>
+                             </excludes>
+                        </configuration>
+                   </execution>
+               </executions>
+		    </plugin>
+		    
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
