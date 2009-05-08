@@ -47,13 +47,12 @@ public class WSEndpointImplTest {
 
     @Test
     public void getWSMethodsShouldReturnAnnotatedMethods() {
-        WSEndpointImpl endpoint = new WSEndpointImpl();
+        WSEndpointImpl endpoint = new WSEndpointImpl(10);
         endpoint.setUnderlyingObjectClass(this.getClass());
         Map<String, WSMethod> wsMethods = endpoint.getWSMethods();
         assertThat(wsMethods.size(), is(2));
         assertThat(wsMethods.keySet(), hasItem("method1"));
         assertThat(wsMethods.keySet(), hasItem("method2"));
     }
-    
-    
+
 }

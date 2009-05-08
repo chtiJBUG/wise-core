@@ -8,6 +8,8 @@
 /.settings
 /target
 /cobertura.ser
+/bin
+.classpath
 
 
 # /docs/

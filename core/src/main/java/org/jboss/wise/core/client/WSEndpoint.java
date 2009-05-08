@@ -87,11 +87,25 @@ public interface WSEndpoint {
     /**
      * @return handlers
      */
+    @GuardedBy( "this" )
     public List<Handler<?>> getHandlers();
 
     /**
      * @return extensions
      */
+    @GuardedBy( "this" )
     public List<WSExtensionEnabler> getExtensions();
+
+    @GuardedBy( "this" )
+    public String getTargetUrl();
+
+    @GuardedBy( "this" )
+    public String getUsername();
+
+    @GuardedBy( "this" )
+    public String getPassword();
+
+    @GuardedBy( "this" )
+    public void setTargetUrl( String targetUrl );
 
 }

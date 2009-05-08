@@ -68,7 +68,7 @@ public class WSMethodImplTest {
 
     @Test( expected = IllegalArgumentException.class )
     public void shouldNotPermitMethodNull() throws Exception {
-        WSEndpointImpl endPointMock = mock(WSEndpointImpl.class);
+        WSEndpoint endPointMock = mock(WSEndpointImpl.class);
         new WSMethodImpl(null, endPointMock);
     }
 
@@ -85,7 +85,7 @@ public class WSMethodImplTest {
         // Let use a method defined in this test class for this goal
         Method method = this.getClass().getMethod("methodForAnnotation", new Class[] {Integer.class, String.class, String.class});
 
-        WSEndpointImpl endPointMock = mock(WSEndpointImpl.class);
+        WSEndpoint endPointMock = mock(WSEndpointImpl.class);
         WSMethodImpl wsMethod = new WSMethodImpl(method, endPointMock);
         Map<String, WebParameterImpl> params = wsMethod.getWebParams();
 
@@ -100,7 +100,7 @@ public class WSMethodImplTest {
         // mockito can't mock Method class since it is final
         // Let use a method defined in this test class for this goal
         Method method = this.getClass().getMethod("methodForAnnotation", new Class[] {Integer.class, String.class, String.class});
-        WSEndpointImpl endPointMock = mock(WSEndpointImpl.class);
+        WSEndpoint endPointMock = mock(WSEndpointImpl.class);
         WSMethodImpl wsMethod = new WSMethodImpl(method, endPointMock);
         Map<String, Object> inputMap = new HashMap<String, Object>();
         inputMap.put("annotation2", "foo");
@@ -118,7 +118,7 @@ public class WSMethodImplTest {
         // mockito can't mock Method class since it is final
         // Let use a method defined in this test class for this goal
         Method method = this.getClass().getMethod("methodForAnnotation", new Class[] {Integer.class, String.class, String.class});
-        WSEndpointImpl endPointMock = mock(WSEndpointImpl.class);
+        WSEndpoint endPointMock = mock(WSEndpointImpl.class);
         WSMethodImpl wsMethod = new WSMethodImpl(method, endPointMock);
         Map<String, Object> inputMap = new HashMap<String, Object>();
         inputMap.put("annotation2", "foo");
@@ -136,7 +136,7 @@ public class WSMethodImplTest {
     @Test
     public void getHoldersResultShouldReturnHolderForRightParameters() throws Exception {
         Method method = this.getClass().getMethod("methodForAnnotation", new Class[] {Integer.class, String.class, String.class});
-        WSEndpointImpl endPointMock = mock(WSEndpointImpl.class);
+        WSEndpoint endPointMock = mock(WSEndpointImpl.class);
         Map<String, Object> inputMap = new HashMap<String, Object>();
         inputMap.put("annotation2", "foo2");
         inputMap.put("annotation3", "foo3");
@@ -150,7 +150,7 @@ public class WSMethodImplTest {
     @Test
     public void getHoldersResultShouldIgnoreUnknowntParameters() throws Exception {
         Method method = this.getClass().getMethod("methodForAnnotation", new Class[] {Integer.class, String.class, String.class});
-        WSEndpointImpl endPointMock = mock(WSEndpointImpl.class);
+        WSEndpoint endPointMock = mock(WSEndpointImpl.class);
         Map<String, Object> inputMap = new HashMap<String, Object>();
         inputMap.put("annotation2", "foo2");
         inputMap.put("annotation3", "foo3");
@@ -166,7 +166,7 @@ public class WSMethodImplTest {
     @Test
     public void getHoldersResultShouldIgnoreINParameters() throws Exception {
         Method method = this.getClass().getMethod("methodForAnnotation", new Class[] {Integer.class, String.class, String.class});
-        WSEndpointImpl endPointMock = mock(WSEndpointImpl.class);
+        WSEndpoint endPointMock = mock(WSEndpointImpl.class);
         Map<String, Object> inputMap = new HashMap<String, Object>();
         inputMap.put("annotation2", "foo2");
         inputMap.put("annotation3", "foo3");

@@ -60,7 +60,7 @@ public class WSMethodImpl implements WSMethod {
     private final Map<String, WebParameterImpl> parameters = Collections.synchronizedMap(new HashMap<String, WebParameterImpl>());
 
     public WSMethodImpl( Method method,
-                         WSEndpointImpl endpoint ) throws IllegalArgumentException {
+                         WSEndpoint endpoint ) throws IllegalArgumentException {
         if (method == null || endpoint == null) {
             throw new IllegalArgumentException();
         }

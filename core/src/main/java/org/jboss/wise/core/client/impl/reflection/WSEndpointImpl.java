@@ -37,6 +37,7 @@ import net.jcip.annotations.ThreadSafe;
 import org.jboss.wise.core.client.WSEndpoint;
 import org.jboss.wise.core.client.WSMethod;
 import org.jboss.wise.core.client.impl.reflection.WSServiceImpl.WSEndPointbuilder;
+import static org.jboss.wise.core.utils.DefaultConfig.MAX_THRED_POOL_SIZE;
 import org.jboss.wise.core.wsextensions.WSExtensionEnabler;
 
 /**
@@ -54,7 +55,7 @@ public class WSEndpointImpl implements WSEndpoint {
     @GuardedBy( "this" )
     private Class underlyingObjectClass;
 
-    private final ExecutorService service = Executors.newFixedThreadPool(2);
+    private final ExecutorService service;
 
     @GuardedBy( "this" )
     ClassLoader classLoader;
@@ -62,14 +63,28 @@ public class WSEndpointImpl implements WSEndpoint {
     @GuardedBy( "this" )
     private WSEndPointbuilder wsEndPointbuilder;
 
+    @GuardedBy( "this" )
+    public String userName;
+
+    @GuardedBy( "this" )
+    public String password;
+
+    @GuardedBy( "this" )
+    public String targetUrl;
+
     private final Map<String, WSMethod> wsMethods = Collections.synchronizedMap(new TreeMap<String, WSMethod>());
 
     public final List<WSExtensionEnabler> extensions = Collections.synchronizedList(new LinkedList<WSExtensionEnabler>());
 
     public final List<Handler<?>> handlers = Collections.synchronizedList(new LinkedList<Handler<?>>());
 
-    public WSEndpointImpl() {
+    public WSEndpointImpl( int maxThreadPoolSize ) {
         this.wsMethods.clear();
+        if (maxThreadPoolSize >= 1) {
+            this.service = Executors.newFixedThreadPool(maxThreadPoolSize);
+        } else {
+            this.service = Executors.newFixedThreadPool(MAX_THRED_POOL_SIZE.getIntValue());
+        }
     }
 
     public Object createInstance() {
@@ -100,23 +115,18 @@ public class WSEndpointImpl implements WSEndpoint {
         this.name = name;
     }
 
-    public synchronized String getUrl() {
-        // TODO
-        return null;
-        // return
-        // (String)(((BindingProvider)underlyingObjectInstance).getRequestContext().get(BindingProvider.ENDPOINT_ADDRESS_PROPERTY));
+    public synchronized String getTargetUrl() {
+        return targetUrl;
+
     }
 
-    public synchronized void setUrl( String url ) {
-        // TODO
-        // ((BindingProvider)underlyingObjectInstance).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, url);
+    public synchronized void setTargetUrl( String targetUrl ) {
+        this.targetUrl = targetUrl;
     }
 
     public synchronized String getUsername() {
-        // TODO
-        return null;
-        // return
-        // (String)(((BindingProvider)underlyingObjectInstance).getRequestContext().get(BindingProvider.USERNAME_PROPERTY));
+        return userName;
+
     }
 
     /**
@@ -125,15 +135,12 @@ public class WSEndpointImpl implements WSEndpoint {
      * @param username
      */
     public synchronized void setUsername( String username ) {
-        // TODO
-        // ((BindingProvider)underlyingObjectInstance).getRequestContext().put(BindingProvider.USERNAME_PROPERTY, username);
+        this.userName = username;
+
     }
 
     public synchronized String getPassword() {
-        // TODO
-        return null;
-        // return
-        // (String)(((BindingProvider)underlyingObjectInstance).getRequestContext().get(BindingProvider.PASSWORD_PROPERTY));
+        return password;
     }
 
     /**
@@ -142,8 +149,7 @@ public class WSEndpointImpl implements WSEndpoint {
      * @param password
      */
     public synchronized void setPassword( String password ) {
-        // TODO
-        // ((BindingProvider)underlyingObjectInstance).getRequestContext().put(BindingProvider.PASSWORD_PROPERTY, password);
+        this.password = password;
     }
 
     public synchronized Class getUnderlyingObjectClass() {

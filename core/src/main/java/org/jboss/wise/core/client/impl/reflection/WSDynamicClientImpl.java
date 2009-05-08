@@ -31,6 +31,7 @@ import java.net.URLClassLoader;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.CopyOnWriteArrayList;
 import javax.xml.ws.WebServiceClient;
 import net.jcip.annotations.GuardedBy;
@@ -44,7 +45,6 @@ import org.jboss.wise.core.client.WSMethod;
 import org.jboss.wise.core.client.WSService;
 import org.jboss.wise.core.client.builder.WSDynamicClientBuilder;
 import org.jboss.wise.core.consumer.WSConsumer;
-import org.jboss.wise.core.consumer.impl.jbosswsnative.WSImportImpl;
 import org.jboss.wise.core.exception.ResourceNotAvailableException;
 import org.jboss.wise.core.exception.WiseRuntimeException;
 import org.jboss.wise.core.utils.JavaUtils;
@@ -82,6 +82,8 @@ public class WSDynamicClientImpl implements WSDynamicClient {
 
     private final String tmpDir;
 
+    private final int maxThreadPoolSize;
+
     /**
      * @param builder
      * @return consumer
@@ -107,6 +109,7 @@ public class WSDynamicClientImpl implements WSDynamicClient {
         this.smooksInstance = smooks;
         userName = builder.getUserName();
         password = builder.getPassword();
+        this.maxThreadPoolSize = builder.getMaxThreadPoolSize();
         wsExtensionEnablerDelegate = new ReflectionEnablerDelegate(builder.getSecurityConfigFileURL(),
                                                                    builder.getSecurityConfigName());
         this.tmpDir = builder.getClientSpecificTmpDir();
@@ -171,10 +174,11 @@ public class WSDynamicClientImpl implements WSDynamicClient {
                     Annotation annotation = clazz.getAnnotation(WebServiceClient.class);
                     if (annotation != null) {
                         WSService service = new WSServiceImpl(clazz, this.getClassLoader(), clazz.newInstance(), userName,
-                                                              password);
+                                                              password, this.maxThreadPoolSize);
                         servicesMap.put(((WebServiceClient)annotation).name(), service);
                     }
                 } catch (Exception e) {
+                    e.printStackTrace();
                     throw new IllegalStateException("Error during loading/instanciating class:" + className
                                                     + " with exception message: " + e.getMessage());
                 }
@@ -239,6 +243,15 @@ public class WSDynamicClientImpl implements WSDynamicClient {
             FileUtils.forceDelete(new File(tmpDir));
         } catch (IOException e) {
             Logger.getLogger(WSDynamicClientImpl.class).info("unable to remove tmpDir:" + tmpDir);
+        }
+        for (WSService service : servicesMap.values()) {
+            if (service instanceof WSServiceImpl) {
+                for (WSEndpoint endpoint : ((WSServiceImpl)service).getEndpoints().values()) {
+                    if (endpoint instanceof WSEndpointImpl) {
+                        ((WSEndpointImpl)endpoint).getService().shutdown();
+                    }
+                }
+            }
         }
     }
 

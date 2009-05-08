@@ -54,7 +54,7 @@ public class WSServiceImplTest {
     @Test
     public void shouldProcessEndPoint() throws Exception {
         URLClassLoader loader = new URLClassLoader(new URL[] {}, Thread.currentThread().getContextClassLoader());
-        WSService service = new WSServiceImpl(WSServiceImplTest.class, loader, this, null, null);
+        WSService service = new WSServiceImpl(WSServiceImplTest.class, loader, this, null, null, 10);
         Map<String, WSEndpoint> endpoints = service.processEndpoints();
         assertThat(endpoints.keySet(), hasItem("EndPoint1"));
         assertThat(endpoints.keySet(), hasItem("EndPoint2"));

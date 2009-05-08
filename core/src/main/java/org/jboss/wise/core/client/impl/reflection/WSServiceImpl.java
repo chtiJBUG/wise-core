@@ -47,6 +47,7 @@ public class WSServiceImpl implements WSService {
     private final String userName;
     private final String password;
     private final Map<String, WSEndpoint> endpoints = Collections.synchronizedMap(new HashMap<String, WSEndpoint>());
+    private final int maxThreadPoolSize;
 
     /**
      * @param serviceClass
@@ -54,12 +55,14 @@ public class WSServiceImpl implements WSService {
      * @param service
      * @param userName
      * @param password
+     * @param maxThreadPoolSize the max pool size for method execution of service attached endpoint.
      */
     public WSServiceImpl( Class serviceClass,
                           URLClassLoader classLoader,
                           Object service,
                           String userName,
-                          String password ) {
+                          String password,
+                          int maxThreadPoolSize ) {
         super();
         this.serviceClass = serviceClass;
         this.classLoader = classLoader;
@@ -68,6 +71,11 @@ public class WSServiceImpl implements WSService {
         this.password = password;
         endpoints.clear();
         this.processEndpoints();
+        this.maxThreadPoolSize = maxThreadPoolSize;
+    }
+
+    public Map<String, WSEndpoint> getEndpoints() {
+        return endpoints;
     }
 
     /**
@@ -81,28 +89,29 @@ public class WSServiceImpl implements WSService {
         }
 
         for (Method method : this.getServiceClass().getMethods()) {
-	    WebEndpoint annotation = method.getAnnotation(WebEndpoint.class);
-	    if (annotation != null) {
-		WSEndpoint ep;
-		try {
-		    if (method.getParameterTypes().length == 0) // required to support JAX-WS 2.1, as you get 2 @WebEndpoint -> exclude the one with WebServiceFeatures for now
-		    {
-			ep = this.getWiseEndpoint(method, annotation.name());
-			endpoints.put(annotation.name(), ep);
-		    }
-		} catch (WiseRuntimeException e) {
-		    e.printStackTrace();
-		}
+            WebEndpoint annotation = method.getAnnotation(WebEndpoint.class);
+            if (annotation != null) {
+                WSEndpoint ep;
+                try {
+                    if (method.getParameterTypes().length == 0) // required to support JAX-WS 2.1, as you get 2 @WebEndpoint ->
+                    // exclude the one with WebServiceFeatures for now
+                    {
+                        ep = this.getWiseEndpoint(method, annotation.name());
+                        endpoints.put(annotation.name(), ep);
+                    }
+                } catch (WiseRuntimeException e) {
+                    e.printStackTrace();
+                }
 
-	    }
-	}
+            }
+        }
         return endpoints;
     }
 
     private WSEndpoint getWiseEndpoint( Method method,
                                         String name ) throws WiseRuntimeException {
         ClassLoader oldLoader = Thread.currentThread().getContextClassLoader();
-        WSEndpointImpl ep = new WSEndpointImpl();
+        WSEndpointImpl ep = new WSEndpointImpl(this.maxThreadPoolSize);
         try {
             Thread.currentThread().setContextClassLoader(this.getClassLoader());
             ep.setClassLoader(this.getClassLoader());

@@ -58,4 +58,10 @@ public class ReflectionBasedWSDynamicClientBuilderTest {
         builder.wsdlURL(" ");
         builder.build();
     }
+
+    @Test( expected = IllegalStateException.class )
+    public void shouldThrowExceptionIfMaxThreadPoolSizeIsLessThanOne() throws Exception {
+        builder.maxThreadPoolSize(0);
+        builder.build();
+    }
 }

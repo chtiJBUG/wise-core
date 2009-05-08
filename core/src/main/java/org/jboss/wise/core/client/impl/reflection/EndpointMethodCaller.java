@@ -65,6 +65,9 @@ public class EndpointMethodCaller implements Callable<Object> {
     public Object call() throws Exception {
         this.addHandlers();
         this.visitEnabler();
+        this.setUsername();
+        this.setPassword();
+        this.setTargetUrl();
         return methodPointer.invoke(epUnderlyingObjectInstance.get(), args);
     }
 
@@ -81,6 +84,27 @@ public class EndpointMethodCaller implements Callable<Object> {
             ((BindingProvider)epUnderlyingObjectInstance.get()).getBinding().setHandlerChain(handlerChain);
         }
 
+    }
+
+    public synchronized void setUsername() {
+        if (epInstance.getUsername() != null) {
+            ((BindingProvider)epUnderlyingObjectInstance.get()).getRequestContext().put(BindingProvider.USERNAME_PROPERTY,
+                                                                                        epInstance.getUsername());
+        }
+    }
+
+    public synchronized void setPassword() {
+        if (epInstance.getPassword() != null) {
+            ((BindingProvider)epUnderlyingObjectInstance.get()).getRequestContext().put(BindingProvider.PASSWORD_PROPERTY,
+                                                                                        epInstance.getPassword());
+        }
+    }
+
+    public synchronized void setTargetUrl() {
+        if (epInstance.getTargetUrl() != null) {
+            ((BindingProvider)epUnderlyingObjectInstance.get()).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
+                                                                                        epInstance.getTargetUrl());
+        }
     }
 
 }
