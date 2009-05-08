@@ -25,8 +25,6 @@ package org.jboss.wise.core.client.impl.reflection.builder;
 import org.jboss.wise.core.client.builder.WSDynamicClientBuilder;
 import org.jboss.wise.core.client.factories.WSDynamicClientFactory;
 import org.jboss.wise.core.client.impl.reflection.builder.ReflectionBasedWSDynamicClientBuilder;
-import org.jboss.wise.core.jbossmc.BeansNames;
-import org.jboss.wise.core.jbossmc.MicroContainerSpi;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -60,16 +58,4 @@ public class ReflectionBasedWSDynamicClientBuilderTest {
         builder.wsdlURL(" ");
         builder.build();
     }
-
-    // @Test
-    // public void shouldThrowExceptionIfTrimmedSymbolicNameIsZero() throws Exception {
-    // WSDynamicClientBuilder builder =
-    // MicroContainerSpi.getKernelProvidedImplementation(BeansNames.WSDynamicClientBuilder.name(),
-    // WSDynamicClientBuilder.class);
-    // WSDynamicClientBuilder.class);
-    // builder.wsdlURL("aa");
-    // builder.symbolicName(" ");
-    // builder.build();
-    // }
-    //    
 }
