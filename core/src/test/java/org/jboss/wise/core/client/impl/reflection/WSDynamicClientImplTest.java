@@ -31,7 +31,6 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -49,7 +48,6 @@ import org.jboss.wise.core.client.builder.WSDynamicClientBuilder;
 import org.jboss.wise.core.client.impl.reflection.builder.ReflectionBasedWSDynamicClientBuilder;
 import org.jboss.wise.core.consumer.WSConsumer;
 import org.jboss.wise.core.exception.ResourceNotAvailableException;
-import org.jboss.wise.core.exception.WiseRuntimeException;
 import org.junit.Before;
 import org.junit.Test;
 import org.milyn.Smooks;
@@ -115,31 +113,44 @@ public class WSDynamicClientImplTest {
 
 	WSMethod wsMethod = client.getWSMethod("ServiceName1", "Port1", "testMethod");
 	assertNotNull("Should get WsMethod through getWSMethod api", wsMethod);
-	try {
-	    client.getWSMethod("ServiceName1", "Port1", "testWrongMethod");
-	    fail("Should have failed because of method not found!");
-	} catch (ResourceNotAvailableException e) {
-	    //OK
-	} catch (Exception e) {
-	    fail("Wrong exception caught!");
-	}
-	try {
-	    client.getWSMethod("ServiceName1", "Port2", "testMethod");
-	    fail("Should have failed because of port not found!");
-	} catch (ResourceNotAvailableException e) {
-	    //OK
-	} catch (Exception e) {
-	    fail("Wrong exception caught!");
-	}
-	try {
-	    client.getWSMethod("ServiceName5", "Port1", "testWrongMethod");
-	    fail("Should have failed because of service not found!");
-	} catch (ResourceNotAvailableException e) {
-	    //OK
-	} catch (Exception e) {
-	    fail("Wrong exception caught!");
-	}
     }
+    
+    @Test(expected = ResourceNotAvailableException.class)
+    public void missingOperationShouldCaseExceptionThrownOnGetWSMethod() throws Exception {
+	WSConsumer consumerMock = mock(WSConsumer.class);
+	String[] classes = { "org.jboss.wise.test.mocks.Service1", "org.jboss.wise.test.mocks.Service2" };
+
+	when(consumerMock
+		.importObjectFromWsdl(anyString(), (File) anyObject(), (File) anyObject(), anyString(), (List) anyObject(), (PrintStream) anyObject(), (File) anyObject()))
+		.thenReturn(Arrays.asList(classes));
+	WSDynamicClientImpl client = new WSDynamicClientImpl(builder, consumerMock);
+	client.getWSMethod("ServiceName1", "Port1", "testWrongMethod");
+    }
+    
+    @Test(expected = ResourceNotAvailableException.class)
+    public void missingPortShouldCaseExceptionThrownOnGetWSMethod() throws Exception {
+	WSConsumer consumerMock = mock(WSConsumer.class);
+	String[] classes = { "org.jboss.wise.test.mocks.Service1", "org.jboss.wise.test.mocks.Service2" };
+
+	when(consumerMock
+		.importObjectFromWsdl(anyString(), (File) anyObject(), (File) anyObject(), anyString(), (List) anyObject(), (PrintStream) anyObject(), (File) anyObject()))
+		.thenReturn(Arrays.asList(classes));
+	WSDynamicClientImpl client = new WSDynamicClientImpl(builder, consumerMock);
+	client.getWSMethod("ServiceName1", "Port2", "testMethod");
+    }
+    
+    @Test(expected = ResourceNotAvailableException.class)
+    public void missingServiceShouldCaseExceptionThrownOnGetWSMethod() throws Exception {
+	WSConsumer consumerMock = mock(WSConsumer.class);
+	String[] classes = { "org.jboss.wise.test.mocks.Service1", "org.jboss.wise.test.mocks.Service2" };
+
+	when(consumerMock
+		.importObjectFromWsdl(anyString(), (File) anyObject(), (File) anyObject(), anyString(), (List) anyObject(), (PrintStream) anyObject(), (File) anyObject()))
+		.thenReturn(Arrays.asList(classes));
+	WSDynamicClientImpl client = new WSDynamicClientImpl(builder, consumerMock);
+	client.getWSMethod("ServiceName5", "Port1", "testWrongMethod");
+    }
+    
 
     @Test
     public void shouldRemoveTmpDirAndCloseSMooksInvokingClose() {
