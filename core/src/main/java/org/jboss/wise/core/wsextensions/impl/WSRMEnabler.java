@@ -46,10 +46,10 @@ public class WSRMEnabler implements WSExtensionEnabler {
     /**
      * {@inheritDoc}
      * 
-     * @see org.jboss.wise.core.wsextensions.WSExtensionEnabler#enable(WSEndpoint)
+     * @see org.jboss.wise.core.wsextensions.WSExtensionEnabler#enable(Object)
      */
-    public void enable( WSEndpoint endpoint ) throws UnsupportedOperationException {
-        delegate.visitWSRM(endpoint);
+    public void enable( Object endpointInstance ) throws UnsupportedOperationException {
+        delegate.visitWSRM(endpointInstance);
     }
 
     /**

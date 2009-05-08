@@ -27,6 +27,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.jboss.wise.core.client.WSDynamicClient;
+import org.jboss.wise.core.client.WSEndpoint;
 import org.jboss.wise.core.client.impl.reflection.WSEndpointImpl;
 import org.jboss.wise.core.wsextensions.EnablerDelegate;
 import org.jboss.wise.core.wsextensions.WSExtensionEnabler;
@@ -52,7 +53,7 @@ public class WSSecurityEnablerTest {
         WSDynamicClient client = mock(WSDynamicClient.class);
         EnablerDelegate delegate = mock(EnablerDelegate.class);
         when(client.getWSExtensionEnablerDelegate()).thenReturn(delegate);
-        WSEndpointImpl ep = mock(WSEndpointImpl.class);
+        WSEndpoint ep = mock(WSEndpointImpl.class);
         WSExtensionEnabler enabler = new WSSecurityEnabler(client);
         enabler.enable(ep);
         verify(delegate).visitWSSecurity(ep);
@@ -63,7 +64,7 @@ public class WSSecurityEnablerTest {
     public void shouldThrowIllegalStateExceptionIfNoConfigSet() {
         WSDynamicClient client = mock(WSDynamicClient.class);
         when(client.getWSExtensionEnablerDelegate()).thenReturn(new ReflectionEnablerDelegate(null, null));
-        WSEndpointImpl ep = mock(WSEndpointImpl.class);
+        WSEndpoint ep = mock(WSEndpointImpl.class);
         WSExtensionEnabler enabler = new WSSecurityEnabler(client);
         enabler.enable(ep);
     }

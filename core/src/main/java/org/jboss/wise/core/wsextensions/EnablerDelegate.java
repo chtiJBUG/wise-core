@@ -22,7 +22,6 @@
 package org.jboss.wise.core.wsextensions;
 
 import net.jcip.annotations.ThreadSafe;
-import org.jboss.wise.core.client.WSEndpoint;
 
 /**
  * It is an interface defining a visitor pattern which is used by {@link WSExtensionEnabler} to delegate the effective work needed
@@ -37,11 +36,11 @@ import org.jboss.wise.core.client.WSEndpoint;
 @ThreadSafe
 public interface EnablerDelegate {
 
-    public void visitWSSecurity( WSEndpoint endpoint ) throws UnsupportedOperationException, IllegalStateException;
+    public void visitWSSecurity( Object endpointInstance ) throws UnsupportedOperationException, IllegalStateException;
 
-    public void visitWSRM( WSEndpoint endpoint ) throws UnsupportedOperationException;
+    public void visitWSRM( Object endpointInstance ) throws UnsupportedOperationException;
 
-    public void visitWSAddressing( WSEndpoint endpoint ) throws UnsupportedOperationException;
+    public void visitWSAddressing( Object endpointInstance ) throws UnsupportedOperationException;
 
-    public void visitMTOM( WSEndpoint endpoint ) throws UnsupportedOperationException;
+    public void visitMTOM( Object endpointInstance ) throws UnsupportedOperationException;
 }

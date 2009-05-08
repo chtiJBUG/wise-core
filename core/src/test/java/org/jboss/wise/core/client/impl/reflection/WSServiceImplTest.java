@@ -59,14 +59,14 @@ public class WSServiceImplTest {
         assertThat(endpoints.keySet(), hasItem("EndPoint1"));
         assertThat(endpoints.keySet(), hasItem("EndPoint2"));
 
-        WSEndpointImpl endPoint1 = (WSEndpointImpl)endpoints.get("EndPoint1");
+        WSEndpoint endPoint1 = endpoints.get("EndPoint1");
         assertThat((URLClassLoader)endPoint1.getClassLoader(), is(loader));
         assertThat(endPoint1.getUnderlyingObjectClass().getCanonicalName(), equalTo(String.class.getCanonicalName()));
-        assertThat((String)endPoint1.getUnderlyingObjectInstance(), equalTo(" "));
-        WSEndpointImpl endPoint2 = (WSEndpointImpl)endpoints.get("EndPoint2");
+        assertThat((String)endPoint1.createInstance(), equalTo(" "));
+        WSEndpoint endPoint2 = endpoints.get("EndPoint2");
         assertThat((URLClassLoader)endPoint2.getClassLoader(), is(loader));
         assertThat(endPoint2.getUnderlyingObjectClass().getCanonicalName(), equalTo(Integer.class.getCanonicalName()));
-        assertThat((Integer)endPoint2.getUnderlyingObjectInstance(), equalTo(Integer.valueOf(3)));
+        assertThat((Integer)endPoint2.createInstance(), equalTo(Integer.valueOf(3)));
 
     }
 }

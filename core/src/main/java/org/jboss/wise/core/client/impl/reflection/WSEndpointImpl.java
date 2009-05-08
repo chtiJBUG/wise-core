@@ -24,16 +24,19 @@ package org.jboss.wise.core.client.impl.reflection;
 
 import java.lang.reflect.Method;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import javax.jws.WebMethod;
-import javax.xml.ws.BindingProvider;
 import javax.xml.ws.handler.Handler;
 import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
 import org.jboss.wise.core.client.WSEndpoint;
 import org.jboss.wise.core.client.WSMethod;
+import org.jboss.wise.core.client.impl.reflection.WSServiceImpl.WSEndPointbuilder;
 import org.jboss.wise.core.wsextensions.WSExtensionEnabler;
 
 /**
@@ -49,21 +52,28 @@ public class WSEndpointImpl implements WSEndpoint {
     private String name;
 
     @GuardedBy( "this" )
-    private Object underlyingObjectInstance;
-
-    @GuardedBy( "this" )
     private Class underlyingObjectClass;
 
-    @GuardedBy( "this" )
-    private String methodName;
+    private final ExecutorService service = Executors.newFixedThreadPool(2);
 
     @GuardedBy( "this" )
     ClassLoader classLoader;
 
+    @GuardedBy( "this" )
+    private WSEndPointbuilder wsEndPointbuilder;
+
     private final Map<String, WSMethod> wsMethods = Collections.synchronizedMap(new TreeMap<String, WSMethod>());
+
+    public final List<WSExtensionEnabler> extensions = Collections.synchronizedList(new LinkedList<WSExtensionEnabler>());
+
+    public final List<Handler<?>> handlers = Collections.synchronizedList(new LinkedList<Handler<?>>());
 
     public WSEndpointImpl() {
         this.wsMethods.clear();
+    }
+
+    public Object createInstance() {
+        return this.getWsEndPointbuilder().createEndPointUnderlyingObject();
     }
 
     /**
@@ -75,21 +85,15 @@ public class WSEndpointImpl implements WSEndpoint {
         return null;
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.jboss.wise.core.client.WSEndpoint#getUnderlyingObjectInstance()
-     */
-    public synchronized Object getUnderlyingObjectInstance() {
-        return underlyingObjectInstance;
-    }
-
-    public synchronized void setUnderlyingObjectInstance( Object instance ) {
-        this.underlyingObjectInstance = instance;
-    }
-
     public synchronized String getName() {
         return name;
+    }
+
+    /**
+     * @return service
+     */
+    public final ExecutorService getService() {
+        return service;
     }
 
     public synchronized void setName( String name ) {
@@ -97,15 +101,22 @@ public class WSEndpointImpl implements WSEndpoint {
     }
 
     public synchronized String getUrl() {
-        return (String)(((BindingProvider)underlyingObjectInstance).getRequestContext().get(BindingProvider.ENDPOINT_ADDRESS_PROPERTY));
+        // TODO
+        return null;
+        // return
+        // (String)(((BindingProvider)underlyingObjectInstance).getRequestContext().get(BindingProvider.ENDPOINT_ADDRESS_PROPERTY));
     }
 
     public synchronized void setUrl( String url ) {
-        ((BindingProvider)underlyingObjectInstance).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, url);
+        // TODO
+        // ((BindingProvider)underlyingObjectInstance).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, url);
     }
 
     public synchronized String getUsername() {
-        return (String)(((BindingProvider)underlyingObjectInstance).getRequestContext().get(BindingProvider.USERNAME_PROPERTY));
+        // TODO
+        return null;
+        // return
+        // (String)(((BindingProvider)underlyingObjectInstance).getRequestContext().get(BindingProvider.USERNAME_PROPERTY));
     }
 
     /**
@@ -114,11 +125,15 @@ public class WSEndpointImpl implements WSEndpoint {
      * @param username
      */
     public synchronized void setUsername( String username ) {
-        ((BindingProvider)underlyingObjectInstance).getRequestContext().put(BindingProvider.USERNAME_PROPERTY, username);
+        // TODO
+        // ((BindingProvider)underlyingObjectInstance).getRequestContext().put(BindingProvider.USERNAME_PROPERTY, username);
     }
 
     public synchronized String getPassword() {
-        return (String)(((BindingProvider)underlyingObjectInstance).getRequestContext().get(BindingProvider.PASSWORD_PROPERTY));
+        // TODO
+        return null;
+        // return
+        // (String)(((BindingProvider)underlyingObjectInstance).getRequestContext().get(BindingProvider.PASSWORD_PROPERTY));
     }
 
     /**
@@ -127,7 +142,8 @@ public class WSEndpointImpl implements WSEndpoint {
      * @param password
      */
     public synchronized void setPassword( String password ) {
-        ((BindingProvider)underlyingObjectInstance).getRequestContext().put(BindingProvider.PASSWORD_PROPERTY, password);
+        // TODO
+        // ((BindingProvider)underlyingObjectInstance).getRequestContext().put(BindingProvider.PASSWORD_PROPERTY, password);
     }
 
     public synchronized Class getUnderlyingObjectClass() {
@@ -138,24 +154,21 @@ public class WSEndpointImpl implements WSEndpoint {
         this.underlyingObjectClass = clazz;
     }
 
-    public synchronized String getMethodName() {
-        return methodName;
-    }
-
-    public synchronized void setMethodName( String methodName ) {
-        this.methodName = methodName;
-    }
-
     /**
      * Add an Handler to this endpoint. Handler will apply on all endpoint method called
      * 
      * @see #getWSMethods()
      * @param handler
      */
-    public synchronized void addHandler( Handler handler ) {
-        List<Handler> handlerChain = ((BindingProvider)underlyingObjectInstance).getBinding().getHandlerChain();
-        handlerChain.add(handler);
-        ((BindingProvider)underlyingObjectInstance).getBinding().setHandlerChain(handlerChain);
+    public void addHandler( Handler handler ) {
+        handlers.add(handler);
+    }
+
+    /**
+     * @return handlers
+     */
+    public final List<Handler<?>> getHandlers() {
+        return handlers;
     }
 
     /**
@@ -195,7 +208,28 @@ public class WSEndpointImpl implements WSEndpoint {
      * @see org.jboss.wise.core.client.WSEndpoint#addWSExtension(org.jboss.wise.core.wsextensions.WSExtensionEnabler)
      */
     public void addWSExtension( WSExtensionEnabler enabler ) {
-        enabler.enable(this);
+        extensions.add(enabler);
+    }
+
+    /**
+     * @return extensions
+     */
+    public final List<WSExtensionEnabler> getExtensions() {
+        return extensions;
+    }
+
+    /**
+     * @return wsEndPointbuilder
+     */
+    final WSEndPointbuilder getWsEndPointbuilder() {
+        return wsEndPointbuilder;
+    }
+
+    /**
+     * @param wsEndPointbuilder Sets wsEndPointbuilder to the specified value.
+     */
+    final void setWsEndPointbuilder( WSEndPointbuilder wsEndPointbuilder ) {
+        this.wsEndPointbuilder = wsEndPointbuilder;
     }
 
 }

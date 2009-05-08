@@ -30,6 +30,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Future;
 import javax.jws.Oneway;
 import javax.jws.WebParam;
 import net.jcip.annotations.GuardedBy;
@@ -59,7 +60,7 @@ public class WSMethodImpl implements WSMethod {
     private final Map<String, WebParameterImpl> parameters = Collections.synchronizedMap(new HashMap<String, WebParameterImpl>());
 
     public WSMethodImpl( Method method,
-                         WSEndpoint endpoint ) throws IllegalArgumentException {
+                         WSEndpointImpl endpoint ) throws IllegalArgumentException {
         if (method == null || endpoint == null) {
             throw new IllegalArgumentException();
         }
@@ -79,21 +80,18 @@ public class WSMethodImpl implements WSMethod {
         Map<String, Object> emptyHolder = Collections.emptyMap();
 
         try {
-            Object epInstance = this.getEndpoint().getUnderlyingObjectInstance();
-            methodPointer = epInstance.getClass().getMethod(this.getMethod().getName(), this.getMethod().getParameterTypes());
+            EndpointMethodCaller caller = new EndpointMethodCaller(this.getEndpoint(), this.getMethod(),
+                                                                   this.getParmeterInRightPositionArray(args));
+            Future<Object> invocation = ((WSEndpointImpl)this.getEndpoint()).getService().submit(caller);
             if (isOneWay()) {
-                synchronized (this) {
-                    methodPointer.invoke(epInstance, this.getParmeterInRightPositionArray(args));
-                }
+                invocation.get();
                 result = new InvocationResultImpl(null, null, emptyHolder);
             } else {
                 synchronized (this) {
-                    result = new InvocationResultImpl("result", methodPointer.invoke(epInstance,
-                                                                                     this.getParmeterInRightPositionArray(args)),
-                                                      getHoldersResult(args));
+                    result = new InvocationResultImpl("result", invocation.get(), getHoldersResult(args));
                 }
             }
-        } catch (InvocationTargetException ite) {
+        } catch (Exception ite) {
             System.out.print("error invoking:" + this.getMethod());
             System.out.print("error invoking:" + args.values().toArray());
             if (methodPointer != null && methodPointer.getExceptionTypes() != null) {
@@ -105,7 +103,7 @@ public class WSMethodImpl implements WSMethod {
                 }
             }
             throw new InvocationException("Unknown exception received: " + ite.getMessage(), ite);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             throw new InvocationException("Generic Error during method invocation!", e);
         }
         return result;

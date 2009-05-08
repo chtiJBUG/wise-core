@@ -106,8 +106,10 @@ public class WSServiceImpl implements WSService {
         try {
             Thread.currentThread().setContextClassLoader(this.getClassLoader());
             ep.setClassLoader(this.getClassLoader());
-            ep.setUnderlyingObjectInstance(this.getServiceClass().getMethod(method.getName(), method.getParameterTypes()).invoke(this.getService(),
-                                                                                                                                 (Object[])null));
+            // ep.setUnderlyingObjectInstance(this.getServiceClass().getMethod(method.getName(),
+            // method.getParameterTypes()).invoke(this.getService(),
+            // (Object[])null));
+            ep.setWsEndPointbuilder(new WSEndPointbuilder(this.getServiceClass(), this.getService(), method));
             ep.setName(name);
             ep.setUnderlyingObjectClass(this.getServiceClass().getMethod(method.getName(), method.getParameterTypes()).getReturnType());
             if (userName != null && password != null) {
@@ -136,4 +138,34 @@ public class WSServiceImpl implements WSService {
         return service;
     }
 
+    public class WSEndPointbuilder {
+        private final Class<?> serviceClass;
+        private final Object serviceObject;
+        private final Method buildMethod;
+
+        /**
+         * @param serviceClass
+         * @param serviceObject
+         * @param buildMethod
+         */
+        public WSEndPointbuilder( Class<?> serviceClass,
+                                  Object serviceObject,
+                                  Method buildMethod ) {
+            super();
+            this.serviceClass = serviceClass;
+            this.serviceObject = serviceObject;
+            this.buildMethod = buildMethod;
+        }
+
+        public Object createEndPointUnderlyingObject() {
+            try {
+                return serviceClass.getMethod(buildMethod.getName(), buildMethod.getParameterTypes()).invoke(serviceObject,
+                                                                                                             (Object[])null);
+            } catch (Exception e) {
+                // TODO: something better
+                e.printStackTrace();
+                return null;
+            }
+        }
+    }
 }

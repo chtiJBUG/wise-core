@@ -22,14 +22,23 @@
 package org.jboss.wise.core.wsextensions.impl.jbosswsnative;
 
 import static org.hamcrest.core.IsAnything.any;
+import static org.junit.matchers.JUnitMatchers.hasItem;
+import static org.junit.Assert.assertThat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import static org.hamcrest.core.IsAnything.any;
+import static org.hamcrest.core.IsInstanceOf.instanceOf;
+import static org.hamcrest.collection.IsMapContaining.hasEntry;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import javax.xml.ws.BindingProvider;
+import javax.xml.ws.handler.Handler;
 import javax.xml.ws.soap.SOAPBinding;
-
+import org.hamcrest.core.IsInstanceOf;
 import org.jboss.wise.core.client.WSEndpoint;
 import org.jboss.ws.extensions.addressing.jaxws.WSAddressingClientHandler;
 import org.junit.Test;
@@ -40,39 +49,36 @@ import org.junit.Test;
 public class ReflectionEnablerDelegateTest {
 
     /**
-     * Test method for
-     * {@link org.jboss.wise.core.wsextensions.impl.jbosswsnative.ReflectionEnablerDelegate#visitMTOM(org.jboss.wise.core.client.WSEndpoint)}
-     * .
+     * Test method for {@link org.jboss.wise.core.wsextensions.impl.jbosswsnative.ReflectionEnablerDelegate#visitMTOM(Object)} .
      */
     @Test
     public void visitMTOMShouldSetMTOMOnBiding() {
         ReflectionEnablerDelegate delegate = new ReflectionEnablerDelegate(null, null);
-        WSEndpoint endpoint = mock(WSEndpoint.class);
         BindingProvider bindingProvider = mock(BindingProvider.class);
         SOAPBinding binding = mock(SOAPBinding.class);
-        when(endpoint.getUnderlyingObjectInstance()).thenReturn(bindingProvider);
         when(bindingProvider.getBinding()).thenReturn(binding);
-        delegate.visitMTOM(endpoint);
+        delegate.visitMTOM(bindingProvider);
         verify(binding).setMTOMEnabled(true);
     }
 
     /**
      * Test method for
-     * {@link org.jboss.wise.core.wsextensions.impl.jbosswsnative.ReflectionEnablerDelegate#visitWSAddressing(org.jboss.wise.core.client.WSEndpoint)}
-     * .
+     * {@link org.jboss.wise.core.wsextensions.impl.jbosswsnative.ReflectionEnablerDelegate#visitWSAddressing(Object)} .
      */
     @Test
     public void visitWSAddressingShouldAddRightHandler() {
         ReflectionEnablerDelegate delegate = new ReflectionEnablerDelegate(null, null);
-        WSEndpoint endpoint = mock(WSEndpoint.class);
-        delegate.visitWSAddressing(endpoint);
-        verify(endpoint).addHandler(argThat(any(WSAddressingClientHandler.class)));
+        List<Handler> handlerList = new ArrayList<Handler>();
+        BindingProvider bindingProvider = mock(BindingProvider.class);
+        SOAPBinding binding = mock(SOAPBinding.class);
+        when(bindingProvider.getBinding()).thenReturn(binding);
+        when(binding.getHandlerChain()).thenReturn(handlerList);
+        delegate.visitWSAddressing(bindingProvider);
+        assertThat(handlerList.get(0), instanceOf(WSAddressingClientHandler.class));
     }
 
     /**
-     * Test method for
-     * {@link org.jboss.wise.core.wsextensions.impl.jbosswsnative.ReflectionEnablerDelegate#visitWSRM(org.jboss.wise.core.client.WSEndpoint)}
-     * .
+     * Test method for {@link org.jboss.wise.core.wsextensions.impl.jbosswsnative.ReflectionEnablerDelegate#visitWSRM(Object)} .
      */
     @Test( expected = UnsupportedOperationException.class )
     public void visitWSRMShouldThrowUnsupportedOperationException() {

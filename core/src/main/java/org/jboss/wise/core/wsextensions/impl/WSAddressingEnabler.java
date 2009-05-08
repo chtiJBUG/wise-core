@@ -46,10 +46,10 @@ public class WSAddressingEnabler implements WSExtensionEnabler {
     /**
      * {@inheritDoc}
      * 
-     * @see org.jboss.wise.core.wsextensions.WSExtensionEnabler#enable(WSEndpoint)
+     * @see org.jboss.wise.core.wsextensions.WSExtensionEnabler#enable(Object)
      */
-    public void enable( WSEndpoint endpoint ) throws UnsupportedOperationException {
-        delegate.visitWSAddressing(endpoint);
+    public void enable( Object endpointInstance ) throws UnsupportedOperationException {
+        delegate.visitWSAddressing(endpointInstance);
     }
 
     public EnablerDelegate getDelegate() {

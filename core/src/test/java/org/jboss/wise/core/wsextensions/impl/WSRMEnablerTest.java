@@ -27,6 +27,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.jboss.wise.core.client.WSDynamicClient;
+import org.jboss.wise.core.client.WSEndpoint;
 import org.jboss.wise.core.client.impl.reflection.WSEndpointImpl;
 import org.jboss.wise.core.wsextensions.EnablerDelegate;
 import org.jboss.wise.core.wsextensions.WSExtensionEnabler;
@@ -63,7 +64,7 @@ public class WSRMEnablerTest {
 
     @Test
     public void shouldDelegateToVisitor() {
-        WSEndpointImpl ep = mock(WSEndpointImpl.class);
+        WSEndpoint ep = mock(WSEndpointImpl.class);
         WSExtensionEnabler enabler = new WSRMEnabler(client);
         enabler.enable(ep);
         verify(delegate).visitWSRM(ep);

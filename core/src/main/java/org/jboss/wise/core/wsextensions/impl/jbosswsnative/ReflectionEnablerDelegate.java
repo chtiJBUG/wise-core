@@ -66,51 +66,54 @@ public class ReflectionEnablerDelegate implements EnablerDelegate {
     /**
      * {@inheritDoc}
      * 
-     * @see org.jboss.wise.core.wsextensions.EnablerDelegate#visitMTOM(org.jboss.wise.core.client.WSEndpoint)
+     * @see org.jboss.wise.core.wsextensions.EnablerDelegate#visitMTOM(Object)
      */
-    public void visitMTOM( WSEndpoint endpoint ) throws UnsupportedOperationException {
-        ((SOAPBinding)((BindingProvider)endpoint.getUnderlyingObjectInstance()).getBinding()).setMTOMEnabled(true);
+    public void visitMTOM( Object endpointInstance ) throws UnsupportedOperationException {
+        ((SOAPBinding)((BindingProvider)endpointInstance).getBinding()).setMTOMEnabled(true);
 
     }
 
     /**
      * {@inheritDoc}
      * 
-     * @see org.jboss.wise.core.wsextensions.EnablerDelegate#visitWSAddressing(org.jboss.wise.core.client.WSEndpoint)
+     * @see org.jboss.wise.core.wsextensions.EnablerDelegate#visitWSAddressing(Object)
      */
-    public void visitWSAddressing( WSEndpoint endpoint ) throws UnsupportedOperationException {
-        endpoint.addHandler(new WSAddressingClientHandler());
+    @SuppressWarnings( "restriction" )
+    public void visitWSAddressing( Object endpointInstance ) throws UnsupportedOperationException {
+        List<Handler> handlerChain = ((BindingProvider)endpointInstance).getBinding().getHandlerChain();
+        handlerChain.add(new WSAddressingClientHandler());
+        ((BindingProvider)endpointInstance).getBinding().setHandlerChain(handlerChain);
     }
 
     /**
      * {@inheritDoc}
      * 
-     * @see org.jboss.wise.core.wsextensions.EnablerDelegate#visitWSRM(org.jboss.wise.core.client.WSEndpoint)
+     * @see org.jboss.wise.core.wsextensions.EnablerDelegate#visitWSRM(Object)
      */
-    public void visitWSRM( WSEndpoint endpoint ) throws UnsupportedOperationException {
+    public void visitWSRM( Object endpointInstance ) throws UnsupportedOperationException {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
-    public void visitWSSecurity( WSEndpoint endpoint ) throws UnsupportedOperationException, IllegalStateException {
+    public void visitWSSecurity( Object endpointInstance ) throws UnsupportedOperationException, IllegalStateException {
 
         if (configFileURL == null || configFileURL.length() == 0 || configName == null || configName.length() == 0) {
             throw new IllegalStateException("configFileURL and configName should not be null");
         }
 
-        List<Handler> origHandlerChain = ((BindingProvider)endpoint.getUnderlyingObjectInstance()).getBinding().getHandlerChain();
-        ((BindingProvider)endpoint.getUnderlyingObjectInstance()).getBinding().setHandlerChain(new LinkedList<Handler>());
+        List<Handler> origHandlerChain = ((BindingProvider)endpointInstance).getBinding().getHandlerChain();
+        ((BindingProvider)endpointInstance).getBinding().setHandlerChain(new LinkedList<Handler>());
 
-        if (endpoint.getUnderlyingObjectInstance() instanceof StubExt) {
+        if (endpointInstance instanceof StubExt) {
             URL configFile = getClass().getClassLoader().getResource(configFileURL);
             if (configFile == null) {
                 throw new IllegalStateException("Cannot find file: " + configFileURL);
             }
-            ((StubExt)endpoint.getUnderlyingObjectInstance()).setSecurityConfig(configFile.toExternalForm());
-            ((StubExt)endpoint.getUnderlyingObjectInstance()).setConfigName(configName);
+            ((StubExt)endpointInstance).setSecurityConfig(configFile.toExternalForm());
+            ((StubExt)endpointInstance).setConfigName(configName);
         }
-        List<Handler> handlerChain = ((BindingProvider)endpoint.getUnderlyingObjectInstance()).getBinding().getHandlerChain();
+        List<Handler> handlerChain = ((BindingProvider)endpointInstance).getBinding().getHandlerChain();
         handlerChain.addAll(origHandlerChain);
-        ((BindingProvider)endpoint.getUnderlyingObjectInstance()).getBinding().setHandlerChain(handlerChain);
+        ((BindingProvider)endpointInstance).getBinding().setHandlerChain(handlerChain);
 
     }
 

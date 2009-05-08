@@ -22,6 +22,7 @@
 
 package org.jboss.wise.core.client;
 
+import java.util.List;
 import java.util.Map;
 import javax.xml.ws.handler.Handler;
 import net.jcip.annotations.GuardedBy;
@@ -36,8 +37,7 @@ import org.jboss.wise.core.wsextensions.WSExtensionEnabler;
  */
 @ThreadSafe
 public interface WSEndpoint {
-
-    public Object getUnderlyingObjectInstance();
+    public Object createInstance();
 
     public String getWsdlName();
 
@@ -70,8 +70,7 @@ public interface WSEndpoint {
     public Map<String, WSMethod> getWSMethods();
 
     /**
-     * @return classLoader used to load JAXWS generated object see also {@link #getUnderlyingObjectInstance()} and
-     *         {@link #getUnderlyingObjectClass()}
+     * @return classLoader used to load JAXWS generated object see also {@link #getUnderlyingObjectClass()}
      */
     public ClassLoader getClassLoader();
 
@@ -84,5 +83,15 @@ public interface WSEndpoint {
      */
     @GuardedBy( "this" )
     public void addWSExtension( WSExtensionEnabler enabler );
+
+    /**
+     * @return handlers
+     */
+    public List<Handler<?>> getHandlers();
+
+    /**
+     * @return extensions
+     */
+    public List<WSExtensionEnabler> getExtensions();
 
 }

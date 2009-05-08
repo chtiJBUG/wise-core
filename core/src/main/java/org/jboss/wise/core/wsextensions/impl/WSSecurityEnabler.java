@@ -46,10 +46,10 @@ public class WSSecurityEnabler implements WSExtensionEnabler {
     /**
      * {@inheritDoc}
      * 
-     * @see org.jboss.wise.core.wsextensions.WSExtensionEnabler#enable(WSEndpoint)
+     * @see org.jboss.wise.core.wsextensions.WSExtensionEnabler#enable(Object)
      */
-    public void enable( WSEndpoint endpoint ) throws UnsupportedOperationException {
-        delegate.visitWSSecurity(endpoint);
+    public void enable( Object endpointInstance ) throws UnsupportedOperationException {
+        delegate.visitWSSecurity(endpointInstance);
     }
 
     /**
