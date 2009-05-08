@@ -34,6 +34,7 @@ import java.util.concurrent.Future;
 import javax.jws.Oneway;
 import javax.jws.WebParam;
 import net.jcip.annotations.GuardedBy;
+import net.jcip.annotations.Immutable;
 import net.jcip.annotations.ThreadSafe;
 import org.jboss.wise.core.client.InvocationResult;
 import org.jboss.wise.core.client.WSEndpoint;
@@ -49,93 +50,93 @@ import org.jboss.wise.core.mapper.WiseMapper;
  * @since 23-Aug-2007
  */
 @ThreadSafe
+@Immutable
 public class WSMethodImpl implements WSMethod {
 
-    @GuardedBy( "this" )
-    private Method method;
+    private final Method method;
 
-    @GuardedBy( "this" )
-    private WSEndpoint endpoint;
+    private final WSEndpoint endpoint;
 
     private final Map<String, WebParameterImpl> parameters = Collections.synchronizedMap(new HashMap<String, WebParameterImpl>());
 
-    public WSMethodImpl( Method method,
-                         WSEndpoint endpoint ) throws IllegalArgumentException {
-        if (method == null || endpoint == null) {
-            throw new IllegalArgumentException();
-        }
-        this.method = method;
-        this.endpoint = endpoint;
-        this.initWebParams();
+    public WSMethodImpl(Method method, WSEndpoint endpoint) throws IllegalArgumentException {
+	if (method == null || endpoint == null) {
+	    throw new IllegalArgumentException();
+	}
+	this.method = method;
+	this.endpoint = endpoint;
+	this.initWebParams();
     }
 
     /*
      * Invokes this method with the provided arguments
      * 
-     * @param args @return @throws WiseException If an unknowtn exception is received
+     * @param args @return @throws WiseException If an unknowtn exception is
+     * received
      */
-    InvocationResultImpl invoke( Map<String, Object> args ) throws InvocationException, IllegalArgumentException {
-        Method methodPointer = null;
-        InvocationResultImpl result = null;
-        Map<String, Object> emptyHolder = Collections.emptyMap();
+    InvocationResultImpl invoke(Map<String, Object> args) throws InvocationException, IllegalArgumentException {
+	Method methodPointer = null;
+	InvocationResultImpl result = null;
+	Map<String, Object> emptyHolder = Collections.emptyMap();
 
-        try {
-            EndpointMethodCaller caller = new EndpointMethodCaller(this.getEndpoint(), this.getMethod(),
-                                                                   this.getParmeterInRightPositionArray(args));
-            Future<Object> invocation = ((WSEndpointImpl)this.getEndpoint()).getService().submit(caller);
-            if (isOneWay()) {
-                invocation.get();
-                result = new InvocationResultImpl(null, null, emptyHolder);
-            } else {
-                synchronized (this) {
-                    result = new InvocationResultImpl("result", invocation.get(), getHoldersResult(args));
-                }
-            }
-        } catch (Exception ite) {
-            System.out.print("error invoking:" + this.getMethod());
-            System.out.print("error invoking:" + args.values().toArray());
-            if (methodPointer != null && methodPointer.getExceptionTypes() != null) {
-                for (int i = 0; i < methodPointer.getExceptionTypes().length; i++) {
-                    if (ite.getCause().getClass().isAssignableFrom(methodPointer.getExceptionTypes()[i])) {
-                        result = new InvocationResultImpl("exception", ite.getCause(), emptyHolder);
-                        return result;
-                    }
-                }
-            }
-            throw new InvocationException("Unknown exception received: " + ite.getMessage(), ite);
-        } catch (Throwable e) {
-            throw new InvocationException("Generic Error during method invocation!", e);
-        }
-        return result;
+	try {
+	    EndpointMethodCaller caller = new EndpointMethodCaller(this.getEndpoint(), this.getMethod(), this
+		    .getParmeterInRightPositionArray(args));
+	    Future<Object> invocation = ((WSEndpointImpl) this.getEndpoint()).getService().submit(caller);
+	    if (isOneWay()) {
+		invocation.get();
+		result = new InvocationResultImpl(null, null, emptyHolder);
+	    } else {
+
+		result = new InvocationResultImpl("result", invocation.get(), getHoldersResult(args));
+
+	    }
+	} catch (Exception ite) {
+	    System.out.print("error invoking:" + this.getMethod());
+	    System.out.print("error invoking:" + args.values().toArray());
+	    if (methodPointer != null && methodPointer.getExceptionTypes() != null) {
+		for (int i = 0; i < methodPointer.getExceptionTypes().length; i++) {
+		    if (ite.getCause().getClass().isAssignableFrom(methodPointer.getExceptionTypes()[i])) {
+			result = new InvocationResultImpl("exception", ite.getCause(), emptyHolder);
+			return result;
+		    }
+		}
+	    }
+	    throw new InvocationException("Unknown exception received: " + ite.getMessage(), ite);
+	} catch (Throwable e) {
+	    throw new InvocationException("Generic Error during method invocation!", e);
+	}
+	return result;
     }
 
     /**
      * Invokes this method with the provided arguments applying provided mapper
      * 
      * @param args
-     * @param mapper if null no mappings are applied method will be invoked using args directly. in this case the keys of the map
-     *        gotta be the parameters names as defined in wsdl/wsconsume generated classes
+     * @param mapper
+     *            if null no mappings are applied method will be invoked using
+     *            args directly. in this case the keys of the map gotta be the
+     *            parameters names as defined in wsdl/wsconsume generated
+     *            classes
      * @return {@link InvocationResultImpl}
      * @throws InvocationException
      * @throws IllegalArgumentException
      * @throws MappingException
      */
-    public InvocationResultImpl invoke( Object args,
-                                        WiseMapper mapper )
-        throws InvocationException, IllegalArgumentException, MappingException {
-        if (mapper == null) {
-            return this.invoke((Map<String, Object>)args);
-        }
-        ClassLoader oldLoader = Thread.currentThread().getContextClassLoader();
-        Map<String, Object> mappingResults;
-        try {
-            Thread.currentThread().setContextClassLoader(this.getEndpoint().getClassLoader());
-            mappingResults = mapper.applyMapping(args);
-        } finally {
-            // restore the original classloader
-            Thread.currentThread().setContextClassLoader(oldLoader);
-        }
-        return this.invoke(mappingResults);
+    public InvocationResultImpl invoke(Object args, WiseMapper mapper) throws InvocationException, IllegalArgumentException, MappingException {
+	if (mapper == null) {
+	    return this.invoke((Map<String, Object>) args);
+	}
+	ClassLoader oldLoader = Thread.currentThread().getContextClassLoader();
+	Map<String, Object> mappingResults;
+	try {
+	    Thread.currentThread().setContextClassLoader(this.getEndpoint().getClassLoader());
+	    mappingResults = mapper.applyMapping(args);
+	} finally {
+	    // restore the original classloader
+	    Thread.currentThread().setContextClassLoader(oldLoader);
+	}
+	return this.invoke(mappingResults);
 
     }
 
@@ -144,8 +145,8 @@ public class WSMethodImpl implements WSMethod {
      * 
      * @see org.jboss.wise.core.client.WSMethod#invoke(java.lang.Object)
      */
-    public InvocationResult invoke( Object args ) throws InvocationException, IllegalArgumentException, MappingException {
-        return this.invoke(args, null);
+    public InvocationResult invoke(Object args) throws InvocationException, IllegalArgumentException, MappingException {
+	return this.invoke(args, null);
     }
 
     /**
@@ -154,80 +155,72 @@ public class WSMethodImpl implements WSMethod {
      * @return a map representing valide webparameters
      */
     public Map<String, WebParameterImpl> getWebParams() {
-        return parameters;
+	return parameters;
     }
 
     private void initWebParams() {
-        Method method = this.getMethod();
-        Annotation[][] annotations = method.getParameterAnnotations();
-        Type[] methodparameterTypes = method.getGenericParameterTypes();
-        for (int i = 0; i < annotations.length; i++) {
-            for (int j = 0; j < annotations[i].length; j++) {
-                if (annotations[i][j] instanceof WebParam) {
-                    WebParam webParaAnno = (WebParam)annotations[i][j];
-                    WebParameterImpl parameter = new WebParameterImpl(methodparameterTypes[i], webParaAnno.name(), i,
-                                                                      webParaAnno.mode());
-                    parameters.put(parameter.getName(), parameter);
-                    break;
-                }
-            }
-        }
+	Method method = this.getMethod();
+	Annotation[][] annotations = method.getParameterAnnotations();
+	Type[] methodparameterTypes = method.getGenericParameterTypes();
+	for (int i = 0; i < annotations.length; i++) {
+	    for (int j = 0; j < annotations[i].length; j++) {
+		if (annotations[i][j] instanceof WebParam) {
+		    WebParam webParaAnno = (WebParam) annotations[i][j];
+		    WebParameterImpl parameter = new WebParameterImpl(methodparameterTypes[i], webParaAnno.name(), i, webParaAnno
+			    .mode());
+		    parameters.put(parameter.getName(), parameter);
+		    break;
+		}
+	    }
+	}
 
     }
 
-    /* 
+    /*
      * package protected method, for test purpose
      */
-    /*package*/Object[] getParmeterInRightPositionArray( Map<String, Object> originalParams ) {
-        Map<String, WebParameterImpl> webParams = this.getWebParams();
-        Object[] arrayToReturn = new Object[webParams.size()];
-        Arrays.fill(arrayToReturn, null);
+    /* package */Object[] getParmeterInRightPositionArray(Map<String, Object> originalParams) {
+	Map<String, WebParameterImpl> webParams = this.getWebParams();
+	Object[] arrayToReturn = new Object[webParams.size()];
+	Arrays.fill(arrayToReturn, null);
 
-        for (String key : originalParams.keySet()) {
-            if (webParams.get(key) != null) {
-                WebParameterImpl webPara = webParams.get(key);
-                int position = webParams.get(key).getPosition();
-                arrayToReturn[position] = originalParams.get(key);
-            }
+	for (String key : originalParams.keySet()) {
+	    if (webParams.get(key) != null) {
+		WebParameterImpl webPara = webParams.get(key);
+		int position = webParams.get(key).getPosition();
+		arrayToReturn[position] = originalParams.get(key);
+	    }
 
-        }
-        return arrayToReturn;
+	}
+	return arrayToReturn;
     }
 
-    /* 
+    /*
      * package protected method, for test purpose
      */
-    Map<String, Object> getHoldersResult( Map<String, Object> paras ) {
-        Map<String, Object> holders = new HashMap<String, Object>();
-        Map<String, WebParameterImpl> webParams = this.getWebParams();
+    Map<String, Object> getHoldersResult(Map<String, Object> paras) {
+	Map<String, Object> holders = new HashMap<String, Object>();
+	Map<String, WebParameterImpl> webParams = this.getWebParams();
 
-        for (String key : paras.keySet()) {
-            WebParameterImpl wisePara = webParams.get(key);
-            if (wisePara != null && (wisePara.getMode() == WebParam.Mode.INOUT || wisePara.getMode() == WebParam.Mode.OUT)) {
-                holders.put(key, paras.get(key));
-            }
-        }
-        return holders;
+	for (String key : paras.keySet()) {
+	    WebParameterImpl wisePara = webParams.get(key);
+	    if (wisePara != null && (wisePara.getMode() == WebParam.Mode.INOUT || wisePara.getMode() == WebParam.Mode.OUT)) {
+		holders.put(key, paras.get(key));
+	    }
+	}
+	return holders;
     }
 
     public synchronized boolean isOneWay() {
-        return method.getAnnotation(Oneway.class) != null;
+	return method.getAnnotation(Oneway.class) != null;
     }
 
-    public synchronized Method getMethod() {
-        return method;
+    public Method getMethod() {
+	return method;
     }
 
-    public synchronized void setMethod( Method method ) {
-        this.method = method;
-    }
-
-    public synchronized WSEndpoint getEndpoint() {
-        return endpoint;
-    }
-
-    public synchronized void setEndpoint( WSEndpoint endpoint ) {
-        this.endpoint = endpoint;
+    public WSEndpoint getEndpoint() {
+	return endpoint;
     }
 
 }

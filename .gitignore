@@ -5,7 +5,10 @@
 /test-output
 /build
 /classes
-/.settings
+**/.settings
+.settings
+.project
+**/.project
 /target
 /cobertura.ser
 /bin

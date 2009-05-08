@@ -112,9 +112,11 @@ public class BasicStressTest extends WiseTest {
 	    WSMethod method = client.getWSMethod("HelloService", "HelloWorldBeanPort", "echo");
 	    Map<String, Object> args = new java.util.HashMap<String, Object>();
 	    args.put("arg0", "from-wise-client thread #" + count);
+
 	    InvocationResult result = method.invoke(args, null);
 	    Map<String, Object> res = result.getMapRequestAndResult(null, null);
 	    Map<String, Object> test = (Map<String, Object>) res.get("results");
+
 	    return (String) test.get("result");
 
 	}
