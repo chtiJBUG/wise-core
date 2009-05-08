@@ -33,6 +33,7 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Executors;
 import javax.jws.Oneway;
 import javax.jws.WebParam;
 import javax.jws.WebParam.Mode;
@@ -179,59 +180,62 @@ public class WSMethodImplTest {
         assertThat(results, hasEntry("annotation3", (Object)"foo3"));
     }
 
-    // @Test
-    // public void shouldRuninvokeForOneWayMethod() throws Exception {
-    // Method method = this.getClass().getMethod("methodOneWay", new Class[] {});
-    // WSEndpointImpl endPointMock = mock(WSEndpointImpl.class);
-    // when(endPointMock.createInstance()).thenReturn(this);
-    // WSMethodImpl wsMethod = new WSMethodImpl(method, endPointMock);
-    // InvocationResult invocationResults = wsMethod.invoke(Collections.EMPTY_MAP);
-    // Map<String, Object> results = invocationResults.getMapRequestAndResult(null, null);
-    // assertThat(this.methodWorked, is(true));
-    // assertThat(results.size(), is(1));
-    // assertThat(((Map)results.get("results")).isEmpty(), is(true));
-    //
-    // }
-    //
-    // @Test
-    // public void shouldRuninvokeForMethods() throws Exception {
-    // Method method = this.getClass().getMethod("methodForAnnotation", new Class[] {Integer.class, String.class, String.class});
-    // WSEndpointImpl endPointMock = mock(WSEndpointImpl.class);
-    // when(endPointMock.createInstance()).thenReturn(this);
-    // WSMethodImpl wsMethod = new WSMethodImpl(method, endPointMock);
-    // Map<String, Object> inputMap = new HashMap<String, Object>();
-    // inputMap.put("annotation2", "foo2");
-    // inputMap.put("annotation3", "foo3");
-    // inputMap.put("annotaion1", Integer.valueOf(3));
-    // InvocationResult invocationResults = wsMethod.invoke(inputMap);
-    // assertThat(this.methodWorked, is(true));
-    // Map<String, Object> results = (Map)invocationResults.getMapRequestAndResult(null, null).get("results");
-    // assertThat(results.size(), is(3));
-    // assertThat(results, hasEntry("result", (Object)"great"));
-    // assertThat(results, hasEntry("annotation2", (Object)"foo2"));
-    // assertThat(results, hasEntry("annotation3", (Object)"foo3"));
-    //
-    // }
-    //
-    // @Test
-    // public void shouldRuninvokeForMethodsApplyingMapping() throws Exception {
-    // Method method = this.getClass().getMethod("methodForAnnotation", new Class[] {Integer.class, String.class, String.class});
-    // WSEndpointImpl endPointMock = mock(WSEndpointImpl.class);
-    // when(endPointMock.createInstance()).thenReturn(this);
-    // WSMethodImpl wsMethod = new WSMethodImpl(method, endPointMock);
-    // Map<String, Object> inputMap = new HashMap<String, Object>();
-    // inputMap.put("annotation2", "foo2");
-    // inputMap.put("annotation3", "foo3");
-    // inputMap.put("annotaion1", Integer.valueOf(3));
-    // WiseMapper mapper = mock(WiseMapper.class);
-    // when(mapper.applyMapping(anyObject())).thenReturn(inputMap);
-    // InvocationResult invocationResults = wsMethod.invoke(inputMap, mapper);
-    // assertThat(this.methodWorked, is(true));
-    // Map<String, Object> results = (Map)invocationResults.getMapRequestAndResult(null, null).get("results");
-    // assertThat(results.size(), is(3));
-    // assertThat(results, hasEntry("result", (Object)"great"));
-    // assertThat(results, hasEntry("annotation2", (Object)"foo2"));
-    // assertThat(results, hasEntry("annotation3", (Object)"foo3"));
-    //
-    // }
+    @Test
+    public void shouldRuninvokeForOneWayMethod() throws Exception {
+        Method method = this.getClass().getMethod("methodOneWay", new Class[] {});
+        WSEndpointImpl endPointMock = mock(WSEndpointImpl.class);
+        when(endPointMock.getService()).thenReturn(Executors.newFixedThreadPool(10));
+        when(endPointMock.createInstance()).thenReturn(this);
+        WSMethodImpl wsMethod = new WSMethodImpl(method, endPointMock);
+        InvocationResult invocationResults = wsMethod.invoke(Collections.EMPTY_MAP);
+        Map<String, Object> results = invocationResults.getMapRequestAndResult(null, null);
+        assertThat(this.methodWorked, is(true));
+        assertThat(results.size(), is(1));
+        assertThat(((Map)results.get("results")).isEmpty(), is(true));
+
+    }
+
+    @Test
+    public void shouldRuninvokeForMethods() throws Exception {
+        Method method = this.getClass().getMethod("methodForAnnotation", new Class[] {Integer.class, String.class, String.class});
+        WSEndpointImpl endPointMock = mock(WSEndpointImpl.class);
+        when(endPointMock.getService()).thenReturn(Executors.newFixedThreadPool(10));
+        when(endPointMock.createInstance()).thenReturn(this);
+        WSMethodImpl wsMethod = new WSMethodImpl(method, endPointMock);
+        Map<String, Object> inputMap = new HashMap<String, Object>();
+        inputMap.put("annotation2", "foo2");
+        inputMap.put("annotation3", "foo3");
+        inputMap.put("annotaion1", Integer.valueOf(3));
+        InvocationResult invocationResults = wsMethod.invoke(inputMap);
+        assertThat(this.methodWorked, is(true));
+        Map<String, Object> results = (Map)invocationResults.getMapRequestAndResult(null, null).get("results");
+        assertThat(results.size(), is(3));
+        assertThat(results, hasEntry("result", (Object)"great"));
+        assertThat(results, hasEntry("annotation2", (Object)"foo2"));
+        assertThat(results, hasEntry("annotation3", (Object)"foo3"));
+
+    }
+
+    @Test
+    public void shouldRuninvokeForMethodsApplyingMapping() throws Exception {
+        Method method = this.getClass().getMethod("methodForAnnotation", new Class[] {Integer.class, String.class, String.class});
+        WSEndpointImpl endPointMock = mock(WSEndpointImpl.class);
+        when(endPointMock.getService()).thenReturn(Executors.newFixedThreadPool(10));
+        when(endPointMock.createInstance()).thenReturn(this);
+        WSMethodImpl wsMethod = new WSMethodImpl(method, endPointMock);
+        Map<String, Object> inputMap = new HashMap<String, Object>();
+        inputMap.put("annotation2", "foo2");
+        inputMap.put("annotation3", "foo3");
+        inputMap.put("annotaion1", Integer.valueOf(3));
+        WiseMapper mapper = mock(WiseMapper.class);
+        when(mapper.applyMapping(anyObject())).thenReturn(inputMap);
+        InvocationResult invocationResults = wsMethod.invoke(inputMap, mapper);
+        assertThat(this.methodWorked, is(true));
+        Map<String, Object> results = (Map)invocationResults.getMapRequestAndResult(null, null).get("results");
+        assertThat(results.size(), is(3));
+        assertThat(results, hasEntry("result", (Object)"great"));
+        assertThat(results, hasEntry("annotation2", (Object)"foo2"));
+        assertThat(results, hasEntry("annotation3", (Object)"foo3"));
+
+    }
 }

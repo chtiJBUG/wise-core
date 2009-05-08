@@ -72,18 +72,22 @@ public class EndpointMethodCaller implements Callable<Object> {
     }
 
     public void visitEnabler() {
-        for (WSExtensionEnabler enabler : epInstance.getExtensions()) {
-            enabler.enable(epUnderlyingObjectInstance.get());
+        if (epInstance.getExtensions() != null) {
+            for (WSExtensionEnabler enabler : epInstance.getExtensions()) {
+                enabler.enable(epUnderlyingObjectInstance.get());
+            }
         }
     }
 
     public void addHandlers() {
-        for (Handler<?> handler : epInstance.getHandlers()) {
-            List<Handler> handlerChain = ((BindingProvider)epUnderlyingObjectInstance.get()).getBinding().getHandlerChain();
-            handlerChain.add(handler);
-            ((BindingProvider)epUnderlyingObjectInstance.get()).getBinding().setHandlerChain(handlerChain);
-        }
+        if (epInstance.getHandlers() != null) {
 
+            for (Handler<?> handler : epInstance.getHandlers()) {
+                List<Handler> handlerChain = ((BindingProvider)epUnderlyingObjectInstance.get()).getBinding().getHandlerChain();
+                handlerChain.add(handler);
+                ((BindingProvider)epUnderlyingObjectInstance.get()).getBinding().setHandlerChain(handlerChain);
+            }
+        }
     }
 
     public synchronized void setUsername() {

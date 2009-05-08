@@ -107,7 +107,7 @@ public class WSEndpointImpl implements WSEndpoint {
     /**
      * @return service
      */
-    public final ExecutorService getService() {
+    public synchronized ExecutorService getService() {
         return service;
     }
 
