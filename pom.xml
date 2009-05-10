@@ -28,39 +28,36 @@
     <packaging>pom</packaging>
 
     <scm>
-        <connection></connection>
-        <developerConnection></developerConnection>
+        <connection>scm:svn:http://anonsvn.jboss.org/repos/wise/core/trunk</connection>
+        <developerConnection>scm:svn:https://svn.jboss.org/repos/wise/core/trunk</developerConnection>
+        <url>http://fisheye.jboss.org/viewrep/Wise/core/trunk</url>
     </scm>
+    
     <issueManagement>
         <system>jira</system>
         <url>https://jira.jboss.org/jira/browse/WISE</url>
     </issueManagement>
 
     <prerequisites>
-        <maven>2.0.5</maven>
+        <maven>2.1.0</maven>
     </prerequisites>
 
     <properties>
         <compiler.fork>false</compiler.fork>
     </properties>
 
-
+    <!-- DistributionManagement -->
     <distributionManagement>
-        <site>
-            <id>site.deploy</id>
-            <name>wise site release</name>
-            <url></url>
-        </site>
-        <repository>
-            <id>wise.releases</id>
-            <name>JBoss release Distribution Repository</name>
-            <url>scpexe://</url>
-        </repository>
-        <snapshotRepository>
-            <id></id>
-            <name></name>
-            <url></url>
-        </snapshotRepository>
+      <repository>
+        <id>repository.jboss.org</id>
+        <name>JBoss Maven Repository</name>
+        <url>file://${jboss.maven.repository}</url>
+      </repository>
+      <snapshotRepository>
+        <id>snapshots.jboss.org</id>
+        <name>JBoss Snapshot Repository</name>
+        <url>dav:https://snapshots.jboss.org/maven2</url>
+      </snapshotRepository>
     </distributionManagement>
 
     <inceptionYear>2008</inceptionYear>
