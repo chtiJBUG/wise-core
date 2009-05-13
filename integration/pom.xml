@@ -174,7 +174,46 @@
 							</webResources>
 						</configuration>
 					</execution>
+					
+					<execution>
+						<id>war-wsdlResolver</id>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>war</goal>
+						</goals>
+						<configuration>
+							<webXml>${basedir}/src/test/resources/WEB-INF/wsdlResolver/web.xml
+							</webXml>
+							<warName>wsdlResolver</warName>
+							<outputDirectory>${basedir}/target/test-classes/
+							</outputDirectory>
+							<webappDirectory>${basedir}/target/wsdlResolver
+							</webappDirectory>
+							<packagingIncludes></packagingIncludes>
+							<webResources>
+								<webResource>
+									<targetPath>WEB-INF/classes</targetPath>
+									<directory>${basedir}/target/test-classes/
+									</directory>
+									<includes>
+										<include>**/wsdlResolver/*.class</include>
+									</includes>
+									<excludes>
+									    <exclude>**/*Test.class</exclude>
+									</excludes>
+								</webResource>
 
+								<webResource>
+									<targetPath>WEB-INF</targetPath>
+									<directory>${basedir}/src/test/resources/WEB-INF/wsdlResolver/
+									</directory>
+									<includes>
+										<include>**/*.*</include>
+									</includes>
+								</webResource>
+							</webResources>
+						</configuration>
+					</execution>
 
 					<execution>
 						<id>war-wsaddress</id>
