@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -42,15 +43,18 @@ import org.jboss.ws.core.utils.JarUrlConnection;
  */
 public class Connection {
 
-    private String usernamePassword = null;
+    private String username;
+    private String password;
 
-    public Connection(String username, String password) {
-	//BASIC Auth support; further auth not supported yet
-	if (StringUtils.trimToNull(username) != null && StringUtils.trimToNull(password) != null) {
-	    this.usernamePassword = new StringBuffer(username).append(":").append(password).toString();
-	}
+    Connection() {
+	//nothing to do
     }
-
+    
+    public Connection(String username, String password) {
+	setUsername(username);
+	setPassword(password);
+    }
+    
     /**
      * Open an inputStream from the given URL.
      * 
@@ -90,6 +94,7 @@ public class Connection {
 	    // connection that gives us fragmented answers.
 	    conn.setRequestProperty("Connection", "close");
 	    // BASIC AUTH
+	    String usernamePassword = getUserNameAndPasswordForBasicAuthentication();
 	    if (usernamePassword != null && usernamePassword.length() != 0) {
 		conn.setRequestProperty("Authorization", "Basic " + (new BASE64Encoder()).encode(usernamePassword.getBytes()));
 	    }
@@ -113,4 +118,31 @@ public class Connection {
             throw new WiseRuntimeException(e);
         }
     }
+    
+    public static boolean isLocalAddress(String addr) throws IllegalArgumentException {
+	try {
+	    URL url = new URL(addr);
+	    return ("file".equals(url.getProtocol()));
+	} catch (Exception e) {
+	    throw new IllegalArgumentException("Cannot process provided address: " + addr, e);
+	}
+    }
+    
+    void setUsername(String username) {
+	this.username = username;
+    }
+    
+    void setPassword(String password) {
+	this.password = password;
+    }
+    
+    String getUserNameAndPasswordForBasicAuthentication() {
+	//BASIC Auth support; further auth not supported yet
+	if (StringUtils.trimToNull(username) != null && StringUtils.trimToNull(password) != null) {
+	    return new StringBuffer(username).append(":").append(password).toString();
+	} else {
+	    return null;
+	}
+    }
+
 }

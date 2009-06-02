@@ -182,7 +182,7 @@ public class WSDLResolver {
 		URL targetURL = new URL(baseURI.substring(0, baseURI.lastIndexOf("/") + 1) + "wsdl-" + IDGenerator.nextVal() + ".wsdl");
 		String newLocationURI = targetURL.getPath();
 		File targetFile = new File(newLocationURI);
-		System.out.println(targetFile);
+		log.debug("targetFile: " + targetFile);
 		targetFile.getParentFile().mkdirs();
 		saved.put(locationURI, newLocationURI);
 		saved.put(newLocationURI, newLocationURI);
@@ -202,8 +202,11 @@ public class WSDLResolver {
 		WSDLFactory wsdlFactory = WSDLFactory.newInstance();
 		javax.wsdl.xml.WSDLWriter wsdlWriter = wsdlFactory.newWSDLWriter();
 		FileWriter fw = new FileWriter(targetFile);
-		wsdlWriter.writeWSDL(subdef, fw);
-		fw.close();
+		try {
+		    wsdlWriter.writeWSDL(subdef, fw);
+		} finally {
+		    fw.close();
+		}
 
 		log.debug("WSDL import saved to: " + targetURL);
 	    }

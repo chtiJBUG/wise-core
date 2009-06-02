@@ -23,31 +23,30 @@
 package org.jboss.wise.core.client.impl.reflection.builder;
 
 import static org.jboss.wise.core.utils.DefaultConfig.MAX_THRED_POOL_SIZE;
+
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintStream;
-import java.net.ConnectException;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
+
 import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
-import org.apache.commons.httpclient.HttpConnection;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.jboss.wise.core.client.WSDynamicClient;
 import org.jboss.wise.core.client.builder.WSDynamicClientBuilder;
 import org.jboss.wise.core.client.impl.reflection.WSDynamicClientImpl;
+import org.jboss.wise.core.client.impl.wsdlResolver.Connection;
+import org.jboss.wise.core.client.impl.wsdlResolver.WSDLResolver;
 import org.jboss.wise.core.exception.WiseRuntimeException;
 import org.jboss.wise.core.utils.IDGenerator;
-import org.jboss.wise.core.utils.IOUtils;
-import sun.misc.BASE64Encoder;
 
 /**
  * @author stefano.maestri@javalinux.it
+ * @author alessio.soldano@jboss.com
  */
 @ThreadSafe
 public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBuilder {
@@ -127,13 +126,12 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
         if (this.getMaxThreadPoolSize() < 1) {
             throw new IllegalStateException("MaxThreadPoolSize cannot be less than 1");
         }
-        if (this.getWsdlURL() != null && this.getWsdlURL().startsWith("http://")) {
-
-            this.setNormalizedWsdlUrl(this.transferWSDL(getUserNameAndPasswordForBasicAuthentication(), clientSpecificTmpDir));
+        String wsdlUrl = this.getWsdlURL();
+        if (userName != null || (StringUtils.trimToNull(wsdlUrl) != null && Connection.isLocalAddress(wsdlUrl))) {
+            this.setNormalizedWsdlUrl(this.transferWSDL(userName, password, clientSpecificTmpDir));
         } else {
-            this.setNormalizedWsdlUrl(this.getWsdlURL());
+            this.setNormalizedWsdlUrl(wsdlUrl);
         }
-        logger.debug("Get usable WSDL :" + this.getWsdlURL());
 
         if (this.getNormalizedWsdlUrl() == null || this.getNormalizedWsdlUrl().trim().length() == 0) {
             throw new IllegalStateException("wsdlURL cannot be null");
@@ -297,111 +295,22 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
         return this;
     }
 
-    synchronized String getUserNameAndPasswordForBasicAuthentication() {
-        if (StringUtils.trimToNull(userName) == null || StringUtils.trimToNull(password) == null) {
-            return null;
-        } else {
-            return new StringBuffer(userName).append(":").append(password).toString();
-        }
-    }
-
-    /*
-     * Downloads the wsdl.
+    /**
+     * Transfer the wsdl to local filesystem. This is required because jaxws tools
+     * can't deal with any kind of authentication.
      * 
      * @throws WiseConnectionException If the wsdl cannot be retrieved
      */
-    private synchronized String transferWSDL( String usernameAndPassword,
-                                              String clientSpecificTmp ) throws WiseRuntimeException {
-        try {
-            return this.transferWSDL(usernameAndPassword, IOUtils.newInstance(), clientSpecificTmp);
-        } catch (IOException e) {
-            throw new WiseRuntimeException(e);
-        }
-
-    }
-
-    /*
-     * Downloads the wsdl.
-     * 
-     * @throws WiseConnectionException If the wsdl cannot be retrieved
-     */
-    String transferWSDL( String usernameAndPassword,
-                         IOUtils ioUtils,
-                         String clientSpecificTmp ) throws IOException, WiseRuntimeException {
-        HttpURLConnection conn = openAndInitConnection(usernameAndPassword, new URL(this.getWsdlURL()));
-        File file = new File(clientSpecificTmp, new StringBuffer("WiseWsdl").append(".xml").toString());
-        ioUtils.copyStreamAndClose(new FileOutputStream(file), getWsdlInputStream(conn));
-        return file.getPath();
-
-    }
-
-    /**
-     * It opens an input stream for passed {@link HttpConnection}. Note that callers should take care of resource closing.
-     * 
-     * @param conn
-     * @return an InputStream if httconn went well, or throw an exception
-     * @throws WiseRuntimeException
-     */
-    InputStream getWsdlInputStream( HttpURLConnection conn ) throws WiseRuntimeException {
-        try {
-            InputStream is = null;
-            if (conn.getResponseCode() == 200) {
-                is = conn.getInputStream();
-            } else {
-
-                throw new ConnectException("Remote server's response is an error: " + conn.getResponseCode());
-            }
-            return is;
-        } catch (Exception e) {
-            throw new WiseRuntimeException(e);
-        }
-
-    }
-
-    /**
-     * @param usernameAndPassword
-     * @param url
-     * @return a connection prepared to download the wsdl
-     * @throws WiseRuntimeException
-     */
-    HttpURLConnection openAndInitConnection( String usernameAndPassword,
-                                             URL url ) throws WiseRuntimeException {
-        HttpURLConnection conn;
-        try {
-            conn = (HttpURLConnection)url.openConnection();
-        } catch (IOException e) {
-            throw new WiseRuntimeException(e);
-        }
-        return this.initConnection(usernameAndPassword, conn);
-    }
-
-    /**
-     * @param usernameAndPassword
-     * @param conn
-     * @return a connection prepared to download the wsdl
-     * @throws WiseRuntimeException
-     */
-    HttpURLConnection initConnection( String usernameAndPassword,
-                                      HttpURLConnection conn ) throws WiseRuntimeException {
-        try {
-
-            conn.setDoOutput(false);
-            conn.setDoInput(true);
-            conn.setUseCaches(false);
-            conn.setRequestMethod("GET");
-            conn.setRequestProperty("Accept",
-                                    "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5");
-            // set Connection close, otherwise we get a keep-alive
-            // connection that gives us fragmented answers.
-            conn.setRequestProperty("Connection", "close");
-            // BASIC AUTH
-            if (usernameAndPassword != null && usernameAndPassword.length() != 0) {
-                conn.setRequestProperty("Authorization", "Basic " + (new BASE64Encoder()).encode(usernameAndPassword.getBytes()));
-            }
-            return conn;
-        } catch (Exception e) {
-            throw new WiseRuntimeException(e);
-        }
+    synchronized String transferWSDL(String username, String password, String tmpDir) throws WiseRuntimeException {
+	try {
+	    WSDLResolver resolver = username != null ? new WSDLResolver(tmpDir, new Connection(username, password)) : new WSDLResolver(tmpDir);
+	    File wsdlFile = resolver.retrieveWsdlFile(new URL(getWsdlURL()));
+	    String result = wsdlFile.getAbsolutePath();
+	    logger.info("Main wsdl file stored locally: " + result);
+	    return result;
+	} catch (Exception e) {
+	    throw new WiseRuntimeException(e);
+	}
     }
 
     /**

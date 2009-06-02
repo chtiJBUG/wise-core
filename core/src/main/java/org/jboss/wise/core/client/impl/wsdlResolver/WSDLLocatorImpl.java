@@ -29,7 +29,6 @@ import java.net.URL;
 import javax.wsdl.xml.WSDLLocator;
 
 import org.jboss.logging.Logger;
-import org.jboss.ws.core.utils.ResourceURL;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 
