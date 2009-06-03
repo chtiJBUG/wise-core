@@ -23,8 +23,6 @@
 	<name>Wise Integration Test</name>
 	<url>http://www.jboss.org/wise</url>
 
-	<packaging>jar</packaging>
-
 	<parent>
 		<groupId>org.jboss.wise</groupId>
 		<artifactId>wise-parent</artifactId>
@@ -81,13 +79,13 @@
 		        <groupId>org.apache.maven.plugins</groupId>
 		        <artifactId>maven-jar-plugin</artifactId>
 		        <executions>
-                    <execution>
+                        <execution>
                         <phase>package</phase>
                         <goals>
-                             <goal>test-jar</goal>
+                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                             <finalName>mtom</finalName>
+                             <finalName>mtom-tests</finalName>
                              <outputDirectory>${basedir}/target/test-classes/</outputDirectory>
                              <testClassesDirectory>${basedir}/target/test-classes/</testClassesDirectory>
                              <includes>
