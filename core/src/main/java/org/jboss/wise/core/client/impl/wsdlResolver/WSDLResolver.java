@@ -59,22 +59,21 @@ import org.xml.sax.EntityResolver;
  * 
  * @author alessio.soldano@jboss.com
  * @since 13-May-2009
- *
+ * 
  */
 public class WSDLResolver {
-    
+
     private static Logger log = Logger.getLogger(WSDLResolver.class);
-    
-    private String tmpDir;
-    private Connection connection;
-    
-    public WSDLResolver(String tmpDir)
-    {
+
+    private final String tmpDir;
+
+    private final Connection connection;
+
+    public WSDLResolver(String tmpDir) {
 	this(tmpDir, new Connection(null, null));
     }
-    
-    public WSDLResolver(String tmpDir, Connection connection)
-    {
+
+    public WSDLResolver(String tmpDir, Connection connection) {
 	this.tmpDir = tmpDir;
 	this.connection = connection;
     }
@@ -102,10 +101,10 @@ public class WSDLResolver {
 	    for (Element documentElement : getSchemaElements(def)) {
 		saveSchemaImports(wsdlFile.toURL(), documentElement, saved, wsdlURL);
 	    }
-	    
-	    //save modified file
+
+	    // save modified file
 	    writeDefinition(def, fWriter);
-	    
+
 	    return wsdlFile;
 	} catch (Exception e) {
 	    log.error("Cannot save wsdl to: " + wsdlFile);
@@ -116,14 +115,14 @@ public class WSDLResolver {
 	    }
 	}
     }
-    
+
     private static void writeDefinition(Definition wsdlDefinition, Writer writer) throws WSDLException, IOException {
 	WSDLFactory wsdlFactory = WSDLFactory.newInstance();
-        javax.wsdl.xml.WSDLWriter wsdlWriter = wsdlFactory.newWSDLWriter();
-        wsdlWriter.writeWSDL(wsdlDefinition, writer);
-        writer.close();
+	javax.wsdl.xml.WSDLWriter wsdlWriter = wsdlFactory.newWSDLWriter();
+	wsdlWriter.writeWSDL(wsdlDefinition, writer);
+	writer.close();
     }
-    
+
     private Definition getWsdlDefinition(URL wsdlLocation) throws WSDLException {
 	if (wsdlLocation == null)
 	    throw new IllegalArgumentException("URL cannot be null");
@@ -134,13 +133,13 @@ public class WSDLResolver {
 	WSDLFactory wsdlFactory = WSDLFactory.newInstance(JBossWSDLFactoryImpl.class.getName(), this.getClass().getClassLoader());
 	WSDLReader wsdlReader = wsdlFactory.newWSDLReader();
 	wsdlReader.setFeature("javax.wsdl.verbose", false);
-	
+
 	return wsdlReader.readWSDL(new WSDLLocatorImpl(entityResolver, wsdlLocation, connection));
     }
-    
+
     private List<Element> getSchemaElements(Definition definition) throws WSDLException {
 	Types types = definition.getTypes();
-	List<Element> result = new LinkedList<Element>(); 
+	List<Element> result = new LinkedList<Element>();
 	if (types != null && types.getExtensibilityElements().size() > 0) {
 	    List extElements = types.getExtensibilityElements();
 	    int len = extElements.size();
@@ -162,6 +161,12 @@ public class WSDLResolver {
 
     /**
      * Save the wsdl imports for a given wsdl definition
+     * 
+     * @param parentURL
+     * @param parentDefinition
+     * @param saved
+     * @param wsdlURL
+     * @throws Exception
      */
     @SuppressWarnings("unchecked")
     private void saveWsdlImports(URL parentURL, Definition parentDefinition, Map<String, String> saved, URL wsdlURL) throws Exception {
@@ -186,18 +191,18 @@ public class WSDLResolver {
 		targetFile.getParentFile().mkdirs();
 		saved.put(locationURI, newLocationURI);
 		saved.put(newLocationURI, newLocationURI);
-		//update the current referrer
+		// update the current referrer
 		wsdlImport.setLocationURI(newLocationURI);
 
 		// recursively save imports
 		saveWsdlImports(parentURL, subdef, saved, wsdlURL);
-		
+
 		// Save XMLSchema imports
 		String baseWsdlURI = wsdlURL.toExternalForm();
 		for (Element domElement : getSchemaElements(subdef)) {
 		    saveSchemaImports(parentURL, domElement, saved, new URL(baseWsdlURI.substring(0, baseWsdlURI.lastIndexOf("/") + 1) + locationURI));
 		}
-		
+
 		// save modified file
 		WSDLFactory wsdlFactory = WSDLFactory.newInstance();
 		javax.wsdl.xml.WSDLWriter wsdlWriter = wsdlFactory.newWSDLWriter();
@@ -215,6 +220,12 @@ public class WSDLResolver {
 
     /**
      * Save the schema imports for a given wsdl definition
+     * 
+     * @param parentURL
+     * @param element
+     * @param saved
+     * @param referrerURL
+     * @throws Exception
      */
     private void saveSchemaImports(URL parentURL, Element element, Map<String, String> saved, URL referrerURL) throws Exception {
 	String baseURI = parentURL.toExternalForm();
@@ -235,25 +246,26 @@ public class WSDLResolver {
 		    File targetFile = new File(newSchemaLocation);
 		    targetFile.getParentFile().mkdirs();
 		    saved.put(schemaLocation, newSchemaLocation);
-		    //update the current referrer
+		    // update the current referrer
 		    childElement.setAttribute("schemaLocation", newSchemaLocation);
 
-		    //get referenced schema
+		    // get referenced schema
 		    URL schemaURL = new URL(referrerURL, schemaLocation);
 		    InputStream is = null;
 		    Element subDoc = null;
 		    try {
 			is = connection.open(schemaURL);
-    		    	subDoc = DOMUtils.parse(is);
+			subDoc = DOMUtils.parse(is);
 		    } finally {
 			try {
 			    is.close();
-			} catch (Exception ignore) {}
+			} catch (Exception ignore) {
+			}
 		    }
-		    //recursively save imports
+		    // recursively save imports
 		    saveSchemaImports(parentURL, subDoc, saved, schemaURL);
-		    
-		    //save modified file
+
+		    // save modified file
 		    FileOutputStream fos = new FileOutputStream(targetFile);
 		    try {
 			DOMWriter domWriter = new DOMWriter(fos);
@@ -262,7 +274,8 @@ public class WSDLResolver {
 		    } finally {
 			try {
 			    fos.close();
-			} catch (Exception ignore) {}
+			} catch (Exception ignore) {
+			}
 		    }
 		}
 	    } else {

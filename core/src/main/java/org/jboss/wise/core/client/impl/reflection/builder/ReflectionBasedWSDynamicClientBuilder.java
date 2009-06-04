@@ -53,53 +53,53 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
 
     private static Logger logger = Logger.getLogger(ReflectionBasedWSDynamicClientBuilder.class);
 
-    @GuardedBy( "this" )
+    @GuardedBy("this")
     private String wsdlURL;
 
-    @GuardedBy( "this" )
+    @GuardedBy("this")
     private String userName;
 
-    @GuardedBy( "this" )
+    @GuardedBy("this")
     private String password;
 
-    @GuardedBy( "this" )
+    @GuardedBy("this")
     private String tmpDir = System.getProperty("java.io.tmpdir");
 
-    @GuardedBy( "this" )
+    @GuardedBy("this")
     private String targetPackage;
 
-    @GuardedBy( "this" )
+    @GuardedBy("this")
     private List<File> bindingFiles = null;
 
-    @GuardedBy( "this" )
+    @GuardedBy("this")
     private File catalog = null;
 
-    @GuardedBy( "this" )
+    @GuardedBy("this")
     private String securityConfigURL;
 
-    @GuardedBy( "this" )
+    @GuardedBy("this")
     private String securityConfigName;
 
-    @GuardedBy( "this" )
+    @GuardedBy("this")
     private boolean keepSource;
 
-    @GuardedBy( "this" )
+    @GuardedBy("this")
     private boolean verbose;
 
-    @GuardedBy( "this" )
+    @GuardedBy("this")
     private String normalizedWsdlUrl;
 
-    @GuardedBy( "this" )
+    @GuardedBy("this")
     private String clientSpecificTmpDir;
 
-    @GuardedBy( "this" )
+    @GuardedBy("this")
     private PrintStream messageStream = System.out;
 
-    @GuardedBy( "this" )
+    @GuardedBy("this")
     private int maxThreadPoolSize = MAX_THRED_POOL_SIZE.getIntValue();
 
     public ReflectionBasedWSDynamicClientBuilder() {
-        super();
+	super();
     }
 
     /**
@@ -108,36 +108,35 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#build()
      */
     public synchronized WSDynamicClient build() throws IllegalStateException, WiseRuntimeException {
-        clientSpecificTmpDir = tmpDir;
-        if (clientSpecificTmpDir != null) {
-            String id = IDGenerator.nextVal();
-            clientSpecificTmpDir = tmpDir + "/Wise" + id;
-            File tmpDirFile = new File(clientSpecificTmpDir);
-            try {
-                FileUtils.forceMkdir(tmpDirFile);
-            } catch (IOException e) {
-                throw new IllegalStateException("unable to create tmp dir:" + clientSpecificTmpDir
-                                                + ". Please provide a valid temp dir if you didn't.");
-            }
-        } else {
-            throw new IllegalStateException("temp dir cannot be null!");
-        }
+	clientSpecificTmpDir = tmpDir;
+	if (clientSpecificTmpDir != null) {
+	    String id = IDGenerator.nextVal();
+	    clientSpecificTmpDir = tmpDir + "/Wise" + id;
+	    File tmpDirFile = new File(clientSpecificTmpDir);
+	    try {
+		FileUtils.forceMkdir(tmpDirFile);
+	    } catch (IOException e) {
+		throw new IllegalStateException("unable to create tmp dir:" + clientSpecificTmpDir + ". Please provide a valid temp dir if you didn't.");
+	    }
+	} else {
+	    throw new IllegalStateException("temp dir cannot be null!");
+	}
 
-        if (this.getMaxThreadPoolSize() < 1) {
-            throw new IllegalStateException("MaxThreadPoolSize cannot be less than 1");
-        }
-        String wsdlUrl = this.getWsdlURL();
-        if (userName != null || (StringUtils.trimToNull(wsdlUrl) != null && Connection.isLocalAddress(wsdlUrl))) {
-            this.setNormalizedWsdlUrl(this.transferWSDL(userName, password, clientSpecificTmpDir));
-        } else {
-            this.setNormalizedWsdlUrl(wsdlUrl);
-        }
+	if (this.getMaxThreadPoolSize() < 1) {
+	    throw new IllegalStateException("MaxThreadPoolSize cannot be less than 1");
+	}
+	String wsdlUrl = this.getWsdlURL();
+	if (userName != null || (StringUtils.trimToNull(wsdlUrl) != null && Connection.isLocalAddress(wsdlUrl))) {
+	    this.setNormalizedWsdlUrl(this.transferWSDL(userName, password, clientSpecificTmpDir));
+	} else {
+	    this.setNormalizedWsdlUrl(wsdlUrl);
+	}
 
-        if (this.getNormalizedWsdlUrl() == null || this.getNormalizedWsdlUrl().trim().length() == 0) {
-            throw new IllegalStateException("wsdlURL cannot be null");
-        }
+	if (this.getNormalizedWsdlUrl() == null || this.getNormalizedWsdlUrl().trim().length() == 0) {
+	    throw new IllegalStateException("wsdlURL cannot be null");
+	}
 
-        return new WSDynamicClientImpl(this);
+	return new WSDynamicClientImpl(this);
 
     }
 
@@ -147,7 +146,7 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#getWsdlURL()
      */
     public synchronized final String getWsdlURL() {
-        return wsdlURL;
+	return wsdlURL;
     }
 
     /**
@@ -155,9 +154,9 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * 
      * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#wsdlURL(java.lang.String)
      */
-    public synchronized final WSDynamicClientBuilder wsdlURL( String wsdlURL ) {
-        this.wsdlURL = wsdlURL;
-        return this;
+    public synchronized final WSDynamicClientBuilder wsdlURL(String wsdlURL) {
+	this.wsdlURL = wsdlURL;
+	return this;
     }
 
     /**
@@ -166,7 +165,7 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#getUserName()
      */
     public synchronized final String getUserName() {
-        return userName;
+	return userName;
     }
 
     /**
@@ -174,9 +173,9 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * 
      * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#userName(java.lang.String)
      */
-    public synchronized WSDynamicClientBuilder userName( String userName ) {
-        this.userName = userName;
-        return this;
+    public synchronized WSDynamicClientBuilder userName(String userName) {
+	this.userName = userName;
+	return this;
     }
 
     /**
@@ -185,7 +184,7 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#getPassword()
      */
     public synchronized final String getPassword() {
-        return password;
+	return password;
     }
 
     /**
@@ -193,9 +192,9 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * 
      * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#password(java.lang.String)
      */
-    public synchronized WSDynamicClientBuilder password( String password ) {
-        this.password = password;
-        return this;
+    public synchronized WSDynamicClientBuilder password(String password) {
+	this.password = password;
+	return this;
     }
 
     /**
@@ -204,7 +203,7 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#getTmpDir()
      */
     public synchronized final String getTmpDir() {
-        return tmpDir;
+	return tmpDir;
     }
 
     /**
@@ -213,56 +212,59 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#getTargetPackage()
      */
     public synchronized final String getTargetPackage() {
-        return targetPackage;
+	return targetPackage;
     }
 
     public synchronized final List<File> getBindingFiles() {
-        return this.bindingFiles;
+	return this.bindingFiles;
     }
 
     public synchronized final File getCatalogFile() {
-        return this.catalog;
+	return this.catalog;
     }
 
     /**
-     * setter method used only by MC. Even if they are usable also by code is much more convenient to use intrface's defined
-     * method {@link #wsdlURL(String)} since it return current instance and permit concatenation like
-     * instace.wsdlURL(wsdl).symbolycName(name);
+     * setter method used only by MC. Even if they are usable also by code is
+     * much more convenient to use intrface's defined method
+     * {@link #wsdlURL(String)} since it return current instance and permit
+     * concatenation like instace.wsdlURL(wsdl).symbolycName(name);
      * 
      * @param wsdlURL
      */
-    public synchronized final void setWsdlURL( String wsdlURL ) {
-        this.wsdlURL = wsdlURL;
+    public synchronized final void setWsdlURL(String wsdlURL) {
+	this.wsdlURL = wsdlURL;
     }
 
     /**
-     * setter method used only by MC. Even if they are usable also by code is much more convenient to use intrface's defined
-     * method {@link #userName(String)} since it return current instance and permit concatenation like
-     * instace.wsdlURL(wsdl).symbolycName(name);
+     * setter method used only by MC. Even if they are usable also by code is
+     * much more convenient to use intrface's defined method
+     * {@link #userName(String)} since it return current instance and permit
+     * concatenation like instace.wsdlURL(wsdl).symbolycName(name);
      * 
      * @param userName
      */
-    public synchronized final void setUserName( String userName ) {
-        this.userName = userName;
+    public synchronized final void setUserName(String userName) {
+	this.userName = userName;
     }
 
     /**
-     * setter method used only by MC. Even if they are usable also by code is much more convenient to use intrface's defined
-     * method {@link #password(String)} since it return current instance and permit concatenation like
-     * instace.wsdlURL(wsdl).symbolycName(name);
+     * setter method used only by MC. Even if they are usable also by code is
+     * much more convenient to use intrface's defined method
+     * {@link #password(String)} since it return current instance and permit
+     * concatenation like instace.wsdlURL(wsdl).symbolycName(name);
      * 
      * @param password
      */
-    public synchronized final void setPassword( String password ) {
-        this.password = password;
+    public synchronized final void setPassword(String password) {
+	this.password = password;
     }
 
-    public synchronized final void setBindingFiles( List<File> bindings ) {
-        this.bindingFiles = bindings;
+    public synchronized final void setBindingFiles(List<File> bindings) {
+	this.bindingFiles = bindings;
     }
 
-    public synchronized final void setCatelogFile( File catalog ) {
-        this.catalog = catalog;
+    public synchronized final void setCatelogFile(File catalog) {
+	this.catalog = catalog;
     }
 
     /**
@@ -270,9 +272,9 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * 
      * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#targetPackage(java.lang.String)
      */
-    public synchronized WSDynamicClientBuilder targetPackage( String targetPackage ) {
-        this.targetPackage = targetPackage;
-        return this;
+    public synchronized WSDynamicClientBuilder targetPackage(String targetPackage) {
+	this.targetPackage = targetPackage;
+	return this;
     }
 
     /**
@@ -280,26 +282,33 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * 
      * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#tmpDir(java.lang.String)
      */
-    public synchronized WSDynamicClientBuilder tmpDir( String tmpDir ) {
-        this.tmpDir = tmpDir;
-        return this;
+    public synchronized WSDynamicClientBuilder tmpDir(String tmpDir) {
+	this.tmpDir = tmpDir;
+	return this;
     }
 
-    public synchronized WSDynamicClientBuilder bindingFiles( List<File> bindings ) {
-        this.bindingFiles = bindings;
-        return this;
+    public synchronized WSDynamicClientBuilder bindingFiles(List<File> bindings) {
+	this.bindingFiles = bindings;
+	return this;
     }
 
-    public synchronized WSDynamicClientBuilder catalogFile( File catalogFile ) {
-        catalog = catalogFile;
-        return this;
+    public synchronized WSDynamicClientBuilder catalogFile(File catalogFile) {
+	catalog = catalogFile;
+	return this;
     }
 
     /**
-     * Transfer the wsdl to local filesystem. This is required because jaxws tools
-     * can't deal with any kind of authentication.
+     * Transfer the wsdl to local filesystem. This is required because jaxws
+     * tools can't deal with any kind of authentication.
      * 
-     * @throws WiseConnectionException If the wsdl cannot be retrieved
+     * @param username
+     * @param password
+     * @param tmpDir
+     * @return the String representing the url
+     * @throws WiseRuntimeException
+     * 
+     * @throws WiseRuntimeException
+     *             If the wsdl cannot be retrieved
      */
     synchronized String transferWSDL(String username, String password, String tmpDir) throws WiseRuntimeException {
 	try {
@@ -319,7 +328,7 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#getSecurityConfigFileURL()
      */
     public synchronized String getSecurityConfigFileURL() {
-        return securityConfigURL;
+	return securityConfigURL;
     }
 
     /**
@@ -328,7 +337,7 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#getSecurityConfigName()
      */
     public synchronized String getSecurityConfigName() {
-        return securityConfigName;
+	return securityConfigName;
     }
 
     /**
@@ -337,7 +346,7 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#isKeepSource()
      */
     public synchronized boolean isKeepSource() {
-        return keepSource;
+	return keepSource;
     }
 
     /**
@@ -346,7 +355,7 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#isVerbose()
      */
     public synchronized boolean isVerbose() {
-        return verbose;
+	return verbose;
     }
 
     /**
@@ -354,9 +363,9 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * 
      * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#keepSource(boolean)
      */
-    public synchronized WSDynamicClientBuilder keepSource( boolean bool ) {
-        this.keepSource = bool;
-        return this;
+    public synchronized WSDynamicClientBuilder keepSource(boolean bool) {
+	this.keepSource = bool;
+	return this;
     }
 
     /**
@@ -364,9 +373,9 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * 
      * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#securityConfigName(java.lang.String)
      */
-    public synchronized WSDynamicClientBuilder securityConfigName( String name ) {
-        this.securityConfigName = name;
-        return this;
+    public synchronized WSDynamicClientBuilder securityConfigName(String name) {
+	this.securityConfigName = name;
+	return this;
     }
 
     /**
@@ -374,9 +383,9 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * 
      * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#securityConfigUrl(java.lang.String)
      */
-    public synchronized WSDynamicClientBuilder securityConfigUrl( String url ) {
-        this.securityConfigURL = url;
-        return this;
+    public synchronized WSDynamicClientBuilder securityConfigUrl(String url) {
+	this.securityConfigURL = url;
+	return this;
     }
 
     /**
@@ -384,39 +393,40 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * 
      * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#verbose(boolean)
      */
-    public synchronized WSDynamicClientBuilder verbose( boolean bool ) {
-        this.verbose = bool;
-        return this;
+    public synchronized WSDynamicClientBuilder verbose(boolean bool) {
+	this.verbose = bool;
+	return this;
     }
 
     /**
      * @return normalizedWsdlUrl
      */
     public synchronized String getNormalizedWsdlUrl() {
-        return normalizedWsdlUrl;
+	return normalizedWsdlUrl;
     }
 
     /**
-     * @param normalizedWsdlUrl Sets normalizedWsdlUrl to the specified value.
+     * @param normalizedWsdlUrl
+     *            Sets normalizedWsdlUrl to the specified value.
      */
-    private synchronized void setNormalizedWsdlUrl( String normalizedWsdlUrl ) {
-        this.normalizedWsdlUrl = normalizedWsdlUrl;
+    private synchronized void setNormalizedWsdlUrl(String normalizedWsdlUrl) {
+	this.normalizedWsdlUrl = normalizedWsdlUrl;
     }
 
     /**
      * @return clientSpecificTmpDir
      */
     public synchronized String getClientSpecificTmpDir() {
-        return clientSpecificTmpDir;
+	return clientSpecificTmpDir;
     }
 
     public synchronized PrintStream getMessageStream() {
-        return messageStream;
+	return messageStream;
     }
 
-    public synchronized WSDynamicClientBuilder messageStream( PrintStream messageStream ) {
-        this.messageStream = messageStream;
-        return this;
+    public synchronized WSDynamicClientBuilder messageStream(PrintStream messageStream) {
+	this.messageStream = messageStream;
+	return this;
     }
 
     /**
@@ -425,7 +435,7 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#getMaxThreadPoolSize()
      */
     public synchronized int getMaxThreadPoolSize() {
-        return this.maxThreadPoolSize;
+	return this.maxThreadPoolSize;
     }
 
     /**
@@ -433,9 +443,9 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      * 
      * @see org.jboss.wise.core.client.builder.WSDynamicClientBuilder#maxThreadPoolSize(int)
      */
-    public synchronized WSDynamicClientBuilder maxThreadPoolSize( int maxThreadPoolSize ) {
-        this.maxThreadPoolSize = maxThreadPoolSize;
-        return this;
+    public synchronized WSDynamicClientBuilder maxThreadPoolSize(int maxThreadPoolSize) {
+	this.maxThreadPoolSize = maxThreadPoolSize;
+	return this;
     }
 
 }

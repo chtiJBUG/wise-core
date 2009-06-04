@@ -38,8 +38,8 @@ public class WiseEntityResolver extends JBossWSEntityResolver {
     // provide logging
     private static final Logger log = Logger.getLogger(WiseEntityResolver.class);
 
-    private Connection connection;
-    
+    private final Connection connection;
+
     public WiseEntityResolver(Connection connection) {
 	super();
 	this.connection = connection;
@@ -48,7 +48,12 @@ public class WiseEntityResolver extends JBossWSEntityResolver {
     /**
      * Use a ResourceURL to access the resource. This method should be protected
      * in the super class.
+     * 
+     * @param id
+     * @param trace
+     * @return an InputSource
      */
+    @Override
     protected InputSource resolveSystemIDAsURL(String id, boolean trace) {
 	if (id == null)
 	    return null;
@@ -67,7 +72,7 @@ public class WiseEntityResolver extends JBossWSEntityResolver {
 	    if (url.getProtocol().equalsIgnoreCase("file") == false)
 		log.warn("Trying to resolve id as a non-file URL: " + id);
 
-	    //InputStream ins = new ResourceURL(url).openStream();
+	    // InputStream ins = new ResourceURL(url).openStream();
 	    InputStream ins = connection.open(url);
 	    if (ins != null) {
 		inputSource = new InputSource(ins);

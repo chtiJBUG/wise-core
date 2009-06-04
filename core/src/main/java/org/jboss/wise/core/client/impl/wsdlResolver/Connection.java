@@ -44,25 +44,30 @@ import org.jboss.ws.core.utils.JarUrlConnection;
 public class Connection {
 
     private String username;
+
     private String password;
 
     Connection() {
-	//nothing to do
+	// nothing to do
     }
-    
+
     public Connection(String username, String password) {
 	setUsername(username);
 	setPassword(password);
     }
-    
+
     /**
      * Open an inputStream from the given URL.
+     * 
+     * @param url
+     * @return the inputStream of this url
+     * @throws IOException
      * 
      */
     public InputStream open(URL url) throws IOException {
 	String protocol = url.getProtocol();
 	if ("http".equalsIgnoreCase(protocol)) {
-        	return getInputStream(openAndInitConnection(url));
+	    return getInputStream(openAndInitConnection(url));
 	} else if ("https".equalsIgnoreCase(protocol)) {
 	    throw new WiseRuntimeException("https not supported yet");
 	} else if ("jar".equalsIgnoreCase(protocol)) {
@@ -81,7 +86,7 @@ public class Connection {
 	}
 	return this.initConnection(conn);
     }
-    
+
     HttpURLConnection initConnection(HttpURLConnection conn) throws WiseRuntimeException {
 	try {
 
@@ -103,22 +108,22 @@ public class Connection {
 	    throw new WiseRuntimeException(e);
 	}
     }
-    
-    InputStream getInputStream(HttpURLConnection conn) throws WiseRuntimeException {
-        try {
-            InputStream is = null;
-            if (conn.getResponseCode() == 200) {
-                is = conn.getInputStream();
-            } else {
 
-                throw new ConnectException("Remote server's response is an error: " + conn.getResponseCode());
-            }
-            return is;
-        } catch (Exception e) {
-            throw new WiseRuntimeException(e);
-        }
+    InputStream getInputStream(HttpURLConnection conn) throws WiseRuntimeException {
+	try {
+	    InputStream is = null;
+	    if (conn.getResponseCode() == 200) {
+		is = conn.getInputStream();
+	    } else {
+
+		throw new ConnectException("Remote server's response is an error: " + conn.getResponseCode());
+	    }
+	    return is;
+	} catch (Exception e) {
+	    throw new WiseRuntimeException(e);
+	}
     }
-    
+
     public static boolean isLocalAddress(String addr) throws IllegalArgumentException {
 	try {
 	    URL url = new URL(addr);
@@ -127,17 +132,17 @@ public class Connection {
 	    throw new IllegalArgumentException("Cannot process provided address: " + addr, e);
 	}
     }
-    
+
     void setUsername(String username) {
 	this.username = username;
     }
-    
+
     void setPassword(String password) {
 	this.password = password;
     }
-    
+
     String getUserNameAndPasswordForBasicAuthentication() {
-	//BASIC Auth support; further auth not supported yet
+	// BASIC Auth support; further auth not supported yet
 	if (StringUtils.trimToNull(username) != null && StringUtils.trimToNull(password) != null) {
 	    return new StringBuffer(username).append(":").append(password).toString();
 	} else {
