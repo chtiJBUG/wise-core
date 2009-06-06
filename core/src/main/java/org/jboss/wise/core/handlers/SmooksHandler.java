@@ -52,6 +52,8 @@ import org.milyn.cdr.XMLConfigDigester;
 import org.milyn.container.ExecutionContext;
 import org.milyn.event.report.HtmlReportGenerator;
 import org.milyn.javabean.BeanAccessor;
+import org.milyn.javabean.repository.BeanRepository;
+import org.milyn.javabean.repository.BeanRepositoryManager;
 import org.milyn.profile.DefaultProfileSet;
 import org.milyn.profile.ProfileStore;
 import org.milyn.profile.UnknownProfileMemberException;
@@ -106,12 +108,10 @@ public class SmooksHandler implements SOAPHandler<SOAPMessageContext> {
 
 		synchronized (SmooksMapper.class) {
 		    // Register the message flow within the Smooks context....
-		    SmooksUtil
-			    .registerProfileSet(DefaultProfileSet.create(Integer.toString(this.hashCode()), new String[] {}), smooks);
+		    SmooksUtil.registerProfileSet(DefaultProfileSet.create(Integer.toString(this.hashCode()), new String[] {}), smooks);
 		}
 	    }
-	    SmooksResourceConfigurationList list = XMLConfigDigester.digestConfig(new URIResourceLocator()
-		    .getResource(smooksResource), "wise");
+	    SmooksResourceConfigurationList list = XMLConfigDigester.digestConfig(new URIResourceLocator().getResource(smooksResource), "wise");
 	    for (int i = 0; i < list.size(); i++) {
 		SmooksResourceConfiguration smookResourceElement = list.get(i);
 		smookResourceElement.setTargetProfile(Integer.toString(this.hashCode()));
@@ -150,6 +150,7 @@ public class SmooksHandler implements SOAPHandler<SOAPMessageContext> {
 	try {
 	    smc.setMessage(applySmooksTransformation(message));
 	} catch (Exception e) {
+	    e.printStackTrace();
 	    return false;
 	}
 	return true;
@@ -163,9 +164,7 @@ public class SmooksHandler implements SOAPHandler<SOAPMessageContext> {
 		executionContext.setEventListener(new HtmlReportGenerator(smooksReport));
 	    } catch (IOException e) {
 		if (log.isDebugEnabled()) {
-		    log
-			    .debug("Error during loading/instanciating Html report generator (" + smooksReport + ") with exception message: " + e
-				    .getMessage());
+		    log.debug("Error during loading/instanciating Html report generator (" + smooksReport + ") with exception message: " + e.getMessage());
 		    log.info("Wise will continue without it");
 
 		}
@@ -182,7 +181,7 @@ public class SmooksHandler implements SOAPHandler<SOAPMessageContext> {
 	    ExecutionContext executionContext = initExecutionContext(smooksReport);
 	    StringWriter transResult = new StringWriter();
 
-	    BeanAccessor.getBeans(executionContext).putAll(this.beansMap);
+	    BeanRepository.getInstance(executionContext).getBeanMap().putAll(this.beansMap);
 	    StringWriter buffer;
 	    outStream = new ByteArrayOutputStream();
 	    message.writeTo(outStream);
