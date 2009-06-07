@@ -22,7 +22,9 @@
 
 package org.jboss.wise.core.handlers;
 
+import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.io.StringWriter;
 import java.util.HashSet;
 import java.util.Set;
 import javax.xml.namespace.QName;
@@ -30,12 +32,19 @@ import javax.xml.soap.SOAPMessage;
 import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.handler.soap.SOAPHandler;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
+
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.apache.log4j.Priority;
+
 import net.jcip.annotations.Immutable;
 import net.jcip.annotations.ThreadSafe;
 
 /**
- * This simple SOAPHandler will output the contents of incoming and outgoing messages. Check the MESSAGE_OUTBOUND_PROPERTY in the
- * context to see if this is an outgoing or incoming message. Write a brief message to the print stream and output the message.
+ * This simple SOAPHandler will output the contents of incoming and outgoing
+ * messages. Check the MESSAGE_OUTBOUND_PROPERTY in the context to see if this
+ * is an outgoing or incoming message. Write a brief message to the print stream
+ * and output the message.
  * 
  * @author Stefano Maestri, stefano.maestri@javalinux.it
  */
@@ -45,55 +54,92 @@ public class LoggingHandler implements SOAPHandler<SOAPMessageContext> {
 
     private final PrintStream outputStream;
 
+    private final Logger logger;
+
+    private final Level level;
+
     /**
      * Default constructor using default System.out PrintStream to print message
      */
     public LoggingHandler() {
-        outputStream = System.out;
+	outputStream = System.out;
+	logger = null;
+	level = Level.ALL;
     }
 
     /**
      * Constructor for custom PrintStream outputter
      * 
-     * @param outStream the PrintStream to use to print messages.
+     * @param outStream
+     *            the PrintStream to use to print messages.
      */
-    public LoggingHandler( PrintStream outStream ) {
-        this.outputStream = outStream;
+    public LoggingHandler(PrintStream outStream) {
+	this.outputStream = outStream;
+	logger = null;
+	level = Level.ALL;
+    }
+
+    public LoggingHandler(Logger logger, Level level) {
+	this.outputStream = null;
+	this.logger = logger;
+	this.level = level;
     }
 
     public Set<QName> getHeaders() {
-        return new HashSet<QName>(); // empty set
+	return new HashSet<QName>(); // empty set
     }
 
-    public boolean handleMessage( SOAPMessageContext smc ) {
-        logToSystemOut(smc);
-        return true;
+    public boolean handleMessage(SOAPMessageContext smc) {
+	logToSystemOut(smc);
+	return true;
     }
 
-    public boolean handleFault( SOAPMessageContext smc ) {
-        logToSystemOut(smc);
-        return true;
+    public boolean handleFault(SOAPMessageContext smc) {
+	logToSystemOut(smc);
+	return true;
     }
 
     // nothing to clean up
-    public void close( MessageContext messageContext ) {
+    public void close(MessageContext messageContext) {
     }
 
-    private void logToSystemOut( SOAPMessageContext smc ) {
-        Boolean outboundProperty = (Boolean)smc.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
+    private void logToSystemOut(SOAPMessageContext smc) {
+	Boolean outboundProperty = (Boolean) smc.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
 
-        if (outboundProperty.booleanValue()) {
-            outputStream.println("\nOutbound message:");
-        } else {
-            outputStream.println("\nInbound message:");
-        }
-        SOAPMessage message = smc.getMessage();
-        try {
-            message.writeTo(outputStream);
-            outputStream.println(""); // just to add a newline
-        } catch (Exception e) {
-            outputStream.println("Exception in handler: " + e);
-        }
+	if (outboundProperty.booleanValue()) {
+	    if (outputStream != null) {
+		outputStream.println("\nOutbound message:");
+	    }
+	    if (logger != null) {
+		logger.log(level, "\nOutbound message:");
+	    }
+	} else {
+	    if (outputStream != null) {
+		outputStream.println("\nInbound message:");
+	    }
+	    if (logger != null) {
+		logger.log(level, "\nInbound message:");
+	    }
+	}
+	SOAPMessage message = smc.getMessage();
+	try {
+	    if (outputStream != null) {
+		message.writeTo(outputStream);
+		outputStream.println(""); // just to add a newline
+	    }
+	    if (logger != null) {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		message.writeTo(baos);
+		logger.log(level, baos);
+	    }
+	} catch (Exception e) {
+	    if (outputStream != null) {
+		outputStream.println("Exception in handler: " + e);
+	    }
+	    if (logger != null) {
+		logger.log(level, "Exception in handler: " + e);
+	    }
+	}
     }
 
 }
