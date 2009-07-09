@@ -18,7 +18,8 @@ new File("resources/SuperHeros.txt").eachLine { line ->
     println line.toUpperCase()
     requestMap.put("toWhom", line);
     InvocationResult result = method.invoke(requestMap, null);
-    println(result.getMappedResult(null, null));
+    println(result.getMappedResult(null));
     
 }
+client.close();
 

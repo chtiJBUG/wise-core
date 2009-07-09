@@ -107,7 +107,7 @@
           <dependency>
              <groupId>xalan</groupId>
              <artifactId>xalan</artifactId>
-            <scope>test</scope>
+            <scope>runtime</scope>
          </dependency> 
 
          <dependency>

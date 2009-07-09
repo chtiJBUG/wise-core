@@ -10,9 +10,6 @@ and class loading will depend only by jvm used to launch the compiled applicatio
 
 Then run runGroovyJDK6.sh and have fun. 
 If you want to see groovy's closures in action with Wise run runGroovyClosure.sh
-
-If you would use this example compiling groovy script in bytecode and then run please type "ant compileGroovy"
-before type "ant runTest". And please note this example have 2 different script (i.e. compiled 
-classes that can act as Main). Select which one you would run editing locale build.xml file.
+Don't forget that samples are developed and tested with JDK6
 
 Have fun.
