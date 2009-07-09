@@ -17,8 +17,9 @@
 	<property name="classes.dir" value="classes" />
 	<property name="classes.java.client.dir" value="classes/client" />
 	<property name="classes.java.server.dir" value="classes/server" />
-
+	<property name="server.classes.additional.dir" value="classes" />
 	<property name="lib.dir" value="../../lib" />
+	<property name="local.lib.dir" value="./lib" />
 	<property name="distribuion.dir" value="../../" />
         <property file="${basedir}/../ant/sample.properties" />
 
@@ -42,6 +43,9 @@
 		<fileset dir="${lib.dir}">
 			<include name="*.jar" />
 		</fileset>
+		<fileset dir="${local.lib.dir}">
+			<include name="*.jar" />
+		</fileset>
 		<fileset dir="${distribuion.dir}">
 		    <include name="*.jar" />
 		</fileset>
@@ -49,6 +53,9 @@
 
 	<path id="run.classpath">
 		<fileset dir="${lib.dir}">
+			<include name="*.jar" />
+		</fileset>
+		<fileset dir="${local.lib.dir}">
 			<include name="*.jar" />
 		</fileset>
 		<fileset dir="${distribuion.dir}">
