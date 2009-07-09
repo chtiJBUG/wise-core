@@ -8,11 +8,5 @@
 	<property name="MainClass" value="org.jboss.wise.samples.HelloWorldClient">
 	</property>
 	
-	<path id="additional.run.classpath">
-		<fileset dir="../lib/JDK5">
-			<include name="*.jar" />
-		</fileset>
-	</path>
-	
 	<import file="${basedir}/../ant/build.xml" />
 </project>

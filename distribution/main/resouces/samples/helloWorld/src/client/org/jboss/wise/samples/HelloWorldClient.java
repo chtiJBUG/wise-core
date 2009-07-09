@@ -24,9 +24,12 @@ package org.jboss.wise.samples;
 
 import java.net.ConnectException;
 import java.util.HashMap;
+import java.util.Map;
+
 import org.jboss.wise.core.client.InvocationResult;
 import org.jboss.wise.core.client.WSDynamicClient;
 import org.jboss.wise.core.client.WSMethod;
+import org.jboss.wise.core.client.builder.WSDynamicClientBuilder;
 import org.jboss.wise.core.client.factories.WSDynamicClientFactory;
 import org.jboss.wise.core.exception.InvocationException;
 import org.jboss.wise.core.exception.MCKernelUnavailableException;
@@ -42,31 +45,35 @@ public class HelloWorldClient {
     /**
      * @param args
      */
-    public static void main( String[] args ) {
-        try {
-            WSDynamicClient client = WSDynamicClientFactory.getInstance().getJAXWSClient("http://127.0.0.1:8080/HelloWorld/HelloWorldWS?wsdl");
-            WSMethod method = client.getWSMethod("HelloWorldWSService", "HelloWorldPort", "sayHello");
-            method.getEndpoint().addHandler(new LoggingHandler());
-            HashMap<String, Object> requestMap = new HashMap<String, Object>();
-            requestMap.put("toWhom", "SpiderMan");
-            InvocationResult result = method.invoke(requestMap, null);
-            System.out.println(result.getMapRequestAndResult(null, null));
-            System.out.println(result.getMapRequestAndResult(null, requestMap));
-        } catch (WiseRuntimeException e) {
-            e.printStackTrace();
-        } catch (ConnectException e) {
-            e.printStackTrace();
-        } catch (MCKernelUnavailableException e) {
-            e.printStackTrace();
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        } catch (InvocationException e) {
-            e.printStackTrace();
-        } catch (MappingException e) {
-            e.printStackTrace();
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-        }
+    public static void main(String[] args) {
+	try {
+	    WSDynamicClientBuilder clientBuilder = WSDynamicClientFactory.getJAXWSClientBuilder();
+	    WSDynamicClient client = clientBuilder.tmpDir("target/temp/wise").verbose(true).keepSource(true)
+		    .wsdlURL("http://127.0.0.1:8080/HelloWorld/HelloWorldWS?wsdl").build();
+	    WSMethod method = client.getWSMethod("HelloWorldWSService", "HelloWorldPort", "sayHello");
+	    method.getEndpoint().addHandler(new LoggingHandler());
+	    HashMap<String, Object> requestMap = new HashMap<String, Object>();
+	    requestMap.put("toWhom", "SpiderMan");
+	    InvocationResult result = method.invoke(requestMap, null);
+	    System.out.println(result.getMapRequestAndResult(null, null));
+	    System.out.println(result.getMapRequestAndResult(null, requestMap));
+	    client.close();
+
+	} catch (WiseRuntimeException e) {
+	    e.printStackTrace();
+	} catch (ConnectException e) {
+	    e.printStackTrace();
+	} catch (MCKernelUnavailableException e) {
+	    e.printStackTrace();
+	} catch (IllegalArgumentException e) {
+	    e.printStackTrace();
+	} catch (InvocationException e) {
+	    e.printStackTrace();
+	} catch (MappingException e) {
+	    e.printStackTrace();
+	} catch (IllegalStateException e) {
+	    e.printStackTrace();
+	}
     }
 
 }

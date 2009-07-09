@@ -30,6 +30,7 @@ import org.jboss.wise.core.client.WSDynamicClient;
 import org.jboss.wise.core.client.WSEndpoint;
 import org.jboss.wise.core.client.WSMethod;
 import org.jboss.wise.core.client.WSService;
+import org.jboss.wise.core.client.builder.WSDynamicClientBuilder;
 import org.jboss.wise.core.client.factories.WSDynamicClientFactory;
 import org.jboss.wise.core.exception.InvocationException;
 import org.jboss.wise.core.exception.MCKernelUnavailableException;
@@ -46,8 +47,10 @@ public class InteractiveHelloWorldClientJDK6 {
      */
     public static void main( String[] args ) {
         try {
-            WSDynamicClient client = WSDynamicClientFactory.getInstance().getJAXWSClient("http://127.0.0.1:8080/InteractiveHelloWorldJDK6/InteractiveHelloWorldWSJDK6?wsdl");
-            Map<String, WSService> services = client.processServices();
+            WSDynamicClientBuilder clientBuilder = WSDynamicClientFactory.getJAXWSClientBuilder();
+	    WSDynamicClient client = clientBuilder.tmpDir("target/temp/wise").verbose(true).keepSource(true)
+		    .wsdlURL("http://127.0.0.1:8080/InteractiveHelloWorld/InteractiveHelloWorldWS?wsdl").build();
+           Map<String, WSService> services = client.processServices();
             System.out.println("Available services are:");
             for (String key : services.keySet()) {
                 System.out.println(key);

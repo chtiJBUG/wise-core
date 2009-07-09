@@ -9,9 +9,10 @@ import org.jboss.wise.core.exception.WiseConnectionException;
 import org.jboss.wise.core.exception.WiseRuntimeException;
 
 
-WSDynamicClient client = WSDynamicClientFactory.getInstance().getJAXWSClient("http://127.0.0.1:8080/HelloWorldGroovy/HelloWorldWS?wsdl");
+WSDynamicClientBuilder clientBuilder = WSDynamicClientFactory.getJAXWSClientBuilder();
+WSDynamicClient client = clientBuilder.tmpDir("target/temp/wise").verbose(true).keepSource(true)
+            .wsdlURL("http://127.0.0.1:8080/HelloWorld/HelloWorldWS?wsdl").build();
 WSMethod method = client.getWSMethod("HelloWorldWSService", "HelloWorldPort", "sayHello");
-
 HashMap<String, Object> requestMap = new HashMap<String, Object>();
 
 new File("resources/SuperHeros.txt").eachLine { line ->

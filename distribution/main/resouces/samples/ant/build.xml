@@ -19,6 +19,7 @@
 	<property name="classes.java.server.dir" value="classes/server" />
 
 	<property name="lib.dir" value="../../lib" />
+	<property name="distribuion.dir" value="../../" />
         <property file="${basedir}/../ant/sample.properties" />
 
     <!-- Use -Ddebug=true for remote debugging -->
@@ -41,11 +42,17 @@
 		<fileset dir="${lib.dir}">
 			<include name="*.jar" />
 		</fileset>
+		<fileset dir="${distribuion.dir}">
+		    <include name="*.jar" />
+		</fileset>
 	</path>
 
 	<path id="run.classpath">
 		<fileset dir="${lib.dir}">
 			<include name="*.jar" />
+		</fileset>
+		<fileset dir="${distribuion.dir}">
+		            <include name="*.jar" />
 		</fileset>
 		<fileset dir="${build.client.dir}">
 			<include name="*.jar" />
