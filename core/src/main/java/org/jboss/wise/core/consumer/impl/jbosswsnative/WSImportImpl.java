@@ -39,104 +39,102 @@ import org.jboss.wsf.spi.tools.WSContractConsumer;
 @ThreadSafe
 public class WSImportImpl extends WSConsumer {
 
-    private final String[] needeJars = {"jbossws-native-jaxws.jar", "jbossws-native-jaxws-ext.jar", "jaxb-api.jar",
-        "jaxb-impl.jar"};
-
     private final ProviderChanger providerChanger;
 
+    private final String[] neededClasses = { "javax/jws/WebResult.class",
+					    "javax/xml/ws/Action.class",
+					    "javax/xml/bind/JAXBElement.class",
+					    "com/sun/xml/bind/XmlAccessorFactory.class" };
+
     public WSImportImpl() {
-        providerChanger = new ProviderChanger();
+	providerChanger = new ProviderChanger();
     }
 
     // for test purpose
-    WSImportImpl( ProviderChanger changer ) {
-        providerChanger = changer;
+    WSImportImpl(ProviderChanger changer) {
+	providerChanger = changer;
     }
 
-    public WSImportImpl( boolean keepSource,
-                         boolean verbose ) {
-        super();
-        providerChanger = new ProviderChanger();
-        this.setKeepSource(keepSource);
-        this.setVerbose(verbose);
+    public WSImportImpl(boolean keepSource, boolean verbose) {
+	super();
+	providerChanger = new ProviderChanger();
+	this.setKeepSource(keepSource);
+	this.setVerbose(verbose);
     }
 
     @Override
-    public synchronized List<String> importObjectFromWsdl( String wsdlURL,
-                                                           File outputDir,
-                                                           File sourceDir,
-                                                           String targetPackage,
-                                                           List<File> bindingFiles,
-                                                           PrintStream messageStream,
-                                                           File catelog ) throws MalformedURLException, WiseRuntimeException {
-        try {
-            // NEEDED for WISE-36 issue
-            providerChanger.changeProvider();
-            WSContractConsumer wsImporter = WSContractConsumer.newInstance(Thread.currentThread().getContextClassLoader());
+    public synchronized List<String> importObjectFromWsdl(String wsdlURL, File outputDir, File sourceDir, String targetPackage, List<File> bindingFiles, PrintStream messageStream, File catelog) throws MalformedURLException, WiseRuntimeException {
+	try {
+	    // NEEDED for WISE-36 issue
+	    providerChanger.changeProvider();
+	    WSContractConsumer wsImporter = WSContractConsumer.newInstance(Thread.currentThread().getContextClassLoader());
 
-            if (targetPackage != null && targetPackage.trim().length() > 0) {
-                wsImporter.setTargetPackage(targetPackage);
-            }
+	    if (targetPackage != null && targetPackage.trim().length() > 0) {
+		wsImporter.setTargetPackage(targetPackage);
+	    }
 
-            wsImporter.setGenerateSource(this.isKeepSource());
-            wsImporter.setOutputDirectory(outputDir);
-            wsImporter.setSourceDirectory(sourceDir);
-            if (messageStream != null) {
-        	wsImporter.setMessageStream(messageStream);
-            }
+	    wsImporter.setGenerateSource(this.isKeepSource());
+	    wsImporter.setOutputDirectory(outputDir);
+	    wsImporter.setSourceDirectory(sourceDir);
+	    if (messageStream != null) {
+		wsImporter.setMessageStream(messageStream);
+	    }
 
-            if (this.isVerbose()) {
-                wsImporter.setMessageStream(System.out);
-            }
-            wsImporter.setAdditionalCompilerClassPath(defineAdditionalCompilerClassPath());
+	    if (this.isVerbose()) {
+		wsImporter.setMessageStream(System.out);
+	    }
+	    System.out.println("################# 0");
+	    wsImporter.setAdditionalCompilerClassPath(defineAdditionalCompilerClassPath());
 
-            if (bindingFiles != null && bindingFiles.size() > 0) {
-                wsImporter.setBindingFiles(bindingFiles);
-            }
+	    if (bindingFiles != null && bindingFiles.size() > 0) {
+		wsImporter.setBindingFiles(bindingFiles);
+	    }
 
-            if (catelog != null) {
-                wsImporter.setCatalog(catelog);
-            }
+	    if (catelog != null) {
+		wsImporter.setCatalog(catelog);
+	    }
 
-            wsImporter.consume(wsdlURL);
-            return this.getClassNames(outputDir, targetPackage);
-        } finally {
-            // NEEDED for WISE-36 issue
-            providerChanger.restoreDefaultProvider();
+	    wsImporter.consume(wsdlURL);
+	    return this.getClassNames(outputDir, targetPackage);
+	} finally {
+	    // NEEDED for WISE-36 issue
+	    providerChanger.restoreDefaultProvider();
 
-        }
+	}
 
     }
 
     /*
-    * This is used load libraries required by tests and usually not available
-    * when running out of container.
-    *
-    * @return A list of paths
-    */
-    private List<String> defineAdditionalCompilerClassPath() throws WiseRuntimeException {
-        List<String> cp = new LinkedList<String>();
-        for (String jar : needeJars) {
-            try {
-                cp.add(Thread.currentThread().getContextClassLoader().getResource(jar).getPath());
-            } catch (NullPointerException npe) {
-                Logger.getLogger(this.getClass()).debug("Didnt't find jar needed by wsImport API:" + jar);
-            }
+     * This is used load libraries required by tests and usually not available
+     * when running out of container.
+     * 
+     * @return A list of paths
+     */
+    /* package */List<String> defineAdditionalCompilerClassPath() throws WiseRuntimeException {
+	List<String> cp = new LinkedList<String>();
+	System.out.println("################# 1");
+	for (String jar : neededClasses) {
+	    try {
+		cp.add(Thread.currentThread().getContextClassLoader().getResource(jar).getPath().split("!")[0]);
+	    } catch (NullPointerException npe) {
+		Logger.getLogger(this.getClass()).debug("Didnt't find jar needed by wsImport API:" + jar);
+	    }
 
-        }
-        return cp;
+	}
+	System.out.println("################# " + cp);
+	return cp;
     }
 
     public class ProviderChanger {
 
-        private final String defaultProvider = "org.jboss.ws.core.jaxws.spi.ProviderImpl";
+	private final String defaultProvider = "org.jboss.ws.core.jaxws.spi.ProviderImpl";
 
-        public void changeProvider() {
-            System.setProperty("javax.xml.ws.spi.Provider", "com.sun.xml.ws.spi.ProviderImpl");
-        }
+	public void changeProvider() {
+	    System.setProperty("javax.xml.ws.spi.Provider", "com.sun.xml.ws.spi.ProviderImpl");
+	}
 
-        public void restoreDefaultProvider() {
-            System.setProperty("javax.xml.ws.spi.Provider", defaultProvider);
-        }
+	public void restoreDefaultProvider() {
+	    System.setProperty("javax.xml.ws.spi.Provider", defaultProvider);
+	}
     }
 }
