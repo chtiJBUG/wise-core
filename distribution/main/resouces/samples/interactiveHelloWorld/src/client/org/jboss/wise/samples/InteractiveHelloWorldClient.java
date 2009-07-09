@@ -33,14 +33,13 @@ import org.jboss.wise.core.client.WSService;
 import org.jboss.wise.core.client.builder.WSDynamicClientBuilder;
 import org.jboss.wise.core.client.factories.WSDynamicClientFactory;
 import org.jboss.wise.core.exception.InvocationException;
-import org.jboss.wise.core.exception.MCKernelUnavailableException;
 import org.jboss.wise.core.exception.MappingException;
 import org.jboss.wise.core.exception.WiseRuntimeException;
 
 /**
  * @author stefano.maestri@javalinux.it
  */
-public class InteractiveHelloWorldClientJDK6 {
+public class InteractiveHelloWorldClient {
 
     /**
      * @param args
@@ -74,19 +73,8 @@ public class InteractiveHelloWorldClientJDK6 {
             InvocationResult result = method.invoke(requestMap, null);
             System.out.println(result.getMapRequestAndResult(null, null));
             System.out.println(result.getMapRequestAndResult(null, requestMap));
-        } catch (ConnectException e) {
-            e.printStackTrace();
-        } catch (WiseRuntimeException e) {
-            e.printStackTrace();
-        } catch (MCKernelUnavailableException e) {
-            e.printStackTrace();
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        } catch (InvocationException e) {
-            e.printStackTrace();
-        } catch (MappingException e) {
-            e.printStackTrace();
-        } catch (IllegalStateException e) {
+	    client.close();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

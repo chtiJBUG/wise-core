@@ -27,8 +27,8 @@ import javax.jws.WebParam;
 import javax.jws.WebResult;
 import javax.jws.WebService;
 
-@WebService( name = "InteractiveHelloWorldWSJDK6", targetNamespace = "http://wise_samples/helloworld" )
-public class InteractiveHelloWorldWSJDK6 {
+@WebService( name = "InteractiveHelloWorldWS", targetNamespace = "http://wise_samples/helloworld" )
+public class InteractiveHelloWorldWS {
     @WebMethod
     @WebResult( name = "result" )
     public String sayHello( @WebParam( name = "toWhom" ) String toWhom ) {

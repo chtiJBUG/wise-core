@@ -6,7 +6,7 @@
 <project name="InteractiveHelloWorld" default="compile" basedir=".">
 
 
-	<property name="MainClass" value="org.jboss.wise.samples.InteractiveHelloWorldClientJDK6">
+	<property name="MainClass" value="org.jboss.wise.samples.InteractiveHelloWorldClient">
 	</property>
 	<property file="${basedir}/build.properties" />
 	

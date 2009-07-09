@@ -2,10 +2,9 @@ import org.jboss.wise.core.client.InvocationResult;
 import org.jboss.wise.core.client.WSDynamicClient;
 import org.jboss.wise.core.client.WSMethod;
 import org.jboss.wise.core.client.factories.WSDynamicClientFactory;
+import org.jboss.wise.core.client.builder.WSDynamicClientBuilder;
 import org.jboss.wise.core.exception.InvocationException;
-import org.jboss.wise.core.exception.MCKernelUnavailableException;
 import org.jboss.wise.core.exception.MappingException;
-import org.jboss.wise.core.exception.WiseConnectionException;
 import org.jboss.wise.core.exception.WiseRuntimeException;
 
 

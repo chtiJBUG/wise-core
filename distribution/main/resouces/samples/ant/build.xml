@@ -58,7 +58,7 @@
 			<include name="*.jar" />
 		</fileset>
                 <pathelement location="${env.JAVA_HOME}/lib/tools.jar"/>
-		<path refid="additional.run.classpath"/>
+		<!--<path refid="additional.run.classpath"/>-->
 
 	</path>
 
