@@ -32,7 +32,7 @@ import java.security.PrivilegedAction;
 import java.util.Properties;
 
 /**
- * @author oracle
+ * @author stefano.maestri@javalinux.it
  * 
  */
 public class SpiLoader {

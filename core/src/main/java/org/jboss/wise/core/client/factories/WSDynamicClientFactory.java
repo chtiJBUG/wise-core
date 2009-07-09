@@ -34,16 +34,16 @@ import org.jboss.wise.core.client.impl.reflection.builder.ReflectionBasedWSDynam
 import org.jboss.wise.core.client.jaxrs.RSDynamicClient;
 import org.jboss.wise.core.client.jaxrs.impl.RSDynamicClientImpl;
 import org.jboss.wise.core.consumer.WSConsumer;
-import org.jboss.wise.core.exception.MCKernelUnavailableException;
 
 /**
  * @author Stefano Maestri, stefano.maestri@javalinux.it
  */
 @ThreadSafe
 public abstract class WSDynamicClientFactory {
+
     private static final String WISE_LOG_CONFIG = "wise-log4j.xml";
 
-    public static void initLog4j(String configFile) throws MCKernelUnavailableException {
+    public static void initLog4j(String configFile) {
 	synchronized (WSDynamicClientFactory.class) {
 	    // If the logger has not been configured
 	    if (Logger.getRootLogger().getAllAppenders() instanceof NullEnumeration) {

@@ -30,82 +30,120 @@ import net.jcip.annotations.ThreadSafe;
 import org.jboss.wise.core.wsextensions.WSExtensionEnabler;
 
 /**
- * This represent a Endpoint(Port) and has utility methods to edit username, password, endpoint address, attach handlers
+ * This represent a Endpoint(Port) and has utility methods to edit username,
+ * password, endpoint address, attach handlers
  * 
  * @author Stefano Maestri, stefano.maestri@javalinux.it
  * @author <a href="ema@redhat.com">Jim Ma</a>
  */
 @ThreadSafe
 public interface WSEndpoint {
+
+    /**
+     * create the underlying instance of the endpoint generated class. Useful to
+     * create a thread pool invoking endpoint methods.
+     * 
+     * @return the created underlying instance of the endpoint generated class
+     */
     public Object createInstance();
 
-    public String getWsdlName();
+    /**
+     * Set username for endpoint authentication
+     * 
+     * @param username
+     */
+    @GuardedBy("this")
+    public void setUsername(String username);
 
-    @GuardedBy( "this" )
-    public void setUsername( String username );
+    /**
+     * Set password for endpoint authentication
+     * 
+     * @param password
+     */
+    @GuardedBy("this")
+    public void setPassword(String password);
 
-    @GuardedBy( "this" )
-    public void setPassword( String password );
-
+    @GuardedBy("this")
     public Class getUnderlyingObjectClass();
 
-    @GuardedBy( "this" )
+    /**
+     * 
+     * @return endpoint name as defined in wsdl
+     */
+    @GuardedBy("this")
     public String getName();
 
     /**
-     * Add an Handler to this endpoint. Handler will apply on all endpoint method called
+     * Add an Handler to this endpoint. Handler will apply on all endpoint
+     * method called
      * 
      * @see #getWSMethods()
      * @param handler
      */
-    @GuardedBy( "this" )
-    public void addHandler( Handler handler );
+    @GuardedBy("this")
+    public void addHandler(Handler handler);
 
     /**
-     * Create the webmethods' map and it back. This maps would be used by clients to get a method to call and invoke it All calls
-     * of this method apply all handlers added with {@link #addHandler(Handler)} method
+     * Create the webmethods' map and it back. This maps would be used by
+     * clients to get a method to call and invoke it All calls of this method
+     * apply all handlers added with {@link #addHandler(Handler)} method
      * 
      * @return The list of WebMethod names
      */
     public Map<String, WSMethod> getWSMethods();
 
     /**
-     * @return classLoader used to load JAXWS generated object see also {@link #getUnderlyingObjectClass()}
+     * @return classLoader used to load JAXWS generated object see also
+     *         {@link #getUnderlyingObjectClass()}
      */
     public ClassLoader getClassLoader();
 
     /**
-     * Use this method to add WSExtension you would enable on this endpoint. Of course extension have to be enabled before you cal
-     * method associated to action you are going to invoke. Not necessary before you build WSMethods object associated to this
-     * endpoint {@link #getWSMethods()} see also {@link WSExtensionEnabler} for more information on how to enable WSExtensions
+     * Use this method to add WSExtension you would enable on this endpoint. Of
+     * course extension have to be enabled before you cal method associated to
+     * action you are going to invoke. Not necessary before you build WSMethods
+     * object associated to this endpoint {@link #getWSMethods()} see also
+     * {@link WSExtensionEnabler} for more information on how to enable
+     * WSExtensions
      * 
-     * @param enabler it is an implementation of {@link WSExtensionEnabler}
+     * @param enabler
+     *            it is an implementation of {@link WSExtensionEnabler}
      */
-    @GuardedBy( "this" )
-    public void addWSExtension( WSExtensionEnabler enabler );
+    @GuardedBy("this")
+    public void addWSExtension(WSExtensionEnabler enabler);
 
     /**
-     * @return handlers
+     * @return handlers added to handler chain of this endpoint.
      */
-    @GuardedBy( "this" )
+    @GuardedBy("this")
     public List<Handler<?>> getHandlers();
 
     /**
-     * @return extensions
+     * @return extensions enabled on this endpoint
      */
-    @GuardedBy( "this" )
+    @GuardedBy("this")
     public List<WSExtensionEnabler> getExtensions();
 
-    @GuardedBy( "this" )
+    /**
+     * 
+     * @return the target url to invoke for this endpoint
+     */
+    @GuardedBy("this")
     public String getTargetUrl();
 
-    @GuardedBy( "this" )
+    @GuardedBy("this")
     public String getUsername();
 
-    @GuardedBy( "this" )
+    @GuardedBy("this")
     public String getPassword();
 
-    @GuardedBy( "this" )
-    public void setTargetUrl( String targetUrl );
+    /**
+     * it give the opportunity to change target url of the endpoint defined in
+     * the wsdl
+     * 
+     * @param targetUrl
+     */
+    @GuardedBy("this")
+    public void setTargetUrl(String targetUrl);
 
 }

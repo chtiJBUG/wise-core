@@ -28,9 +28,11 @@ import org.jboss.wise.core.exception.MappingException;
 import org.jboss.wise.core.mapper.WiseMapper;
 
 /**
- * Holds the webservice's (JAXWS or JAXRS) invocation result's data. Normally this data are kept in Map<String, Object> for JAXWS
- * and a Stream or String for JAXR, but implementor are free to change internal data structure. Anyway it return a Map<String,
- * Object> with webservice's call results, eventually applying a mapping to custom object using a WiseMapper passed to
+ * Holds the webservice's (JAXWS or JAXRS) invocation result's data. Normally
+ * this data are kept in Map<String, Object> for JAXWS and a Stream or String
+ * for JAXR, but implementor are free to change internal data structure. Anyway
+ * it return a Map<String, Object> with webservice's call results, eventually
+ * applying a mapping to custom object using a WiseMapper passed to
  * {@link #getMapRequestAndResult(WiseMapper, Map)} methods
  * 
  * @author stefano.maestri@javalinux.it
@@ -38,46 +40,63 @@ import org.jboss.wise.core.mapper.WiseMapper;
  */
 @Immutable
 public interface InvocationResult {
-	public final static String RESPONSE = "RESPONSE";
-	public final static String STATUS = "STATUS";
-	public final static String HEADERS = "HEADERS";
+    public final static String RESPONSE = "RESPONSE";
+
+    public final static String STATUS = "STATUS";
+
+    public final static String HEADERS = "HEADERS";
 
     /**
-     * Apply WiseMapper provided with to returned Object as defined in wsdl/wiseconsume generated objects. If mapper parameter is
-     * null, no mapping are applied and original object are returned. When no mapping applied you will have this answer: For JAXWS
-     * the original object answer are returned into this map; For JAXRS a Map contains 2 key/valuepair with keys "ContentType" and
-     * "JAXRSStream"
+     * Apply WiseMapper provided to returned Object as defined in
+     * wsdl/wiseconsume generated objects. If mapper parameter is null, no
+     * mapping are applied and original object are returned. When no mapping
+     * applied you will have this answer: For JAXWS the original object answer
+     * are returned into this map; For JAXRS a Map contains 2 key/valuepair with
+     * keys "ContentType" and "JAXRSStream"
      * 
-     * @param mapper a WiseMapper used to map JAX-WS generated object returned by method call to arbitrary custom object model. It
-     *        could be null to don't apply any kind of mappings
-     * @param inputMap It's the map of input object used to give them together with output. It's useful when they are needed by
-     *        wise's client in same classLoader used by smooks (i.e when wise is used to enrich set of objects like in ESB action
-     *        pipeline)
-     * @return a Map<String, Object> containing the result of ws calls eventually mapped using WiseMapper provided
-     * @throws MappingException rethrown exception got from provided {@link WiseMapper}
+     * @param mapper
+     *            a WiseMapper used to map JAX-WS generated object returned by
+     *            method call to arbitrary custom object model. It could be null
+     *            to don't apply any kind of mappings
+     * @param inputMap
+     *            It's the map of input object used to give them together with
+     *            output. It's useful when they are needed by wise's client in
+     *            same classLoader used by smooks (i.e when wise is used to
+     *            enrich set of objects like in ESB action pipeline)
+     * @return a Map<String, Object> containing the result of ws calls
+     *         eventually mapped using WiseMapper provided
+     * @throws MappingException
+     *             rethrown exception got from provided {@link WiseMapper}
      */
 
-    public Map<String, Object> getMapRequestAndResult( WiseMapper mapper,
-                                                       Map<String, Object> inputMap ) throws MappingException;
+    public Map<String, Object> getMapRequestAndResult(WiseMapper mapper, Map<String, Object> inputMap) throws MappingException;
 
     /**
-     * Apply WiseMapper provided with to returned Object as defined in wsdl/wiseconsume generated objects. If mapper parameter is
-     * null, no mapping are applied and original object are returned. When no mapping applied you will have this answer: For JAXWS
-     * the original object answer are returned into this map; For JAXRS a Map contains 2 key/valuepair with keys "ContentType" and
-     * "JAXRSStream"
+     * Apply WiseMapper provided with to returned Object as defined in
+     * wsdl/wiseconsume generated objects. If mapper parameter is null, no
+     * mapping are applied and original object are returned. When no mapping
+     * applied you will have this answer: For JAXWS the original object answer
+     * are returned into this map; For JAXRS a Map contains 2 key/valuepair with
+     * keys "ContentType" and "JAXRSStream"
      * 
-     * @param mapper a WiseMapper used to map JAX-WS generated object returned by method call to arbitrary custom object model. It
-     *        could be null to don't apply any kind of mappings
-     * @return a Map<String, Object> containing the result of ws calls eventually mapped using WiseMapper provided
-     * @throws MappingException rethrown exception got from provided {@link WiseMapper}
+     * @param mapper
+     *            a WiseMapper used to map JAX-WS generated object returned by
+     *            method call to arbitrary custom object model. It could be null
+     *            to don't apply any kind of mappings
+     * @return a Map<String, Object> containing the result of ws calls
+     *         eventually mapped using WiseMapper provided
+     * @throws MappingException
+     *             rethrown exception got from provided {@link WiseMapper}
      */
-    public Map<String, Object> getMappedResult( WiseMapper mapper ) throws MappingException;
+    public Map<String, Object> getMappedResult(WiseMapper mapper) throws MappingException;
 
     /**
-     * Return a Map containing objects returned by web service invocation. Both return value and OUT Holders parameters are
-     * considered ; For JAXRS a Map contains 2 key/valuepair with keys "ContentType" and "JAXRSStream"
+     * Return a Map containing objects returned by web service invocation. Both
+     * return value and OUT Holders parameters are considered ; For JAXRS a Map
+     * contains 2 key/valuepair with keys "ContentType" and "JAXRSStream"
      * 
-     * @return a Map<String, Object> containing the result of ws calls eventually mapped using WiseMapper provided
+     * @return a Map<String, Object> containing the result of ws calls
+     *         eventually mapped using WiseMapper provided
      */
     public Map<String, Object> getResult();
 

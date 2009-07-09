@@ -33,7 +33,7 @@ import net.jcip.annotations.ThreadSafe;
 /**
  * This is the Wise core class responsible to invoke the JAX-WS tools that
  * handles wsdl retrieval & parsing. It is used to build the list of WSService
- * representing the serices availabe in parsed wsdl.
+ * representing the services available in parsed wsdl.
  * 
  * @author Stefano Maestri, stefano.maestri@javalinux.it
  */
@@ -41,7 +41,8 @@ import net.jcip.annotations.ThreadSafe;
 public interface WSDynamicClient {
 
     /**
-     * Create the services' map and gives it back.
+     * Create the services' map and gives it back. Useful when Wise is used for
+     * interactive explore and invoke a service.
      * 
      * @return The Map of WSEndpoint with symbolic names as keys
      * @throws IllegalStateException
@@ -64,13 +65,26 @@ public interface WSDynamicClient {
      * @param serviceName
      * @param portName
      * @param operationName
-     * @throws ResourceNotAvailableException when the specified service, port or operation can not be found
+     * @throws ResourceNotAvailableException
+     *             when the specified service, port or operation can not be
+     *             found
      * @return the WSMethod class to use for effective service invocation
      */
     public WSMethod getWSMethod(String serviceName, String portName, String operationName) throws ResourceNotAvailableException;
 
+    /**
+     * 
+     * @return the {@link EnablerDelegate} used to enable the WS-* for all
+     *         endpoint attached all serivices attached to this
+     *         {@link WSDynamicClient}.
+     */
     public EnablerDelegate getWSExtensionEnablerDelegate();
 
+    /**
+     * 
+     * @return the single smooks instance attached to this
+     *         {@link WSDynamicClient}
+     */
     public Smooks getSmooksInstance();
 
     public void close();

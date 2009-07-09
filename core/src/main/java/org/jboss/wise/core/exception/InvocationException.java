@@ -23,13 +23,14 @@
 package org.jboss.wise.core.exception;
 
 /**
+ * Exception thrown if something goes wrong during ws invocation
+ * 
  * @author stefano.maestri@javalinux.it
  */
 public class InvocationException extends Exception {
 
-    public InvocationException( String message,
-                                Throwable cause ) {
-        super(message, cause);
+    public InvocationException(String message, Throwable cause) {
+	super(message, cause);
     }
 
 }

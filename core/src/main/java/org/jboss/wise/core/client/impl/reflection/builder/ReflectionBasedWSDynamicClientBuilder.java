@@ -116,7 +116,8 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
 	    try {
 		FileUtils.forceMkdir(tmpDirFile);
 	    } catch (IOException e) {
-		throw new IllegalStateException("unable to create tmp dir:" + clientSpecificTmpDir + ". Please provide a valid temp dir if you didn't.");
+		throw new IllegalStateException(
+			"unable to create tmp dir:" + clientSpecificTmpDir + ". Please provide a valid temp dir if you didn't.");
 	    }
 	} else {
 	    throw new IllegalStateException("temp dir cannot be null!");
@@ -223,42 +224,6 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
 	return this.catalog;
     }
 
-    /**
-     * setter method used only by MC. Even if they are usable also by code is
-     * much more convenient to use intrface's defined method
-     * {@link #wsdlURL(String)} since it return current instance and permit
-     * concatenation like instace.wsdlURL(wsdl).symbolycName(name);
-     * 
-     * @param wsdlURL
-     */
-    public synchronized final void setWsdlURL(String wsdlURL) {
-	this.wsdlURL = wsdlURL;
-    }
-
-    /**
-     * setter method used only by MC. Even if they are usable also by code is
-     * much more convenient to use intrface's defined method
-     * {@link #userName(String)} since it return current instance and permit
-     * concatenation like instace.wsdlURL(wsdl).symbolycName(name);
-     * 
-     * @param userName
-     */
-    public synchronized final void setUserName(String userName) {
-	this.userName = userName;
-    }
-
-    /**
-     * setter method used only by MC. Even if they are usable also by code is
-     * much more convenient to use intrface's defined method
-     * {@link #password(String)} since it return current instance and permit
-     * concatenation like instace.wsdlURL(wsdl).symbolycName(name);
-     * 
-     * @param password
-     */
-    public synchronized final void setPassword(String password) {
-	this.password = password;
-    }
-
     public synchronized final void setBindingFiles(List<File> bindings) {
 	this.bindingFiles = bindings;
     }
@@ -312,7 +277,8 @@ public class ReflectionBasedWSDynamicClientBuilder implements WSDynamicClientBui
      */
     synchronized String transferWSDL(String username, String password, String tmpDir) throws WiseRuntimeException {
 	try {
-	    WSDLResolver resolver = username != null ? new WSDLResolver(tmpDir, new Connection(username, password)) : new WSDLResolver(tmpDir);
+	    WSDLResolver resolver = username != null ? new WSDLResolver(tmpDir, new Connection(username, password))
+		    : new WSDLResolver(tmpDir);
 	    File wsdlFile = resolver.retrieveWsdlFile(new URL(getWsdlURL()));
 	    String result = wsdlFile.getAbsolutePath();
 	    logger.info("Main wsdl file stored locally: " + result);

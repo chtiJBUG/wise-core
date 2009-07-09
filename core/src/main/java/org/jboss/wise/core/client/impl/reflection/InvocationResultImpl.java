@@ -32,7 +32,8 @@ import org.jboss.wise.core.exception.MappingException;
 import org.jboss.wise.core.mapper.WiseMapper;
 
 /**
- * Holds the webservice's invocation result's data. Can apply a mapping to custom object using a WiseMapper passed to
+ * Holds the webservice's invocation result's data. Can apply a mapping to
+ * custom object using a WiseMapper passed to
  * {@link #getMapRequestAndResult(WiseMapper, Map)} methods
  * 
  * @author stefano.maestri@javalinux.it
@@ -48,46 +49,40 @@ public class InvocationResultImpl implements InvocationResult {
      * @param value
      * @param results
      */
-    public InvocationResultImpl( String name,
-                                 Object value,
-                                 Map<String, Object> results ) {
+    public InvocationResultImpl(String name, Object value, Map<String, Object> results) {
 
-        this.originalObjects = new HashMap<String, Object>();
-        if (results == null) {
-            results = Collections.EMPTY_MAP;
-        }
-        this.originalObjects.putAll(results);
-        if (name != null && name.trim().length() != 0) {
-            this.originalObjects.put(name, value);
-        }
+	this.originalObjects = new HashMap<String, Object>();
+	if (results == null) {
+	    results = Collections.EMPTY_MAP;
+	}
+	this.originalObjects.putAll(results);
+	if (name != null && name.trim().length() != 0) {
+	    this.originalObjects.put(name, value);
+	}
     }
 
     /**
-     * Apply WiseMapper provided with to returned Object as defined in wsdl/wiseconsume generated objects
+     * {@inheritDoc}
      * 
-     * @param mapper a WiseMapper used to map JAX-WS generated object returned by method call to arbitrary custom object model
-     * @param inputMap It's the map of input object used to give them together with output. It's useful when they are needed by
-     *        wise's client in same classLoader used by smooks (i.e when wise is used to enrich set of objects like in ESB action
-     *        pipeline)
-     * @return a Map<String, Object> containing the result od ws calls eventually remapped using WiseMapper provided
-     * @throws MappingException
+     * @see org.jboss.wise.core.client.InvocationResult#getMapRequestAndResult(WiseMapper,
+     *      Map)
      */
-    // TODO: demostrate with unit test how it can be used for message enrichement in same class loader and
+    // TODO: demostrate with an integration test how it can be used for message
+    // enrichement in same class loader and
     // integrating input and output in same object model
-    public Map<String, Object> getMapRequestAndResult( WiseMapper mapper,
-                                                       Map<String, Object> inputMap ) throws MappingException {
+    public Map<String, Object> getMapRequestAndResult(WiseMapper mapper, Map<String, Object> inputMap) throws MappingException {
 
-        if (inputMap == null) {
-            inputMap = new HashMap<String, Object>();
-        }
-        inputMap.put("results", originalObjects);
-        Map<String, Object> mappedResult = new HashMap<String, Object>();
-        if (mapper != null) {
-            mappedResult.putAll(mapper.applyMapping(inputMap));
-        } else {
-            mappedResult.putAll(inputMap);
-        }
-        return mappedResult;
+	if (inputMap == null) {
+	    inputMap = new HashMap<String, Object>();
+	}
+	inputMap.put("results", originalObjects);
+	Map<String, Object> mappedResult = new HashMap<String, Object>();
+	if (mapper != null) {
+	    mappedResult.putAll(mapper.applyMapping(inputMap));
+	} else {
+	    mappedResult.putAll(inputMap);
+	}
+	return mappedResult;
 
     }
 
@@ -96,8 +91,8 @@ public class InvocationResultImpl implements InvocationResult {
      * 
      * @see org.jboss.wise.core.client.InvocationResult#getMappedResult(org.jboss.wise.core.mapper.WiseMapper)
      */
-    public Map<String, Object> getMappedResult( WiseMapper mapper ) throws MappingException {
-        return this.getMapRequestAndResult(mapper, null);
+    public Map<String, Object> getMappedResult(WiseMapper mapper) throws MappingException {
+	return this.getMapRequestAndResult(mapper, null);
     }
 
     /**
@@ -106,7 +101,7 @@ public class InvocationResultImpl implements InvocationResult {
      * @see org.jboss.wise.core.client.InvocationResult#getResult()
      */
     public Map<String, Object> getResult() {
-        return originalObjects;
+	return originalObjects;
     }
 
 }

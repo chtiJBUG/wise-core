@@ -41,7 +41,8 @@ import static org.jboss.wise.core.utils.DefaultConfig.MAX_THRED_POOL_SIZE;
 import org.jboss.wise.core.wsextensions.WSExtensionEnabler;
 
 /**
- * This represent a WebEndpoint and has utility methods to edit username, password, endpoint address, attach handlers
+ * This represent a WebEndpoint and has utility methods to edit username,
+ * password, endpoint address, attach handlers
  * 
  * @author Stefano Maestri, stefano.maestri@javalinux.it
  * @since 09-Sep-2007
@@ -49,27 +50,27 @@ import org.jboss.wise.core.wsextensions.WSExtensionEnabler;
 @ThreadSafe
 public class WSEndpointImpl implements WSEndpoint {
 
-    @GuardedBy( "this" )
+    @GuardedBy("this")
     private String name;
 
-    @GuardedBy( "this" )
+    @GuardedBy("this")
     private Class underlyingObjectClass;
 
     private final ExecutorService service;
 
-    @GuardedBy( "this" )
+    @GuardedBy("this")
     ClassLoader classLoader;
 
-    @GuardedBy( "this" )
+    @GuardedBy("this")
     private WSEndPointbuilder wsEndPointbuilder;
 
-    @GuardedBy( "this" )
+    @GuardedBy("this")
     public String userName;
 
-    @GuardedBy( "this" )
+    @GuardedBy("this")
     public String password;
 
-    @GuardedBy( "this" )
+    @GuardedBy("this")
     public String targetUrl;
 
     private final Map<String, WSMethod> wsMethods = Collections.synchronizedMap(new TreeMap<String, WSMethod>());
@@ -78,54 +79,45 @@ public class WSEndpointImpl implements WSEndpoint {
 
     public final List<Handler<?>> handlers = Collections.synchronizedList(new LinkedList<Handler<?>>());
 
-    public WSEndpointImpl( int maxThreadPoolSize ) {
-        this.wsMethods.clear();
-        if (maxThreadPoolSize >= 1) {
-            this.service = Executors.newFixedThreadPool(maxThreadPoolSize);
-        } else {
-            this.service = Executors.newFixedThreadPool(MAX_THRED_POOL_SIZE.getIntValue());
-        }
+    public WSEndpointImpl(int maxThreadPoolSize) {
+	this.wsMethods.clear();
+	if (maxThreadPoolSize >= 1) {
+	    this.service = Executors.newFixedThreadPool(maxThreadPoolSize);
+	} else {
+	    this.service = Executors.newFixedThreadPool(MAX_THRED_POOL_SIZE.getIntValue());
+	}
     }
 
     public Object createInstance() {
-        return this.getWsEndPointbuilder().createEndPointUnderlyingObject();
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.jboss.wise.core.client.WSEndpoint#getWsdlName()
-     */
-    public String getWsdlName() {
-        return null;
+	return this.getWsEndPointbuilder().createEndPointUnderlyingObject();
     }
 
     public synchronized String getName() {
-        return name;
+	return name;
     }
 
     /**
      * @return service
      */
     public synchronized ExecutorService getService() {
-        return service;
+	return service;
     }
 
-    public synchronized void setName( String name ) {
-        this.name = name;
+    public synchronized void setName(String name) {
+	this.name = name;
     }
 
     public synchronized String getTargetUrl() {
-        return targetUrl;
+	return targetUrl;
 
     }
 
-    public synchronized void setTargetUrl( String targetUrl ) {
-        this.targetUrl = targetUrl;
+    public synchronized void setTargetUrl(String targetUrl) {
+	this.targetUrl = targetUrl;
     }
 
     public synchronized String getUsername() {
-        return userName;
+	return userName;
 
     }
 
@@ -134,13 +126,13 @@ public class WSEndpointImpl implements WSEndpoint {
      * 
      * @param username
      */
-    public synchronized void setUsername( String username ) {
-        this.userName = username;
+    public synchronized void setUsername(String username) {
+	this.userName = username;
 
     }
 
     public synchronized String getPassword() {
-        return password;
+	return password;
     }
 
     /**
@@ -148,64 +140,66 @@ public class WSEndpointImpl implements WSEndpoint {
      * 
      * @param password
      */
-    public synchronized void setPassword( String password ) {
-        this.password = password;
+    public synchronized void setPassword(String password) {
+	this.password = password;
     }
 
     public synchronized Class getUnderlyingObjectClass() {
-        return underlyingObjectClass;
+	return underlyingObjectClass;
     }
 
-    public synchronized void setUnderlyingObjectClass( Class clazz ) {
-        this.underlyingObjectClass = clazz;
+    public synchronized void setUnderlyingObjectClass(Class clazz) {
+	this.underlyingObjectClass = clazz;
     }
 
     /**
-     * Add an Handler to this endpoint. Handler will apply on all endpoint method called
+     * Add an Handler to this endpoint. Handler will apply on all endpoint
+     * method called
      * 
      * @see #getWSMethods()
      * @param handler
      */
-    public void addHandler( Handler handler ) {
-        handlers.add(handler);
+    public void addHandler(Handler handler) {
+	handlers.add(handler);
     }
 
     /**
      * @return handlers
      */
     public final List<Handler<?>> getHandlers() {
-        return handlers;
+	return handlers;
     }
 
     /**
-     * Create the webmethods' map and it back. This maps would be used by clients to get a method to call and invoke it All calls
-     * of this method apply all handlers added with {@link #addHandler(Handler)} method
+     * Create the webmethods' map and it back. This maps would be used by
+     * clients to get a method to call and invoke it All calls of this method
+     * apply all handlers added with {@link #addHandler(Handler)} method
      * 
      * @return The list of WebMethod names
      */
     public synchronized Map<String, WSMethod> getWSMethods() {
-        if (wsMethods.size() > 0) {
-            return wsMethods;
-        }
-        for (Method method : this.getUnderlyingObjectClass().getMethods()) {
-            WebMethod annotation = method.getAnnotation(WebMethod.class);
-            if (annotation != null) {
-                if (annotation.operationName() != null && !annotation.operationName().equals("")) {
-                    wsMethods.put(annotation.operationName(), new WSMethodImpl(method, this));
-                } else {
-                    wsMethods.put(method.getName(), new WSMethodImpl(method, this));
-                }
-            }
-        }
-        return wsMethods;
+	if (wsMethods.size() > 0) {
+	    return wsMethods;
+	}
+	for (Method method : this.getUnderlyingObjectClass().getMethods()) {
+	    WebMethod annotation = method.getAnnotation(WebMethod.class);
+	    if (annotation != null) {
+		if (annotation.operationName() != null && !annotation.operationName().equals("")) {
+		    wsMethods.put(annotation.operationName(), new WSMethodImpl(method, this));
+		} else {
+		    wsMethods.put(method.getName(), new WSMethodImpl(method, this));
+		}
+	    }
+	}
+	return wsMethods;
     }
 
     public synchronized ClassLoader getClassLoader() {
-        return classLoader;
+	return classLoader;
     }
 
-    public synchronized void setClassLoader( ClassLoader classLoader ) {
-        this.classLoader = classLoader;
+    public synchronized void setClassLoader(ClassLoader classLoader) {
+	this.classLoader = classLoader;
     }
 
     /**
@@ -213,29 +207,30 @@ public class WSEndpointImpl implements WSEndpoint {
      * 
      * @see org.jboss.wise.core.client.WSEndpoint#addWSExtension(org.jboss.wise.core.wsextensions.WSExtensionEnabler)
      */
-    public void addWSExtension( WSExtensionEnabler enabler ) {
-        extensions.add(enabler);
+    public void addWSExtension(WSExtensionEnabler enabler) {
+	extensions.add(enabler);
     }
 
     /**
      * @return extensions
      */
     public final List<WSExtensionEnabler> getExtensions() {
-        return extensions;
+	return extensions;
     }
 
     /**
      * @return wsEndPointbuilder
      */
-    final WSEndPointbuilder getWsEndPointbuilder() {
-        return wsEndPointbuilder;
+    final synchronized WSEndPointbuilder getWsEndPointbuilder() {
+	return wsEndPointbuilder;
     }
 
     /**
-     * @param wsEndPointbuilder Sets wsEndPointbuilder to the specified value.
+     * @param wsEndPointbuilder
+     *            Sets wsEndPointbuilder to the specified value.
      */
-    final void setWsEndPointbuilder( WSEndPointbuilder wsEndPointbuilder ) {
-        this.wsEndPointbuilder = wsEndPointbuilder;
+    final synchronized void setWsEndPointbuilder(WSEndPointbuilder wsEndPointbuilder) {
+	this.wsEndPointbuilder = wsEndPointbuilder;
     }
 
 }

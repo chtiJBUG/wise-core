@@ -24,6 +24,8 @@ package org.jboss.wise.core.client;
 
 import java.lang.reflect.Type;
 import javax.jws.WebParam;
+import javax.jws.WebParam.Mode;
+
 import net.jcip.annotations.Immutable;
 
 /**
@@ -35,12 +37,31 @@ import net.jcip.annotations.Immutable;
 @Immutable
 public interface WebParameter {
 
+    /**
+     * 
+     * @return The name defined in the wsdl and {@link WebParam} annotation of
+     *         generated classses
+     */
     public String getName();
 
+    /**
+     * 
+     * @return The {@link Type} defined in generated classses
+     */
     public Type getType();
 
+    /**
+     * 
+     * @return the position (starting from zero) of the parameter in method
+     *         signature
+     */
     public int getPosition();
 
+    /**
+     * 
+     * @return The {@link Mode} defined in the wsdl and {@link WebParam}
+     *         annotation of generated classses
+     */
     public Enum<WebParam.Mode> getMode();
 
 }
