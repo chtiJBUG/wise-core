@@ -19,9 +19,6 @@
 			<webinf dir="./resources/WEB-INF-servlet">
 			    <include name="*"/>
 			</webinf>
-			<lib dir="${distribuion.dir}">
-			    <include name="*.jar" if="includeWiseInWar"/>
-			</lib>
 			<lib dir="${lib.dir}">
 			    <include name="commons-io-*.jar" if="includeWiseInWar"/>
 			    <include name="commons-lang-*.jar" if="includeWiseInWar"/>
