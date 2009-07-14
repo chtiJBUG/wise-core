@@ -38,9 +38,9 @@
         <url>https://jira.jboss.org/jira/browse/WISE</url>
     </issueManagement>
 
-    <prerequisites>
+<!--     <prerequisites>
         <maven>2.1.0</maven>
-   </prerequisites>
+   </prerequisites>--> 
 
     <properties>
         <compiler.fork>false</compiler.fork>

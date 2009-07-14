@@ -192,11 +192,7 @@
                 <version>2.0.0.Beta</version>
             </dependency>
 
-            <dependency>
-                <groupId>jboss</groupId>
-                <artifactId>jboss-kernel</artifactId>
-                <version>2.0.0.Beta</version>
-            </dependency>
+            
 
             <dependency>
                 <groupId>org.jboss.ws.native</groupId>
@@ -207,20 +203,20 @@
             <dependency>
                 <groupId>org.milyn</groupId>
                 <artifactId>milyn-smooks-core</artifactId>
-                <version>1.1</version>
+                <version>1.2</version>
             </dependency>
 
 
             <dependency>
                 <groupId>org.milyn</groupId>
                 <artifactId>milyn-commons</artifactId>
-                <version>1.1</version>
+                <version>1.2</version>
             </dependency>
 
             <dependency>
                 <groupId>org.milyn</groupId>
                 <artifactId>milyn-smooks-javabean</artifactId>
-                <version>1.1</version>
+                <version>1.2</version>
             </dependency>
 
 
