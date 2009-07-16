@@ -83,7 +83,6 @@ public class WSImportImpl extends WSConsumer {
 	    if (this.isVerbose()) {
 		wsImporter.setMessageStream(System.out);
 	    }
-	    System.out.println("################# 0");
 	    wsImporter.setAdditionalCompilerClassPath(defineAdditionalCompilerClassPath());
 
 	    if (bindingFiles != null && bindingFiles.size() > 0) {
@@ -112,7 +111,6 @@ public class WSImportImpl extends WSConsumer {
      */
     /* package */List<String> defineAdditionalCompilerClassPath() throws WiseRuntimeException {
 	List<String> cp = new LinkedList<String>();
-	System.out.println("################# 1");
 	for (String jar : neededClasses) {
 	    try {
 		cp.add(Thread.currentThread().getContextClassLoader().getResource(jar).getPath().split("!")[0]);
@@ -121,7 +119,6 @@ public class WSImportImpl extends WSConsumer {
 	    }
 
 	}
-	System.out.println("################# " + cp);
 	return cp;
     }
 

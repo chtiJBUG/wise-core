@@ -66,6 +66,18 @@
             </dependency>
 
 
+            <dependency>
+                <groupId>jboss</groupId>
+                <artifactId>jboss-kernel</artifactId>
+                <exclusions>
+
+                      <exclusion>
+                        <groupId>wutka-dtdparser</groupId>
+                        <artifactId>dtdparser121</artifactId>
+                      </exclusion>
+
+               </exclusions>               
+            </dependency>
             
             
             <dependency>

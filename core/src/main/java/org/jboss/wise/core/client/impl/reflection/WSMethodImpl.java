@@ -184,13 +184,10 @@ public class WSMethodImpl implements WSMethod {
 	Object[] arrayToReturn = new Object[webParams.size()];
 	Arrays.fill(arrayToReturn, null);
 
-	for (String key : originalParams.keySet()) {
-	    if (webParams.get(key) != null) {
-		WebParameterImpl webPara = webParams.get(key);
-		int position = webParams.get(key).getPosition();
-		arrayToReturn[position] = originalParams.get(key);
-	    }
-
+	for (String key : webParams.keySet()) {
+	    WebParameterImpl webPara = webParams.get(key);
+	    int position = webPara.getPosition();
+	    arrayToReturn[position] = originalParams.get(key);
 	}
 	return arrayToReturn;
     }

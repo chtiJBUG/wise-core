@@ -139,10 +139,10 @@ public class SmooksMapper implements WiseMapper {
 	Map<String, Object> returnMap = result.getResultMap();
 
 	// workaround when we should use smooks to extract a single value
-	// Have a look to SmooksMapperTest.shouldMapToSingleInput() for an
+	// Have a look to SmooksMapperTest.shouldMapToPrimitiveInput() for an
 	// example of use
-	if (returnMap.size() == 1 && returnMap.get("singleInput") != null) {
-	    returnMap = (Map<String, Object>) returnMap.get("singleInput");
+	if (returnMap.get("primitiveInputs") != null) {
+	    returnMap = (Map<String, Object>) returnMap.get("primitiveInputs");
 	}
 	return returnMap;
 

@@ -7,10 +7,11 @@
 
     <resource-config selector="org.jboss.wise.core.mapper.mappingObject.InternalObject">
         <resource>org.milyn.javabean.BeanPopulator</resource>
-        <param name="beanId">singleInput</param>
+        <param name="beanId">primitiveInputs</param>
         <param name="beanClass">java.util.HashMap</param>
         <param name="bindings">
             <binding property="textInput" type="String" selector="text" />
+            <binding property="intInput" type="Integer" selector="number" />
         </param>
     </resource-config>
     

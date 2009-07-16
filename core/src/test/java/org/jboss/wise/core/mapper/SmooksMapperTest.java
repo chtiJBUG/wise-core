@@ -21,84 +21,112 @@
  */
 package org.jboss.wise.core.mapper;
 
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.mock;
+import static org.hamcrest.core.IsNot.not;
+
 import static org.hamcrest.collection.IsMapContaining.hasEntry;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.xml.datatype.XMLGregorianCalendar;
+
 import org.jboss.wise.core.client.WSDynamicClient;
 import org.jboss.wise.core.mapper.mappingObject.ExternalObject;
 import org.jboss.wise.core.mapper.mappingObject.InternalObject;
 import org.junit.Test;
 import org.milyn.Smooks;
+import org.milyn.container.ExecutionContext;
+
+import com.sun.tools.corba.se.idl.constExpr.And;
 
 /**
  * @author stefano.maestri@javalinux.it
  */
 public class SmooksMapperTest {
+
     public static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
 
     @Test
     public void shouldMapComplexObjectModel() throws Exception {
-        WSDynamicClient client = mock(WSDynamicClient.class);
-        when(client.getSmooksInstance()).thenReturn(new Smooks());
-        WiseMapper mapper = new SmooksMapper("./smooks/smooks-config.xml", "target/smooks-report/report.html", client);
-        Map<String, Object> originalObjects = new HashMap<String, Object>();
-        ExternalObject external = new ExternalObject();
-        InternalObject internal = new InternalObject();
-        internal.setNumber(Integer.valueOf(1));
-        internal.setText("fooText");
-        external.setInternal(internal);
-        originalObjects.put("external", external);
-        Map<String, Object> results;
-        results = mapper.applyMapping(originalObjects);
-        Integer integerResult = (Integer)results.get("complexObject").getClass().getMethod("getNumberField", null).invoke(results.get("complexObject"),
-                                                                                                                          null);
-        String stringResult = (String)results.get("complexObject").getClass().getMethod("getTextField", null).invoke(results.get("complexObject"),
-                                                                                                                     null);
-        assertThat(integerResult, equalTo(internal.getNumber()));
-        assertThat(stringResult, equalTo("fooText"));
+	WSDynamicClient client = mock(WSDynamicClient.class);
+	when(client.getSmooksInstance()).thenReturn(new Smooks());
+	WiseMapper mapper = new SmooksMapper("./smooks/smooks-config.xml", "target/smooks-report/report.html", client);
+	Map<String, Object> originalObjects = new HashMap<String, Object>();
+	ExternalObject external = new ExternalObject();
+	InternalObject internal = new InternalObject();
+	internal.setNumber(Integer.valueOf(1));
+	internal.setText("fooText");
+	external.setInternal(internal);
+	originalObjects.put("external", external);
+	Map<String, Object> results;
+	results = mapper.applyMapping(originalObjects);
+	Integer integerResult = (Integer) results.get("complexObject").getClass().getMethod("getNumberField", null)
+		.invoke(results.get("complexObject"), null);
+	String stringResult = (String) results.get("complexObject").getClass().getMethod("getTextField", null).invoke(results
+		.get("complexObject"), null);
+	assertThat(integerResult, equalTo(internal.getNumber()));
+	assertThat(stringResult, equalTo("fooText"));
 
     }
 
     @Test
     public void shouldMapObjectContainingXMLGregorianCalendarField() throws Exception {
-        WSDynamicClient client = mock(WSDynamicClient.class);
-        when(client.getSmooksInstance()).thenReturn(new Smooks());
-        WiseMapper mapper = new SmooksMapper("./smooks/smooks-config-XMLGregorianCalendar.xml", client);
-        Map<String, Object> originalObjects = new HashMap<String, Object>();
-        ExternalObject external = new ExternalObject();
-        String dateString = "2007-03-07T04:27:00";
-        Date date = (new SimpleDateFormat(DEFAULT_DATE_FORMAT)).parse(dateString);
-        external.setDate(date);
-        originalObjects.put("external", external);
-        Map<String, Object> results;
-        results = mapper.applyMapping(originalObjects);
-        long returnedTime = ((XMLGregorianCalendar)results.get("complexObject").getClass().getMethod("getDateField", null).invoke(results.get("complexObject"),
-                                                                                                                                  null)).toGregorianCalendar().getTimeInMillis();
-        assertThat(returnedTime, is(date.getTime()));
+	WSDynamicClient client = mock(WSDynamicClient.class);
+	when(client.getSmooksInstance()).thenReturn(new Smooks());
+	WiseMapper mapper = new SmooksMapper("./smooks/smooks-config-XMLGregorianCalendar.xml", client);
+	Map<String, Object> originalObjects = new HashMap<String, Object>();
+	ExternalObject external = new ExternalObject();
+	String dateString = "2007-03-07T04:27:00";
+	Date date = (new SimpleDateFormat(DEFAULT_DATE_FORMAT)).parse(dateString);
+	external.setDate(date);
+	originalObjects.put("external", external);
+	Map<String, Object> results;
+	results = mapper.applyMapping(originalObjects);
+	long returnedTime = ((XMLGregorianCalendar) results.get("complexObject").getClass().getMethod("getDateField", null)
+		.invoke(results.get("complexObject"), null)).toGregorianCalendar().getTimeInMillis();
+
+	assertThat(returnedTime, is(date.getTime()));
 
     }
 
     @Test
-    public void shouldMapToSingleInput() throws Exception {
-        WSDynamicClient client = mock(WSDynamicClient.class);
-        when(client.getSmooksInstance()).thenReturn(new Smooks());
-        WiseMapper mapper = new SmooksMapper("./smooks/smooks-single-input.xml", client);
-        Map<String, Object> originalObjects = new HashMap<String, Object>();
-        InternalObject internal = new InternalObject();
-        internal.setNumber(Integer.valueOf(1));
-        internal.setText("fooText");
-        originalObjects.put("internal", internal);
-        Map<String, Object> results;
-        results = mapper.applyMapping(originalObjects);
-        assertThat(results, hasEntry("textInput", (Object)"fooText"));
+    public void shouldMapToPrimitiveInput() throws Exception {
+	WSDynamicClient client = mock(WSDynamicClient.class);
+	when(client.getSmooksInstance()).thenReturn(new Smooks());
+	WiseMapper mapper = new SmooksMapper("./smooks/smooks-primitive-input.xml", client);
+	Map<String, Object> originalObjects = new HashMap<String, Object>();
+	InternalObject internal = new InternalObject();
+	internal.setNumber(Integer.valueOf(1));
+	internal.setText("fooText");
+	originalObjects.put("internal", internal);
+	Map<String, Object> results;
+	results = mapper.applyMapping(originalObjects);
+	assertThat(results, hasEntry("textInput", (Object) "fooText"));
+	assertThat(results, hasEntry("intInput", (Object) Integer.valueOf(1)));
+
+    }
+
+    @Test
+    public void shouldHaveDifferentContentDeliveryConfigurationPerxecutionContext() {
+	WSDynamicClient client = mock(WSDynamicClient.class);
+	when(client.getSmooksInstance()).thenReturn(new Smooks());
+	SmooksMapper mapper = new SmooksMapper("./smooks/smooks-primitive-input.xml", client);
+	SmooksMapper mapper2 = new SmooksMapper("./smooks/smooks-config-XMLGregorianCalendar.xml", client);
+	SmooksMapper mapper3 = new SmooksMapper("./smooks/smooks-config.xml", client);
+	ExecutionContext context = mapper.initExecutionContext(null);
+	ExecutionContext context2 = mapper2.initExecutionContext(null);
+	ExecutionContext context3 = mapper3.initExecutionContext(null);
+
+	assertThat(context.getDeliveryConfig(), not(is(context2.getDeliveryConfig())));
+	assertThat(context.getDeliveryConfig(), not(is(context3.getDeliveryConfig())));
+	assertThat(context2.getDeliveryConfig(), not(is(context3.getDeliveryConfig())));
 
     }
 }
