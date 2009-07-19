@@ -25,6 +25,7 @@ package org.jboss.wise.core.consumer.impl.jbosswsnative;
 import java.io.File;
 import java.io.PrintStream;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
 import net.jcip.annotations.ThreadSafe;
@@ -124,14 +125,15 @@ public class WSImportImpl extends WSConsumer {
 
     public class ProviderChanger {
 
-	private final String defaultProvider = "org.jboss.ws.core.jaxws.spi.ProviderImpl";
+	private final ClassLoader defaultCl = Thread.currentThread().getContextClassLoader();
 
 	public void changeProvider() {
-	    System.setProperty("javax.xml.ws.spi.Provider", "com.sun.xml.ws.spi.ProviderImpl");
+	    URL[] urls = {};
+	    Thread.currentThread().setContextClassLoader(new WiseForceToolsProviderClassLoader(urls, defaultCl));
 	}
 
 	public void restoreDefaultProvider() {
-	    System.setProperty("javax.xml.ws.spi.Provider", defaultProvider);
+	    Thread.currentThread().setContextClassLoader(defaultCl);
 	}
     }
 }
