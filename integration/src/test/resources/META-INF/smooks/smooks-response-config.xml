@@ -1,46 +1,34 @@
 <?xml version="1.0"?>
-<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.0.xsd">
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd"
+                      xmlns:jb="http://www.milyn.org/xsd/smooks/javabean-1.2.xsd">
 
-    <resource-config selector="global-parameters">
+    <params>
         <param name="stream.filter.type">SAX</param>
-    </resource-config>
+    </params>
 
-    <resource-config selector="wise.samples.complexws.ComplexObject">
-        <resource>org.milyn.javabean.BeanPopulator</resource>
-        <param name="beanId">ExternalObject</param>
-        <param name="beanClass">org.jboss.wise.test.integration.smooks.pojo.clientside.ExternalObject</param>
-        <param name="bindings">
-        <binding property="date" type="MessageDate">messageDate.year + "-" + messageDate.month + "-" + messageDate.day</binding>
-            <binding property="internal" selector="${InternalObject}" />
-        </param>
-    </resource-config>
-    
-    <resource-config selector="wise.samples.complexws.ComplexObject">
-        <resource>org.milyn.javabean.BeanPopulator</resource>
-        <param name="beanId">InternalObject</param>
-        <param name="beanClass">org.jboss.wise.test.integration.smooks.pojo.clientside.InternalObject</param>
-        <param name="bindings">
-            <binding property="number" type="Integer" selector="integerField" />
-            <binding property="text" selector="stringField" />
-            
-        </param>
-    </resource-config>
-    
-    <resource-config selector="wise.samples.complexws.ComplexObject">
-        <resource>org.milyn.javabean.BeanPopulator</resource>
-        <param name="beanId">messageDate</param>
-        <param name="beanClass">java.util.HashMap</param>
-        <param name="bindings">
-            <binding property="day" selector="calendarField/day" default ="0"/>
-            <binding property="month" selector="calendarField/month" default ="0" />
-            <binding property="year" selector="calendarField/year" default ="0"/>
-        </param>
-    </resource-config>
-    
-    <resource-config selector="decoder:MessageDate">
-        <resource>org.milyn.javabean.decoders.DateDecoder</resource>
-        <param name="format">yyyy-MM-dd</param>
-    </resource-config> 
+    <jb:bean beanId="ExternalObject" createOnElement="$document" class="org.jboss.wise.test.integration.smooks.pojo.clientside.ExternalObject">
+        <jb:expression property="date">
+            decoder = java.util.Calendar.getInstance();
+            decoder.set(messageDate.year, messageDate.month, messageDate.day, 0, 0, 0);
+            return decoder.getTime();
+        </jb:expression>
 
+        <jb:wiring property="internal" beanIdRef="InternalObject" />
+    </jb:bean>
+
+    <!-- Wired onto the 'internal' property of 'ExternalObject' (above) -->
+    <jb:bean beanId="InternalObject" createOnElement="$document" class="org.jboss.wise.test.integration.smooks.pojo.clientside.InternalObject">
+        <jb:value property="number" data="integerField" decoder="Integer" />
+        <jb:value property="text" data="stringField" />
+    </jb:bean>
+
+    <!-- Capture the date fields in a Map.  Used in 'date' expression binding on 'ExternalObject' (above) -->
+
+    <jb:bean beanId="messageDate" createOnElement="calendarField" class="java.util.HashMap">
+        <jb:value property="day" data="day" default="0" />
+        <jb:value property="month" data="month" default="0" />
+        <jb:value property="year" data="year" default="0" />
+    </jb:bean>
 
 </smooks-resource-list>
+
