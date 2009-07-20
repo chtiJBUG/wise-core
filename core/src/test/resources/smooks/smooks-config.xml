@@ -1,19 +1,16 @@
-<?xml version="1.0"?>
-<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.0.xsd">
-
-    <resource-config selector="global-parameters">
+<?xml version="1.0" encoding="UTF-8"?>
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd"
+    xmlns:jb="http://www.milyn.org/xsd/smooks/javabean-1.2.xsd">
+    <params>
         <param name="stream.filter.type">SAX</param>
-    </resource-config>
-
-    <resource-config selector="org.jboss.wise.core.mapper.mappingObject.ExternalObject">
-        <resource>org.milyn.javabean.BeanPopulator</resource>
-        <param name="beanId">complexObject</param>
-        <param name="beanClass">org.jboss.wise.core.mapper.mappingObject.ComplexObject</param>
-        <param name="bindings">
-            <binding property="numberField" type="Integer" selector="internal number" />
-            <binding property="textField" selector="internal text" />
-        </param>
-    </resource-config>
-
+    </params>
+    <jb:bean beanId="complexObject"
+        class="org.jboss.wise.core.mapper.mappingObject.ComplexObject"
+        createOnElement="org.jboss.wise.core.mapper.mappingObject.ExternalObject">
+        <jb:value property="numberField" data="internal/number" />
+        <jb:value property="textField" data="internal/text">
+        </jb:value>
+    </jb:bean>
+    
 
 </smooks-resource-list>

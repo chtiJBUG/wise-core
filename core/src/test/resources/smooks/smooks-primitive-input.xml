@@ -1,21 +1,16 @@
-<?xml version="1.0"?>
-<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.0.xsd">
-
-    <resource-config selector="global-parameters">
+<?xml version="1.0" encoding="UTF-8"?>
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd"
+    xmlns:jb="http://www.milyn.org/xsd/smooks/javabean-1.2.xsd">
+    <params>
         <param name="stream.filter.type">SAX</param>
-    </resource-config>
-
-    <resource-config selector="org.jboss.wise.core.mapper.mappingObject.InternalObject">
-        <resource>org.milyn.javabean.BeanPopulator</resource>
-        <param name="beanId">primitiveInputs</param>
-        <param name="beanClass">java.util.HashMap</param>
-        <param name="bindings">
-            <binding property="textInput" type="String" selector="text" />
-            <binding property="intInput" type="Integer" selector="number" />
-        </param>
-    </resource-config>
+    </params>
+    <jb:bean beanId="primitiveInputs"
+        class="java.util.HashMap"
+        createOnElement="org.jboss.wise.core.mapper.mappingObject.InternalObject">
+        <jb:value property="textInput" data="text" />
+        <jb:value property="intInput" decoder="Integer" data="number">
+        </jb:value>
+    </jb:bean>
     
-   
-
 
 </smooks-resource-list>
