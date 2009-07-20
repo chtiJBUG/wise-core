@@ -70,7 +70,11 @@ public class SmooksMapper implements WiseMapper {
     }
 
     public SmooksMapper(String smooksResource, String smooksReport, WSDynamicClient client) {
+	ClassLoader oldLoader = Thread.currentThread().getContextClassLoader();
+
 	try {
+	    Thread.currentThread().setContextClassLoader(client.getClassLoader());
+
 	    smooks = client.getSmooksInstance();
 	    try {
 		ProfileStore profileStore = smooks.getApplicationContext().getProfileStore();
@@ -96,6 +100,9 @@ public class SmooksMapper implements WiseMapper {
 	    this.smooksReport = smooksReport;
 	} catch (Exception e) {
 	    throw new WiseRuntimeException("failde to create SmooksMapper", e);
+	} finally {
+	    // restore the original classloader
+	    Thread.currentThread().setContextClassLoader(oldLoader);
 	}
     }
 

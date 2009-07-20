@@ -30,6 +30,8 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -57,6 +59,8 @@ public class SmooksMapperTest {
     public void shouldMapComplexObjectModel() throws Exception {
 	WSDynamicClient client = mock(WSDynamicClient.class);
 	when(client.getSmooksInstance()).thenReturn(new Smooks());
+	when(client.getClassLoader())
+		.thenReturn(new URLClassLoader(new URL[] {}, Thread.currentThread().getContextClassLoader()));
 	WiseMapper mapper = new SmooksMapper("./smooks/smooks-config.xml", "target/smooks-report/report.html", client);
 	Map<String, Object> originalObjects = new HashMap<String, Object>();
 	ExternalObject external = new ExternalObject();
@@ -80,6 +84,8 @@ public class SmooksMapperTest {
     public void shouldMapObjectContainingXMLGregorianCalendarField() throws Exception {
 	WSDynamicClient client = mock(WSDynamicClient.class);
 	when(client.getSmooksInstance()).thenReturn(new Smooks());
+	when(client.getClassLoader())
+		.thenReturn(new URLClassLoader(new URL[] {}, Thread.currentThread().getContextClassLoader()));
 	WiseMapper mapper = new SmooksMapper("./smooks/smooks-config-XMLGregorianCalendar.xml", client);
 	Map<String, Object> originalObjects = new HashMap<String, Object>();
 	ExternalObject external = new ExternalObject();
@@ -100,6 +106,8 @@ public class SmooksMapperTest {
     public void shouldMapToPrimitiveInput() throws Exception {
 	WSDynamicClient client = mock(WSDynamicClient.class);
 	when(client.getSmooksInstance()).thenReturn(new Smooks());
+	when(client.getClassLoader())
+		.thenReturn(new URLClassLoader(new URL[] {}, Thread.currentThread().getContextClassLoader()));
 	WiseMapper mapper = new SmooksMapper("./smooks/smooks-primitive-input.xml", client);
 	Map<String, Object> originalObjects = new HashMap<String, Object>();
 	InternalObject internal = new InternalObject();
@@ -117,6 +125,8 @@ public class SmooksMapperTest {
     public void shouldHaveDifferentContentDeliveryConfigurationPerxecutionContext() {
 	WSDynamicClient client = mock(WSDynamicClient.class);
 	when(client.getSmooksInstance()).thenReturn(new Smooks());
+	when(client.getClassLoader())
+		.thenReturn(new URLClassLoader(new URL[] {}, Thread.currentThread().getContextClassLoader()));
 	SmooksMapper mapper = new SmooksMapper("./smooks/smooks-primitive-input.xml", client);
 	SmooksMapper mapper2 = new SmooksMapper("./smooks/smooks-config-XMLGregorianCalendar.xml", client);
 	SmooksMapper mapper3 = new SmooksMapper("./smooks/smooks-config.xml", client);
