@@ -80,8 +80,8 @@ public class WiseIntegrationSmooksTest extends WiseTest {
 	assertThat(((ExternalObject) resultMap.get("ExternalObject")).getInternal(), equalTo(internal));
 	// just verifying not null, ignoring all annoyance of java TZ
 	// FIXME
-	// assertThat(((ExternalObject)
-	// resultMap.get("ExternalObject")).getDate(), notNullValue());
+	assertThat(((ExternalObject)
+	resultMap.get("ExternalObject")).getDate(), notNullValue());
     }
 
     @After
