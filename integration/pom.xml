@@ -75,30 +75,30 @@
 
 	<build>
 		<plugins>
-		    <plugin>
-		        <groupId>org.apache.maven.plugins</groupId>
-		        <artifactId>maven-jar-plugin</artifactId>
-		        <executions>
-                        <execution>
-                        <phase>package</phase>
-                        <goals>
-                             <goal>jar</goal>
-                        </goals>
-                        <configuration>
-                             <finalName>mtom-tests</finalName>
-                             <outputDirectory>${basedir}/target/test-classes/</outputDirectory>
-                             <testClassesDirectory>${basedir}/target/test-classes/</testClassesDirectory>
-                             <includes>
-                                  <include>**/mtom/*</include>
-                             </includes>
-                             <excludes>
-                                  <exclude>**/*Test.class</exclude>
-                             </excludes>
-                        </configuration>
-                   </execution>
-               </executions>
-		    </plugin>
-		    
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+						<configuration>
+							<finalName>mtom-tests</finalName>
+							<outputDirectory>${basedir}/target/test-classes/</outputDirectory>
+							<testClassesDirectory>${basedir}/target/test-classes/</testClassesDirectory>
+							<includes>
+								<include>**/mtom/*</include>
+							</includes>
+							<excludes>
+								<exclude>**/*Test.class</exclude>
+							</excludes>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
@@ -126,7 +126,7 @@
 										<include>**/basic/*.class</include>
 									</includes>
 									<excludes>
-									    <exclude>**/*Test.class</exclude>
+										<exclude>**/*Test.class</exclude>
 									</excludes>
 								</webResource>
 							</webResources>
@@ -157,7 +157,7 @@
 										<include>**/wsse/*.class</include>
 									</includes>
 									<excludes>
-									    <exclude>**/*Test.class</exclude>
+										<exclude>**/*Test.class</exclude>
 									</excludes>
 								</webResource>
 
@@ -172,7 +172,7 @@
 							</webResources>
 						</configuration>
 					</execution>
-					
+
 					<execution>
 						<id>war-wsdlResolver</id>
 						<phase>pre-integration-test</phase>
@@ -197,7 +197,7 @@
 										<include>**/wsdlResolver/*.class</include>
 									</includes>
 									<excludes>
-									    <exclude>**/*Test.class</exclude>
+										<exclude>**/*Test.class</exclude>
 									</excludes>
 								</webResource>
 
@@ -237,7 +237,7 @@
 										<include>**/wsaddressing/*.class</include>
 									</includes>
 									<excludes>
-									    <exclude>**/*Test.class</exclude>
+										<exclude>**/*Test.class</exclude>
 									</excludes>
 								</webResource>
 							</webResources>
@@ -268,7 +268,7 @@
 										<include>**/wsaandwsse/*.class</include>
 									</includes>
 									<excludes>
-									    <exclude>**/*Test.class</exclude>
+										<exclude>**/*Test.class</exclude>
 									</excludes>
 								</webResource>
 								<webResource>
@@ -306,7 +306,7 @@
 										<include>**/smooks/**/*.class</include>
 									</includes>
 									<excludes>
-									    <exclude>**/*Test.class</exclude>
+										<exclude>**/*Test.class</exclude>
 									</excludes>
 								</webResource>
 							</webResources>
@@ -351,7 +351,14 @@
 							<includes>
 								<include>**/*Integration*Test.java</include>
 							</includes>
+							<systemProperties>
+								<property>
+									<name>log4j.configuration</name>
+									<value>integration-test-log4j.xml</value>
+								</property>
+							</systemProperties>
 						</configuration>
+
 					</execution>
 				</executions>
 			</plugin>
@@ -386,7 +393,7 @@
 				</plugins>
 			</build>
 		</profile>
-		
+
 		<profile>
 			<id>use.endorsed.dir</id>
 			<activation>
@@ -397,10 +404,10 @@
 			<build>
 				<plugins>
 					<plugin>
-					  <artifactId>maven-surefire-plugin</artifactId>
-					  <configuration>
-					     <argLine>-Djava.endorsed.dirs=${endorsed.dir}</argLine>
-					  </configuration>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<configuration>
+							<argLine>-Djava.endorsed.dirs=${endorsed.dir}</argLine>
+						</configuration>
 					</plugin>
 				</plugins>
 			</build>
@@ -415,7 +422,7 @@
 						<executions>
 							<execution>
 								<id>integration-tests</id>
-								<phase>integration-test</phase> 
+								<phase>integration-test</phase>
 								<goals>
 									<goal>test</goal>
 								</goals>

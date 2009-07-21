@@ -32,3 +32,6 @@ distribution/main/resouces/samples/*/build
 
 #.ext file of smooks plugin for eclipse
 *.ext
+
+#*test.log
+*test.log
