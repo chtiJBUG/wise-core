@@ -10,7 +10,7 @@ import org.jboss.wise.core.exception.WiseRuntimeException;
 
 WSDynamicClientBuilder clientBuilder = WSDynamicClientFactory.getJAXWSClientBuilder();
 WSDynamicClient client = clientBuilder.tmpDir("target/temp/wise").verbose(true).keepSource(true)
-            .wsdlURL("http://127.0.0.1:8080/HelloWorld/HelloWorldWS?wsdl").build();
+            .wsdlURL("http://127.0.0.1:8080/HelloWorldGroovy/HelloWorldWS?wsdl").build();
 WSMethod method = client.getWSMethod("HelloWorldWSService", "HelloWorldPort", "sayHello");
 HashMap<String, Object> requestMap = new HashMap<String, Object>();
 

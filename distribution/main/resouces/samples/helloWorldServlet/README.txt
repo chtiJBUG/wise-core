@@ -2,7 +2,7 @@ This example is little different from others since it demonstrate the use of wis
 
 This sample needs a jboss-4.x application server or at least a servlet container. 
 
-To run this sample you have simply to call ant deployTestWS which will deploy a war containing both the "server side" webservice.
+To run this sample you have simply to call ant deployTestWS which will deploy a war with the "server side" webservice.
 Then call "ant deployServlet" to deploy a war containing the "client" servlet and all needed libraries. To call the servlet point your browser to 
 
 http://localhost:8080/HelloWorld-servlet/HelloWorldServlet?NAME=superman 

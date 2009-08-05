@@ -3,7 +3,7 @@
      29 Sep 2008 16:36:29                                                        
                                                           
      ====================================================================== -->
-<project name="HelloWorldGroovy" basedir=".">
+<project name="HelloWorldRuby" basedir=".">
 
 	<!-- Here we have 2 "Main" script. Please uncomment her the one you would try -->
 	<property name="MainClass" value="HelloWorldClient">

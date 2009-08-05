@@ -9,7 +9,7 @@ import org.jboss.wise.core.exception.WiseRuntimeException;
 import java.util.HashMap;
 
 clientBuilder = WSDynamicClientFactory.getJAXWSClientBuilder();
-client = clientBuilder.tmpDir("target/temp/wise").verbose(true).keepSource(true).wsdlURL("http://127.0.0.1:8080/HelloWorld/HelloWorldWS?wsdl").build();
+client = clientBuilder.tmpDir("target/temp/wise").verbose(true).keepSource(true).wsdlURL("http://127.0.0.1:8080/HelloWorldRuby/HelloWorldWS?wsdl").build();
 method = client.getWSMethod("HelloWorldWSService", "HelloWorldPort", "sayHello");
 requestMap = HashMap.new;
 requestMap.put "toWhom", "SpiderMan";
