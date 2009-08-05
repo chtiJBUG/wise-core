@@ -27,8 +27,12 @@ import java.io.PrintStream;
 import java.net.ConnectException;
 import java.util.List;
 import net.jcip.annotations.ThreadSafe;
+
+import org.apache.tools.ant.taskdefs.Length.When;
 import org.jboss.wise.core.client.WSDynamicClient;
+import org.jboss.wise.core.client.WSMethod;
 import org.jboss.wise.core.exception.WiseRuntimeException;
+import org.springframework.ui.context.Theme;
 
 /**
  * {@link WSDynamicClientBuilder} is an interface to define builder for various
@@ -41,6 +45,7 @@ import org.jboss.wise.core.exception.WiseRuntimeException;
 public interface WSDynamicClientBuilder {
 
     /**
+     * Build the {@link WSDynamicClient} with all parameters set on this class
      * 
      * @return {@link WSDynamicClient}
      * @throws IllegalStateException
@@ -50,6 +55,7 @@ public interface WSDynamicClientBuilder {
     public WSDynamicClient build() throws IllegalStateException, ConnectException, WiseRuntimeException;
 
     /**
+     * Set the wsdlURL to generate WS client
      * 
      * @param wsdlURL
      * @return {@link WSDynamicClient}
@@ -57,32 +63,109 @@ public interface WSDynamicClientBuilder {
     public WSDynamicClientBuilder wsdlURL(String wsdlURL);
 
     /**
+     * set the userName used in Basic Auth both for downloading wsdl and calling
+     * service
      * 
      * @param userName
      * @return {@link WSDynamicClient}
      */
     public WSDynamicClientBuilder userName(String userName);
 
+    /**
+     * set the password used in Basic Auth both for downloading wsdl and calling
+     * service
+     * 
+     * @param password
+     * @return {@link WSDynamicClient}
+     */
     public WSDynamicClientBuilder password(String password);
 
+    /**
+     * set the temp direcoory location used to generate temporary client
+     * classes. Wise will generate there subdirecoty fo each instance of
+     * {@link WSDynamicClient} and take care of all cleanup when
+     * WSDynamicClient.close() is called
+     * 
+     * @param tmpDir
+     * @return {@link WSDynamicClient}
+     */
     public WSDynamicClientBuilder tmpDir(String tmpDir);
 
+    /**
+     * force the package name used for generated client classes. If it is't set
+     * wsconsume rules will e used: namespaces and/or bindingfiles
+     * 
+     * @param targetPackage
+     * @return {@link WSDynamicClient}
+     */
     public WSDynamicClientBuilder targetPackage(String targetPackage);
 
+    /**
+     * set the list of JAXB bindings files used by wsconsume
+     * 
+     * @param bindings
+     * @return {@link WSDynamicClient}
+     */
     public WSDynamicClientBuilder bindingFiles(List<File> bindings);
 
+    /**
+     * set the catelog file
+     * 
+     * @param catelog
+     * @return {@link WSDynamicClient}
+     */
     public WSDynamicClientBuilder catalogFile(File catelog);
 
+    /**
+     * 
+     * @param url
+     * @return {@link WSDynamicClient}
+     */
     public WSDynamicClientBuilder securityConfigUrl(String url);
 
+    /**
+     * 
+     * @param name
+     * @return {@link WSDynamicClient}
+     */
     public WSDynamicClientBuilder securityConfigName(String name);
 
+    /**
+     * if it it set to true source code generated for client classes will be
+     * kept in {@link #tmpDir(String)}
+     * 
+     * @param bool
+     * @return {@link WSDynamicClient}
+     */
     public WSDynamicClientBuilder keepSource(boolean bool);
 
+    /**
+     * if it set to true wsconsume operation of class generation and compilation
+     * will be verbose and its messages will be put on
+     * {@link #messageStream(PrintStream)}
+     * 
+     * @param bool
+     * @return {@link WSDynamicClient}
+     */
     public WSDynamicClientBuilder verbose(boolean bool);
 
+    /**
+     * Sets the PrintStream to use for status feedback. The simplest example
+     * would be to use System.out.
+     * 
+     * @param messageStream
+     * @return {@link WSDynamicClient}
+     */
     public WSDynamicClientBuilder messageStream(PrintStream messageStream);
 
+    /**
+     * Set the max size of thread pool used to invoke in parallel
+     * {@link WSMethod} on the build {@link WSDynamicClient}. default value is
+     * 100.
+     * 
+     * @param maxThreadPoolSize
+     * @return {@link WSDynamicClient}
+     */
     public WSDynamicClientBuilder maxThreadPoolSize(int maxThreadPoolSize);
 
     public String getWsdlURL();

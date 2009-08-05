@@ -66,7 +66,6 @@ public class WSImportImpl extends WSConsumer {
     @Override
     public synchronized List<String> importObjectFromWsdl(String wsdlURL, File outputDir, File sourceDir, String targetPackage, List<File> bindingFiles, PrintStream messageStream, File catelog) throws MalformedURLException, WiseRuntimeException {
 	try {
-	    // NEEDED for WISE-36 issue
 	    WSContractConsumer wsImporter = WSContractConsumer.newInstance(Thread.currentThread().getContextClassLoader());
 
 	    if (targetPackage != null && targetPackage.trim().length() > 0) {
@@ -92,6 +91,8 @@ public class WSImportImpl extends WSConsumer {
 	    if (catelog != null) {
 		wsImporter.setCatalog(catelog);
 	    }
+	    // NEEDED for WISE-36 issue
+
 	    providerChanger.changeProvider();
 	    wsImporter.consume(wsdlURL);
 	} finally {
