@@ -117,6 +117,9 @@ public interface WSDynamicClientBuilder {
     public WSDynamicClientBuilder catalogFile(File catelog);
 
     /**
+     * It is the URL of config file used by JbossWS to enable WS-SE. For more
+     * information about this file refer to our samples and/or to JBossWS
+     * documentation
      * 
      * @param url
      * @return {@link WSDynamicClient}
@@ -124,6 +127,9 @@ public interface WSDynamicClientBuilder {
     public WSDynamicClientBuilder securityConfigUrl(String url);
 
     /**
+     * It is the config name sed by JbossWS to enable WS-SE. For more
+     * information about this file refer to our samples and/or to JBossWS
+     * documentation
      * 
      * @param name
      * @return {@link WSDynamicClient}
