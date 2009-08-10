@@ -2,7 +2,7 @@ Wise Invoke Services Easily samples
 
 Here you find a set of samples demonstrating how to use Wise in a standalone application.
 Any directory, except for 'lib' and 'ant', contains a single example. The directory's name suggests
-which kind of test you will find in. Only in case we think example needs a further explanation you 
+which kind of test you will find in. Only in case we think an example needs further explanations, you 
 will find a local README.txt inside its directory.
 
 lib directory contains library referred by examples. ant directory contains build.xml imported from
