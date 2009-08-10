@@ -32,7 +32,6 @@ import org.apache.tools.ant.taskdefs.Length.When;
 import org.jboss.wise.core.client.WSDynamicClient;
 import org.jboss.wise.core.client.WSMethod;
 import org.jboss.wise.core.exception.WiseRuntimeException;
-import org.springframework.ui.context.Theme;
 
 /**
  * {@link WSDynamicClientBuilder} is an interface to define builder for various
