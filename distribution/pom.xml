@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.jboss.wise</groupId>
     <artifactId>wise-distribution</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.1</version>
     <name>Wise Distribution</name>
     <url>http://www.jboss.org/wise</url>
 
@@ -11,7 +11,7 @@
     <parent>
         <groupId>org.jboss.wise</groupId>
         <artifactId>wise-parent</artifactId>
-        <version>1.0.1-SNAPSHOT</version>
+        <version>1.1</version>
     </parent>
 
     <dependencies>
