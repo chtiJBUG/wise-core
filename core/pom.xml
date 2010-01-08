@@ -224,6 +224,11 @@
 					</systemProperties>
 				</configuration>
 			</plugin>
+
+                        <plugin>
+                          <groupId>it.javalinux.testedby.plugins</groupId>
+                          <artifactId>maven-testedby-plugin</artifactId>
+                        </plugin>
 		</plugins>
 
 	</build>
