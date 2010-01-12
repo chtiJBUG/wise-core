@@ -110,41 +110,6 @@
                         </systemProperties>
                     </configuration>
                 </plugin>
-<plugin>
-
-        <groupId>it.javalinux.testedby.plugins</groupId>
-
-        <artifactId>maven-testedby-plugin</artifactId>
-
-        <version>1.0.0-SNAPSHOT</version>
-
-        <configuration>
-
-          <verbose>true</verbose>
-
-          <staleMillis>100</staleMillis>
-
-          <runnerClass>it.javalinux.testedby.runner.impl.JunitTestRunner</runnerClass>
-
-        </configuration>
-
-        <executions>
-
-        <execution>
-
-          <phase>process-test-classes</phase>
-
-          <goals>
-
-            <goal>testedby</goal>
-
-          </goals>
-
-        </execution>
-
-        </executions>
-
-      </plugin>
             </plugins>
         </pluginManagement>
         <defaultGoal>install</defaultGoal>
