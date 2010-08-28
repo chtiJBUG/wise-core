@@ -44,20 +44,20 @@
 	<properties>
 		<compiler.fork>false</compiler.fork>
 	</properties>
-
-	<!-- DistributionManagement -->
-	<distributionManagement>
-		<repository>
-			<id>repository.jboss.org</id>
-			<name>JBoss Maven Repository</name>
-			<url>file://${jboss.maven.repository}</url>
-		</repository>
-		<snapshotRepository>
-			<id>snapshots.jboss.org</id>
-			<name>JBoss Snapshot Repository</name>
-			<url>dav:https://snapshots.jboss.org/maven2</url>
-		</snapshotRepository>
-	</distributionManagement>
+	
+    <!-- DistributionManagement -->
+    <distributionManagement>
+      <repository>
+        <id>jboss-releases-repository</id>
+        <name>JBoss Releases Repository</name>
+        <url>https://repository.jboss.org/nexus/service/local/staging/deploy/maven2/</url>
+      </repository>
+      <snapshotRepository>
+        <id>jboss-snapshots-repository</id>
+        <name>JBoss Snapshots Repository</name>
+        <url>https://repository.jboss.org/nexus/content/repositories/snapshots/</url>
+      </snapshotRepository>
+    </distributionManagement>
 
 	<inceptionYear>2008</inceptionYear>
 	<mailingLists>
@@ -82,87 +82,6 @@
 		<module>integration</module>
 	</modules>
 
-
-	<repositories>
-		<repository>
-			<id>jboss.org</id>
-			<name>JBoss Maven repository</name>
-			<url>http://repository.jboss.org/maven2/</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-
-		<repository>
-			<id>ibiblio</id>
-			<name>ibiblio mirror</name>
-			<url>http://mirrors.ibiblio.org/pub/mirrors/maven2/</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-
-		<repository>
-			<id>java.net</id>
-			<name>java.net Maven Repository</name>
-			<url>http://download.java.net/maven/1/</url>
-			<layout>legacy</layout>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-
-		<repository>
-			<id>Codehaus Snapshots</id>
-			<url>http://snapshots.repository.codehaus.org/</url>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-		</repository>
-	</repositories>
-
-
-	<pluginRepositories>
-		<pluginRepository>
-			<id>Codehaus Snapshots</id>
-			<url>http://snapshots.repository.codehaus.org/</url>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-		</pluginRepository>
-
-		<pluginRepository>
-			<id>Apache Snapshots</id>
-			<url>http://repository.apache.org/snapshots/</url>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-		</pluginRepository>
-
-		<pluginRepository>
-			<id>ibiblio</id>
-			<name>ibiblio mirror</name>
-			<url>http://mirrors.ibiblio.org/pub/mirrors/maven2/</url>
-		</pluginRepository>
-	</pluginRepositories>
 	<build>
 		<defaultGoal>install</defaultGoal>
 
