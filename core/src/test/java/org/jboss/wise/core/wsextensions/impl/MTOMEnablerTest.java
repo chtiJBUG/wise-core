@@ -29,9 +29,9 @@ import static org.mockito.Mockito.when;
 import org.jboss.wise.core.client.WSDynamicClient;
 import org.jboss.wise.core.client.WSEndpoint;
 import org.jboss.wise.core.client.impl.reflection.WSEndpointImpl;
+import org.jboss.wise.core.wsextensions.DefaultEnablerDelegate;
 import org.jboss.wise.core.wsextensions.EnablerDelegate;
 import org.jboss.wise.core.wsextensions.WSExtensionEnabler;
-import org.jboss.wise.core.wsextensions.impl.jbosswsnative.ReflectionEnablerDelegate;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -46,14 +46,14 @@ public class MTOMEnablerTest {
     @Before
     public void before() {
         client = mock(WSDynamicClient.class);
-        delegate = mock(ReflectionEnablerDelegate.class);
+        delegate = mock(DefaultEnablerDelegate.class);
         when(client.getWSExtensionEnablerDelegate()).thenReturn(delegate);
     }
 
     @Test
     public void shouldFindVisitorImpl() {
         WSExtensionEnabler enabler = new MTOMEnabler(client);
-        assertThat(enabler.getDelegate(), is(ReflectionEnablerDelegate.class));
+        assertThat(enabler.getDelegate(), is(DefaultEnablerDelegate.class));
     }
 
     @Test

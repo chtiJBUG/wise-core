@@ -49,7 +49,7 @@ import org.jboss.wise.core.exception.ResourceNotAvailableException;
 import org.jboss.wise.core.exception.WiseRuntimeException;
 import org.jboss.wise.core.utils.JavaUtils;
 import org.jboss.wise.core.wsextensions.EnablerDelegate;
-import org.jboss.wise.core.wsextensions.impl.jbosswsnative.ReflectionEnablerDelegate;
+import org.jboss.wise.core.wsextensions.EnablerDelegateProvider;
 import org.milyn.Smooks;
 
 /**
@@ -108,7 +108,9 @@ public class WSDynamicClientImpl implements WSDynamicClient {
 	userName = builder.getUserName();
 	password = builder.getPassword();
 	this.maxThreadPoolSize = builder.getMaxThreadPoolSize();
-	wsExtensionEnablerDelegate = new ReflectionEnablerDelegate(builder.getSecurityConfigFileURL(), builder
+//	wsExtensionEnablerDelegate = new ReflectionEnablerDelegate(builder.getSecurityConfigFileURL(), builder
+//		.getSecurityConfigName());
+	wsExtensionEnablerDelegate = EnablerDelegateProvider.newEnablerDelegate(builder.getSecurityConfigFileURL(), builder
 		.getSecurityConfigName());
 	this.tmpDir = builder.getClientSpecificTmpDir();
 	File outputDir = new File(tmpDir + "/classes/");

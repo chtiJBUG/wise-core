@@ -22,19 +22,15 @@
 package org.jboss.wise.core.wsextensions.impl.jbosswsnative;
 
 import java.net.URL;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
+
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.handler.Handler;
-import javax.xml.ws.soap.SOAPBinding;
-import net.jcip.annotations.GuardedBy;
+
 import net.jcip.annotations.Immutable;
-import net.jcip.annotations.ThreadSafe;
-import org.apache.xerces.parsers.SecurityConfiguration;
-import org.jboss.wise.core.client.WSEndpoint;
+
+import org.jboss.wise.core.wsextensions.DefaultEnablerDelegate;
 import org.jboss.wise.core.wsextensions.EnablerDelegate;
 import org.jboss.ws.core.StubExt;
 import org.jboss.ws.extensions.addressing.jaxws.WSAddressingClientHandler;
@@ -47,7 +43,7 @@ import org.jboss.ws.extensions.addressing.jaxws.WSAddressingClientHandler;
  * @author alessio.soldano@jboss.com
  */
 @Immutable
-public class ReflectionEnablerDelegate implements EnablerDelegate {
+public class ReflectionEnablerDelegate extends DefaultEnablerDelegate {
 
     private final String configFileURL;
     private final String configName;
@@ -66,19 +62,9 @@ public class ReflectionEnablerDelegate implements EnablerDelegate {
     /**
      * {@inheritDoc}
      * 
-     * @see org.jboss.wise.core.wsextensions.EnablerDelegate#visitMTOM(Object)
-     */
-    public void visitMTOM( Object endpointInstance ) throws UnsupportedOperationException {
-        ((SOAPBinding)((BindingProvider)endpointInstance).getBinding()).setMTOMEnabled(true);
-
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
      * @see org.jboss.wise.core.wsextensions.EnablerDelegate#visitWSAddressing(Object)
      */
-    @SuppressWarnings( "restriction" )
+    @SuppressWarnings( "rawtypes" )
     public void visitWSAddressing( Object endpointInstance ) throws UnsupportedOperationException {
         List<Handler> handlerChain = ((BindingProvider)endpointInstance).getBinding().getHandlerChain();
         handlerChain.add(new WSAddressingClientHandler());
@@ -94,6 +80,7 @@ public class ReflectionEnablerDelegate implements EnablerDelegate {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
+    @SuppressWarnings("rawtypes")
     public void visitWSSecurity( Object endpointInstance ) throws UnsupportedOperationException, IllegalStateException {
 
         if (configFileURL == null || configFileURL.length() == 0 || configName == null || configName.length() == 0) {

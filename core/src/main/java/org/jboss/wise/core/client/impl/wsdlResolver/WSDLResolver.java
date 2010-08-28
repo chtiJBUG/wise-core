@@ -47,7 +47,7 @@ import javax.wsdl.xml.WSDLReader;
 import org.jboss.logging.Logger;
 import org.jboss.wise.core.utils.IDGenerator;
 import org.jboss.ws.Constants;
-import org.jboss.ws.tools.wsdl.JBossWSDLFactoryImpl;
+//import org.jboss.ws.tools.wsdl.JBossWSDLFactoryImpl;
 import org.jboss.wsf.common.DOMUtils;
 import org.jboss.wsf.common.DOMWriter;
 import org.jboss.wsf.common.IOUtils;
@@ -130,7 +130,8 @@ public class WSDLResolver {
 	log.info("Getting wsdl definition from: " + wsdlLocation.toExternalForm());
 
 	EntityResolver entityResolver = new WiseEntityResolver(connection);
-	WSDLFactory wsdlFactory = WSDLFactory.newInstance(JBossWSDLFactoryImpl.class.getName(), this.getClass().getClassLoader());
+	//WSDLFactory wsdlFactory = WSDLFactory.newInstance(JBossWSDLFactoryImpl.class.getName(), this.getClass().getClassLoader());
+	WSDLFactory wsdlFactory = WSDLFactory.newInstance();
 	WSDLReader wsdlReader = wsdlFactory.newWSDLReader();
 	wsdlReader.setFeature("javax.wsdl.verbose", false);
 
