@@ -21,8 +21,11 @@
  */
 package org.jboss.wise.core.wsextensions;
 
+import org.jboss.wsf.spi.util.ServiceLoader;
+
 
 /**
+ * Provides instances of the currently configured EnablerDelegate
  * 
  * @author alessio.soldano@jboss.com
  * @since 28-Aug-2010
@@ -32,7 +35,6 @@ public class EnablerDelegateProvider {
     
     public static EnablerDelegate newEnablerDelegate(String configFile, String configName)
     {
-	//TODO!! implement proper service lookup for the available implementation of the delegate
-	return new DefaultEnablerDelegate();
+	return (EnablerDelegate)ServiceLoader.loadService(EnablerDelegate.class.getName(), DefaultEnablerDelegate.class.getName());
     }
 }

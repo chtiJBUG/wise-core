@@ -31,7 +31,6 @@ import java.net.URLClassLoader;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.concurrent.CopyOnWriteArrayList;
 import javax.xml.ws.WebServiceClient;
 import net.jcip.annotations.GuardedBy;
@@ -63,8 +62,6 @@ import org.milyn.Smooks;
 public class WSDynamicClientImpl implements WSDynamicClient {
 
     private static final long serialVersionUID = -7185945063107035243L;
-
-    private final Logger log = Logger.getLogger(WSDynamicClientImpl.class);
 
     @GuardedBy("this")
     private URLClassLoader classLoader;
@@ -108,8 +105,6 @@ public class WSDynamicClientImpl implements WSDynamicClient {
 	userName = builder.getUserName();
 	password = builder.getPassword();
 	this.maxThreadPoolSize = builder.getMaxThreadPoolSize();
-//	wsExtensionEnablerDelegate = new ReflectionEnablerDelegate(builder.getSecurityConfigFileURL(), builder
-//		.getSecurityConfigName());
 	wsExtensionEnablerDelegate = EnablerDelegateProvider.newEnablerDelegate(builder.getSecurityConfigFileURL(), builder
 		.getSecurityConfigName());
 	this.tmpDir = builder.getClientSpecificTmpDir();
@@ -137,7 +132,7 @@ public class WSDynamicClientImpl implements WSDynamicClient {
 
 	    // we need a custom classloader pointing the temp dir
 	    // in order to load the generated classes on the fly
-	    this.setClassLoader(new URLClassLoader(new URL[] { outputDir.toURL(), }, Thread.currentThread()
+	    this.setClassLoader(new URLClassLoader(new URL[] { outputDir.toURI().toURL(), }, Thread.currentThread()
 		    .getContextClassLoader()));
 	    ClassLoader oldLoader = Thread.currentThread().getContextClassLoader();
 
@@ -166,7 +161,7 @@ public class WSDynamicClientImpl implements WSDynamicClient {
 	    Thread.currentThread().setContextClassLoader(this.getClassLoader());
 	    for (String className : classNames) {
 		try {
-		    Class clazz = JavaUtils.loadJavaType(className, this.getClassLoader());
+		    Class<?> clazz = JavaUtils.loadJavaType(className, this.getClassLoader());
 		    Annotation annotation = clazz.getAnnotation(WebServiceClient.class);
 		    if (annotation != null) {
 			WSService service = new WSServiceImpl(clazz, this.getClassLoader(), clazz.newInstance(), userName,
