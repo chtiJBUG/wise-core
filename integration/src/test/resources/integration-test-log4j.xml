@@ -6,7 +6,7 @@ debug="false">
 
   <appender name="FILE" class="org.apache.log4j.FileAppender">
       <errorHandler class="org.jboss.logging.util.OnlyOnceErrorHandler"/>
-      <param name="File" value="integration-test.log"/>
+      <param name="File" value="target/integration-test.log"/>
       <param name="Append" value="false"/>
 
       <layout class="org.apache.log4j.PatternLayout">
