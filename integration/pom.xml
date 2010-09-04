@@ -60,12 +60,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.jboss.ws.native</groupId>
-			<artifactId>jbossws-native-client</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
 			<groupId>xalan</groupId>
 			<artifactId>xalan</artifactId>
 			<scope>test</scope>
@@ -87,8 +81,8 @@
 						</goals>
 						<configuration>
 							<finalName>mtom-tests</finalName>
-							<outputDirectory>${basedir}/target/test-classes/</outputDirectory>
-							<testClassesDirectory>${basedir}/target/test-classes/</testClassesDirectory>
+							<outputDirectory>${project.build.testOutputDirectory}</outputDirectory>
+							<testClassesDirectory>${project.build.directory}/test-classes/</testClassesDirectory>
 							<includes>
 								<include>**/mtom/*</include>
 							</includes>
@@ -111,18 +105,15 @@
 							<goal>war</goal>
 						</goals>
 						<configuration>
-							<webXml>${basedir}/src/test/resources/WEB-INF/basic/web.xml
-							</webXml>
+							<webXml>${basedir}/src/test/resources/WEB-INF/basic/web.xml</webXml>
 							<warName>basic</warName>
-							<outputDirectory>${basedir}/target/test-classes/
-							</outputDirectory>
-							<webappDirectory>${basedir}/target/basic
-							</webappDirectory>
+							<outputDirectory>${project.build.testOutputDirectory}</outputDirectory>
+							<webappDirectory>${project.build.directory}/basic</webappDirectory>
+							<warSourceExcludes>**/lib/**</warSourceExcludes>
 							<webResources>
 								<webResource>
 									<targetPath>WEB-INF/classes</targetPath>
-									<directory>${basedir}/target/test-classes/
-									</directory>
+									<directory>${basedir}/target/test-classes/</directory>
 									<includes>
 										<include>**/basic/*.class</include>
 									</includes>
@@ -141,19 +132,15 @@
 							<goal>war</goal>
 						</goals>
 						<configuration>
-							<webXml>${basedir}/src/test/resources/WEB-INF/wsse/web.xml
-							</webXml>
+							<webXml>${basedir}/src/test/resources/WEB-INF/wsse/web.xml</webXml>
 							<warName>wsse</warName>
-							<outputDirectory>${basedir}/target/test-classes/
-							</outputDirectory>
-							<webappDirectory>${basedir}/target/wsse
-							</webappDirectory>
-							<packagingIncludes></packagingIncludes>
+							<outputDirectory>${project.build.testOutputDirectory}</outputDirectory>
+							<webappDirectory>${project.build.directory}/wsse</webappDirectory>
+							<warSourceExcludes>**/lib/**</warSourceExcludes>
 							<webResources>
 								<webResource>
 									<targetPath>WEB-INF/classes</targetPath>
-									<directory>${basedir}/target/test-classes/
-									</directory>
+									<directory>${basedir}/target/test-classes/</directory>
 									<includes>
 										<include>**/wsse/*.class</include>
 									</includes>
@@ -161,11 +148,9 @@
 										<exclude>**/*Test.class</exclude>
 									</excludes>
 								</webResource>
-
 								<webResource>
 									<targetPath>WEB-INF</targetPath>
-									<directory>${basedir}/src/test/resources/WEB-INF/wsse/
-									</directory>
+									<directory>${basedir}/src/test/resources/WEB-INF/wsse/</directory>
 									<includes>
 										<include>**/*.*</include>
 									</includes>
@@ -181,19 +166,15 @@
 							<goal>war</goal>
 						</goals>
 						<configuration>
-							<webXml>${basedir}/src/test/resources/WEB-INF/wsdlResolver/web.xml
-							</webXml>
+							<webXml>${basedir}/src/test/resources/WEB-INF/wsdlResolver/web.xml</webXml>
 							<warName>wsdlResolver</warName>
-							<outputDirectory>${basedir}/target/test-classes/
-							</outputDirectory>
-							<webappDirectory>${basedir}/target/wsdlResolver
-							</webappDirectory>
-							<packagingIncludes></packagingIncludes>
-							<webResources>
+							<outputDirectory>${project.build.testOutputDirectory}</outputDirectory>
+							<webappDirectory>${project.build.directory}/wsdlResolver</webappDirectory>
+							<warSourceExcludes>**/lib/**</warSourceExcludes>
+ 							<webResources>
 								<webResource>
 									<targetPath>WEB-INF/classes</targetPath>
-									<directory>${basedir}/target/test-classes/
-									</directory>
+									<directory>${basedir}/target/test-classes/</directory>
 									<includes>
 										<include>**/wsdlResolver/*.class</include>
 									</includes>
@@ -201,11 +182,9 @@
 										<exclude>**/*Test.class</exclude>
 									</excludes>
 								</webResource>
-
 								<webResource>
 									<targetPath>WEB-INF</targetPath>
-									<directory>${basedir}/src/test/resources/WEB-INF/wsdlResolver/
-									</directory>
+									<directory>${basedir}/src/test/resources/WEB-INF/wsdlResolver/</directory>
 									<includes>
 										<include>**/*.*</include>
 									</includes>
@@ -221,14 +200,11 @@
 							<goal>war</goal>
 						</goals>
 						<configuration>
-							<webXml>${basedir}/src/test/resources/WEB-INF/wsa/web.xml
-							</webXml>
+							<webXml>${basedir}/src/test/resources/WEB-INF/wsa/web.xml</webXml>
 							<warName>wsa</warName>
-							<outputDirectory>${basedir}/target/test-classes/
-							</outputDirectory>
-							<webappDirectory>${basedir}/target/wsa
-							</webappDirectory>
-							<packagingIncludes></packagingIncludes>
+							<outputDirectory>${project.build.testOutputDirectory}</outputDirectory>
+							<webappDirectory>${project.build.directory}/wsa</webappDirectory>
+							<warSourceExcludes>**/lib/**</warSourceExcludes>
 							<webResources>
 								<webResource>
 									<targetPath>WEB-INF/classes</targetPath>
@@ -252,21 +228,18 @@
 							<goal>war</goal>
 						</goals>
 						<configuration>
-							<webXml>${basedir}/src/test/resources/WEB-INF/wsaandwsse/web.xml
-							</webXml>
+							<webXml>${basedir}/src/test/resources/WEB-INF/wsaandwsse/web.xml</webXml>
 							<warName>wsaandwsse</warName>
-							<outputDirectory>${basedir}/target/test-classes/
-							</outputDirectory>
-							<webappDirectory>${basedir}/target/wsaandwsse
-							</webappDirectory>
-							<packagingIncludes></packagingIncludes>
+							<outputDirectory>${project.build.testOutputDirectory}</outputDirectory>
+							<webappDirectory>${project.build.directory}/wsaandwsse</webappDirectory>
+							<warSourceExcludes>**/lib/**</warSourceExcludes>
 							<webResources>
 								<webResource>
 									<targetPath>WEB-INF/classes</targetPath>
-									<directory>${basedir}/target/test-classes/
-									</directory>
+									<directory>${basedir}/target/test-classes/</directory>
 									<includes>
 										<include>**/wsaandwsse/*.class</include>
+										<include>**/wsaandwsse/handlers.xml</include>
 									</includes>
 									<excludes>
 										<exclude>**/*Test.class</exclude>
@@ -274,8 +247,7 @@
 								</webResource>
 								<webResource>
 									<targetPath>WEB-INF</targetPath>
-									<directory>${basedir}/src/test/resources/WEB-INF/wsaandwsse/
-									</directory>
+									<directory>${basedir}/src/test/resources/WEB-INF/wsaandwsse/</directory>
 									<includes>
 										<include>**/*.*</include>
 									</includes>
@@ -291,18 +263,15 @@
 							<goal>war</goal>
 						</goals>
 						<configuration>
-							<webXml>${basedir}/src/test/resources/WEB-INF/smooks/web.xml
-                            </webXml>
+							<webXml>${basedir}/src/test/resources/WEB-INF/smooks/web.xml</webXml>
 							<warName>smooks</warName>
-							<outputDirectory>${basedir}/target/test-classes/
-                            </outputDirectory>
-							<webappDirectory>${basedir}/target/smooks
-                            </webappDirectory>
+							<outputDirectory>${project.build.testOutputDirectory}</outputDirectory>
+							<webappDirectory>${project.build.directory}/smooks</webappDirectory>
+							<warSourceExcludes>**/lib/**</warSourceExcludes>
 							<webResources>
 								<webResource>
 									<targetPath>WEB-INF/classes</targetPath>
-									<directory>${basedir}/target/test-classes/
-                                    </directory>
+									<directory>${basedir}/target/test-classes/</directory>
 									<includes>
 										<include>**/smooks/**/*.class</include>
 									</includes>
@@ -367,6 +336,26 @@
 
 	</build>
 	<profiles>
+
+        <profile>
+          <id>native</id>
+          <activation>
+            <property>
+              <name>!cxf.stack</name>
+            </property>
+          </activation>
+          <dependencies>
+          	<dependency>
+				<groupId>org.jboss.wise</groupId>
+				<artifactId>wise-core-native</artifactId>
+				<version>${project.version}</version>
+				<scope>test</scope>
+			</dependency>
+          </dependencies>
+        </profile>
+
+
+
 		<profile>
 			<id>skip.tests</id>
 			<activation>

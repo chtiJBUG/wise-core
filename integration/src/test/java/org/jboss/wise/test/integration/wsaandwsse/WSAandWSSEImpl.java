@@ -27,7 +27,7 @@ import org.jboss.ws.annotation.EndpointConfig;
 
 @WebService(endpointInterface = "org.jboss.wise.test.integration.wsaandwsse.WSAandWSSE", targetNamespace = "http://org.jboss/wise/wssecurity", serviceName = "WSAandWSSEService")
 @EndpointConfig(configName = "Standard WSSecurity Endpoint")
-@HandlerChain(file = "WEB-INF/handlers.xml")
+@HandlerChain(file = "handlers.xml")
 public class WSAandWSSEImpl implements WSAandWSSE {
 	public String echoUserType(String user) {
 		return "Hello WSAddressingAndWSSecurity";
