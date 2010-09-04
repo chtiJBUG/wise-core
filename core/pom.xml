@@ -70,15 +70,16 @@
 			<groupId>jboss</groupId>
 			<artifactId>jboss-kernel</artifactId>
 			<exclusions>
-
 				<exclusion>
 					<groupId>wutka-dtdparser</groupId>
 					<artifactId>dtdparser121</artifactId>
 				</exclusion>
-
+				<exclusion>
+					<groupId>jboss</groupId>
+					<artifactId>jboss-logging-spi</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
-
 
 		<dependency>
 			<groupId>com.sun.xml.bind</groupId>
