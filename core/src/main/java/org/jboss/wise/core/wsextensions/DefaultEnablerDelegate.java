@@ -38,6 +38,24 @@ public class DefaultEnablerDelegate implements EnablerDelegate {
     /**
      * {@inheritDoc}
      * 
+     *  @see org.jboss.wise.core.wsextensions.EnablerDelegate#setConfigFile(String)
+     */
+    public void setConfigFile(String configFile) {
+	//NOOP
+    }
+    
+    /**
+     * {@inheritDoc}
+     * 
+     *  @see org.jboss.wise.core.wsextensions.EnablerDelegate#setConfigName(String)
+     */
+    public void setConfigName(String configName) {
+	//NOOP
+    }
+    
+    /**
+     * {@inheritDoc}
+     * 
      * @see org.jboss.wise.core.wsextensions.EnablerDelegate#visitMTOM(Object)
      */
     public void visitMTOM( Object endpointInstance ) throws UnsupportedOperationException {

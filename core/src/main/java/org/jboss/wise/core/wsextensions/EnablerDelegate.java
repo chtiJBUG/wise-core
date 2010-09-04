@@ -41,6 +41,20 @@ import net.jcip.annotations.ThreadSafe;
 public interface EnablerDelegate {
 
     /**
+     * Sets the configFile to be used, if any
+     * 
+     * @param configFile
+     */
+    public void setConfigFile(String configFile);
+    
+    /**
+     * Sets the configName to be used, if any
+     * 
+     * @param configName
+     */
+    public void setConfigName(String configName);
+    
+    /**
      * 
      * @param endpointInstance
      * @throws UnsupportedOperationException

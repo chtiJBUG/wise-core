@@ -21,7 +21,7 @@
  */
 package org.jboss.wise.core.wsextensions;
 
-import org.jboss.wsf.spi.util.ServiceLoader;
+import org.jboss.wise.core.client.SpiLoader;
 
 
 /**
@@ -35,6 +35,9 @@ public class EnablerDelegateProvider {
     
     public static EnablerDelegate newEnablerDelegate(String configFile, String configName)
     {
-	return (EnablerDelegate)ServiceLoader.loadService(EnablerDelegate.class.getName(), DefaultEnablerDelegate.class.getName());
+	EnablerDelegate ed = (EnablerDelegate)SpiLoader.loadService(EnablerDelegate.class.getName(), DefaultEnablerDelegate.class.getName());
+	ed.setConfigFile(configFile);
+	ed.setConfigName(configName);
+	return ed;
     }
 }

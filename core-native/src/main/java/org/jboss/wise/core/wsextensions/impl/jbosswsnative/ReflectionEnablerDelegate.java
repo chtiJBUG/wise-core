@@ -45,8 +45,12 @@ import org.jboss.ws.extensions.addressing.jaxws.WSAddressingClientHandler;
 @Immutable
 public class ReflectionEnablerDelegate extends DefaultEnablerDelegate {
 
-    private final String configFileURL;
-    private final String configName;
+    private String configFileURL;
+    private String configName;
+    
+    public ReflectionEnablerDelegate() {
+	super();
+    }
 
     /**
      * @param configFileURL
@@ -57,6 +61,24 @@ public class ReflectionEnablerDelegate extends DefaultEnablerDelegate {
         super();
         this.configFileURL = configFileURL;
         this.configName = configName;
+    }
+    
+    /**
+     * {@inheritDoc}
+     * 
+     *  @see org.jboss.wise.core.wsextensions.EnablerDelegate#setConfigFile(String)
+     */
+    public void setConfigFile(String configFile) {
+	this.configFileURL = configFile;
+    }
+    
+    /**
+     * {@inheritDoc}
+     * 
+     *  @see org.jboss.wise.core.wsextensions.EnablerDelegate#setConfigName(String)
+     */
+    public void setConfigName(String configName) {
+	this.configName = configName;
     }
 
     /**
