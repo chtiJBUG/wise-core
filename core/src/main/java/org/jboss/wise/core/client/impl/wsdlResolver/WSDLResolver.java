@@ -47,7 +47,6 @@ import javax.wsdl.xml.WSDLReader;
 import org.jboss.logging.Logger;
 import org.jboss.wise.core.utils.IDGenerator;
 import org.jboss.ws.Constants;
-//import org.jboss.ws.tools.wsdl.JBossWSDLFactoryImpl;
 import org.jboss.wsf.common.DOMUtils;
 import org.jboss.wsf.common.DOMWriter;
 import org.jboss.wsf.common.IOUtils;

@@ -19,46 +19,50 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-package org.jboss.wise.core.wsextensions.impl;
 
-import net.jcip.annotations.Immutable;
+package org.jboss.wise.core.client.builder;
+
+import java.net.ConnectException;
+
 import net.jcip.annotations.ThreadSafe;
 
 import org.jboss.wise.core.client.WSDynamicClient;
-import org.jboss.wise.core.wsextensions.EnablerDelegate;
-import org.jboss.wise.core.wsextensions.WSExtensionEnabler;
+import org.jboss.wise.core.client.jaxrs.RSDynamicClient;
+import org.jboss.wise.core.client.jaxrs.RSDynamicClient.HttpMethod;
+import org.jboss.wise.core.exception.WiseRuntimeException;
 
 /**
- * It is the enabler for WS-Security extension
  * 
- * @author stefano.maestri@javalinux.it
+ * 
+ * @author alessio.soldano@jboss.com
  */
 @ThreadSafe
-@Immutable
-public class WSSecurityEnabler implements WSExtensionEnabler {
-
-    private final EnablerDelegate delegate;
-
-    public WSSecurityEnabler( WSDynamicClient client ) {
-        delegate = client.getWSExtensionEnablerDelegate();
-    }
+public interface RSDynamicClientBuilder {
 
     /**
-     * {@inheritDoc}
+     * Build the {@link WSDynamicClient} with all parameters set on this class
      * 
-     * @see org.jboss.wise.core.wsextensions.WSExtensionEnabler#enable(Object)
+     * @return {@link WSDynamicClient}
+     * @throws IllegalStateException
+     * @throws ConnectException
+     * @throws WiseRuntimeException
      */
-    public void enable( Object endpointInstance ) throws UnsupportedOperationException {
-        delegate.visitWSSecurity(endpointInstance);
-    }
+    public RSDynamicClient build() throws IllegalStateException, WiseRuntimeException;
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.jboss.wise.core.wsextensions.WSExtensionEnabler#getDelegate()
-     */
-    public EnablerDelegate getDelegate() {
-        return delegate;
-    }
+    public RSDynamicClientBuilder resourceURI(String resourceURI);
+    
+    public RSDynamicClientBuilder httpMethod(HttpMethod httpMethod);
+    
+    public RSDynamicClientBuilder produceMediaTypes(String produceMediaTypes);
+    
+    public RSDynamicClientBuilder consumeMediaTypes(String consumeMediaTypes);
+
+    public String getResourceURI();
+    
+    public String getProduceMediaTypes();
+    
+    public String getConsumeMediaTypes();
+    
+    public HttpMethod getHttpMethod();
 
 }

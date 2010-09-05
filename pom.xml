@@ -201,6 +201,12 @@
             </dependency>
 
             <dependency>
+                <groupId>org.jboss.ws.cxf</groupId>
+                <artifactId>jbossws-cxf-client</artifactId>
+                <version>3.3.1.GA</version>
+            </dependency>
+
+            <dependency>
                 <groupId>org.milyn</groupId>
                 <artifactId>milyn-smooks-core</artifactId>
                 <version>1.2.1</version>
@@ -544,9 +550,9 @@
               <name>cxf.stack</name>
             </property>
           </activation>
-          <!-- <modules>
+          <modules>
             <module>core-cxf</module>
-          </modules> -->
+          </modules>
         </profile>
     </profiles>
 

@@ -23,17 +23,18 @@
 package org.jboss.wise.core.client.factories;
 
 import java.net.URL;
+
 import net.jcip.annotations.ThreadSafe;
+
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.apache.log4j.helpers.NullEnumeration;
 import org.apache.log4j.xml.DOMConfigurator;
 import org.jboss.wise.core.client.SpiLoader;
+import org.jboss.wise.core.client.builder.RSDynamicClientBuilder;
 import org.jboss.wise.core.client.builder.WSDynamicClientBuilder;
-import org.jboss.wise.core.client.impl.reflection.builder.ReflectionBasedWSDynamicClientBuilder;
 import org.jboss.wise.core.client.jaxrs.RSDynamicClient;
-import org.jboss.wise.core.client.jaxrs.impl.RSDynamicClientImpl;
-import org.jboss.wise.core.consumer.WSConsumer;
+import org.jboss.wise.core.exception.WiseRuntimeException;
 
 /**
  * @author Stefano Maestri, stefano.maestri@javalinux.it
@@ -87,8 +88,13 @@ public abstract class WSDynamicClientFactory {
      *         to be called
      */
     public static RSDynamicClient getJAXRSClient(String endpointURL, RSDynamicClient.HttpMethod httpMethod, String produceMediaTypes, String consumeMediaTypes, String userName, String password) {
-	RSDynamicClient client = new RSDynamicClientImpl(endpointURL, produceMediaTypes, consumeMediaTypes, httpMethod);
-	return client;
+	RSDynamicClientBuilder builder = (RSDynamicClientBuilder) SpiLoader
+		.loadService("org.jboss.wise.core.client.builder.RSDynamicClientBuilder", null);
+	if (builder == null)
+	{
+	    throw new WiseRuntimeException("No RSDynamicClientBuilder implementation found!");
+	}
+	return builder.resourceURI(endpointURL).httpMethod(httpMethod).produceMediaTypes(produceMediaTypes).consumeMediaTypes(consumeMediaTypes).build();
     }
 
     /**

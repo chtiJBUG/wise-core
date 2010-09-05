@@ -28,7 +28,9 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
+
 import net.jcip.annotations.ThreadSafe;
+
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethodBase;
 import org.apache.commons.httpclient.methods.ByteArrayRequestEntity;
@@ -40,7 +42,6 @@ import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.PutMethod;
 import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
-import org.apache.log4j.Logger;
 import org.jboss.wise.core.client.InvocationResult;
 import org.jboss.wise.core.client.impl.reflection.InvocationResultImpl;
 import org.jboss.wise.core.client.jaxrs.RSDynamicClient;
@@ -58,7 +59,6 @@ import org.jboss.wise.core.mapper.WiseMapper;
  */
 @ThreadSafe
 public class RSDynamicClientImpl implements RSDynamicClient {
-    private final Logger log = Logger.getLogger(RSDynamicClientImpl.class);
 
     private final String resourceURI;
     private String user;
