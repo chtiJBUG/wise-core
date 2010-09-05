@@ -22,40 +22,23 @@
 
 package org.jboss.wise.core.consumer.impl.jbosswsnative;
 
-import static org.junit.matchers.JUnitMatchers.containsString;
-
-import static org.mockito.Matchers.contains;
-
-import static org.junit.matchers.JUnitMatchers.hasItems;
-
-import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.junit.matchers.JUnitMatchers.hasItem;
+import static org.junit.matchers.JUnitMatchers.containsString;
+import static org.junit.matchers.JUnitMatchers.hasItems;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+
 import java.io.File;
 import java.net.URL;
 import java.util.List;
 
-import org.hamcrest.Matcher;
-import org.jboss.wise.core.exception.WiseRuntimeException;
 import org.junit.Test;
 
 /**
  * @author stefano.maestri@javalinux.it
  */
 public class WSImportImplTest {
-
-    @Test
-    public void parseHelloGreetingWSDLShouldWorkWithoutPackage() throws Exception {
-	URL url = Thread.currentThread().getContextClassLoader().getResource(".");
-	File outputDir = new File(url.getFile());
-	URL wsdURL = Thread.currentThread().getContextClassLoader().getResource("./hello_world.wsdl");
-	WSImportImpl importer = new WSImportImpl();
-	importer.importObjectFromWsdl(wsdURL.toExternalForm(), outputDir, outputDir, null, null, System.out, null);
-    }
 
     @Test
     public void importObjectFromWsdlShouldSetProviderProperties() throws Exception {
@@ -82,46 +65,12 @@ public class WSImportImplTest {
 
     }
 
-    @Test()
-    public void parseHelloWSDLWithBindingFile() throws Exception {
-	URL url = Thread.currentThread().getContextClassLoader().getResource(".");
-	File outputDir = new File(url.getFile());
-	URL bindingURL = Thread.currentThread().getContextClassLoader().getResource("./jaxws-binding.xml");
-	URL wsdURL = Thread.currentThread().getContextClassLoader().getResource("./hello_world.wsdl");
-	File bindFile = new File(bindingURL.getFile());
-	List<File> bindings = new java.util.ArrayList<File>();
-	bindings.add(bindFile);
-	WSImportImpl importer = new WSImportImpl();
-	importer.importObjectFromWsdl(wsdURL.toExternalForm(), outputDir, outputDir, null, bindings, System.out, null);
-	File generatedClass = new File(url.getFile(), "org/mytest");
-	assertTrue(generatedClass.exists());
-    }
-
-    @Test(expected = WiseRuntimeException.class)
-    public void parseHelloGreetingWSDLShouldFailWithPackageAndNoBindingsForNameDuplication() throws Exception {
-	URL url = Thread.currentThread().getContextClassLoader().getResource(".");
-	File outputDir = new File(url.getFile());
-	URL wsdURL = Thread.currentThread().getContextClassLoader().getResource("./hello_world.wsdl");
-	WSImportImpl importer = new WSImportImpl();
-	importer.importObjectFromWsdl(wsdURL.toExternalForm(), outputDir, outputDir, "org.jboss.wise", null, System.out, null);
-    }
-
-    @Test()
-    public void getClassNamesShouldFindFooClassPlaceHolder() throws Exception {
-	WSImportImpl importer = new WSImportImpl();
-	URL url = Thread.currentThread().getContextClassLoader().getResource("./placeHolderClasses/");
-	File file = new File(url.getFile());
-	List<String> list = importer.getClassNames(file);
-	assertThat(list.size(), is(1));
-	assertThat(list, hasItem("org.jboss.foo.Foo"));
-
-    }
-
+    @SuppressWarnings("unchecked")
     @Test()
     public void defineAdditionalCompilerClassPathShouldReturnRightJars() {
 
 	WSImportImpl importer = new WSImportImpl();
 	List<String> jars = importer.defineAdditionalCompilerClassPath();
-	assertThat(jars, hasItems(containsString("jbossws-native-jaxws"), containsString("jbossws-native-jaxws-ext"), containsString("jaxb-api"), containsString("jaxb-impl")));
+	assertThat(jars, hasItems(containsString("jaxb-impl")));
     }
 }

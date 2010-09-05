@@ -32,9 +32,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
+
 import javax.xml.ws.WebServiceClient;
+
 import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.jboss.wise.core.client.SpiLoader;
@@ -88,7 +91,7 @@ public class WSDynamicClientImpl implements WSDynamicClient {
      */
     private static WSConsumer createConsumer(WSDynamicClientBuilder builder) {
 	WSConsumer consumer = (WSConsumer) SpiLoader
-		.loadService("org.jboss.wise.consumer.WSConsumer", "org.jboss.wise.core.consumer.impl.jbosswsnative.WSImportImpl");
+		.loadService("org.jboss.wise.consumer.WSConsumer", "org.jboss.wise.core.consumer.impl.jbossws.DefaultWSImportImpl");
 	return consumer;
     }
 
@@ -138,7 +141,8 @@ public class WSDynamicClientImpl implements WSDynamicClient {
 
 	    try {
 		Thread.currentThread().setContextClassLoader(this.getClassLoader());
-		JavaUtils.loadJavaType("com.sun.xml.ws.spi.ProviderImpl", this.getClassLoader());
+		Class<?> clazz = JavaUtils.loadJavaType("javax.xml.ws.spi.Provider", this.getClassLoader());
+		clazz.getMethod("provider", new Class[]{}).invoke(null, new Object[]{});
 	    } finally {
 		// restore the original classloader
 		Thread.currentThread().setContextClassLoader(oldLoader);

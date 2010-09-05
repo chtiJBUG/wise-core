@@ -27,7 +27,6 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.Enumeration;
 
 public class WiseForceToolsProviderClassLoader extends URLClassLoader {
 

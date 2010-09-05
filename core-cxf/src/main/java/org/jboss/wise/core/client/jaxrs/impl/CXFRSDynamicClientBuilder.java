@@ -21,8 +21,6 @@
  */
 package org.jboss.wise.core.client.jaxrs.impl;
 
-import java.net.ConnectException;
-
 import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
 

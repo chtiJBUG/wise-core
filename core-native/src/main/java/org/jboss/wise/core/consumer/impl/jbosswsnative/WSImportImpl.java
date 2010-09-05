@@ -22,37 +22,33 @@
 
 package org.jboss.wise.core.consumer.impl.jbosswsnative;
 
-import java.io.File;
-import java.io.PrintStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.LinkedList;
 import java.util.List;
+
 import net.jcip.annotations.ThreadSafe;
-import org.apache.log4j.Logger;
-import org.jboss.wise.core.consumer.WSConsumer;
+
+import org.jboss.wise.core.consumer.impl.jbossws.DefaultWSImportImpl;
 import org.jboss.wise.core.exception.WiseRuntimeException;
 import org.jboss.wsf.spi.tools.WSContractConsumer;
 
 /**
  * @author stefano.maestri@javalinux.it
+ * @author alessio.soldano@jboss.com
  */
 @ThreadSafe
-public class WSImportImpl extends WSConsumer {
+public class WSImportImpl extends DefaultWSImportImpl {
 
     private final ProviderChanger providerChanger;
 
-    private final String[] neededClasses = { "javax/jws/WebResult.class",
-					    "javax/xml/ws/Action.class",
-					    "javax/xml/bind/JAXBElement.class",
-					    "com/sun/xml/bind/XmlAccessorFactory.class" };
-
     public WSImportImpl() {
+	super();
 	providerChanger = new ProviderChanger();
     }
 
     // for test purpose
     WSImportImpl(ProviderChanger changer) {
+	super();
 	providerChanger = changer;
     }
 
@@ -64,63 +60,20 @@ public class WSImportImpl extends WSConsumer {
     }
 
     @Override
-    public synchronized List<String> importObjectFromWsdl(String wsdlURL, File outputDir, File sourceDir, String targetPackage, List<File> bindingFiles, PrintStream messageStream, File catelog) throws MalformedURLException, WiseRuntimeException {
+    protected void runWSConsume(WSContractConsumer wsImporter, String wsdlURL) throws MalformedURLException {
 	try {
-	    WSContractConsumer wsImporter = WSContractConsumer.newInstance(Thread.currentThread().getContextClassLoader());
-
-	    if (targetPackage != null && targetPackage.trim().length() > 0) {
-		wsImporter.setTargetPackage(targetPackage);
-	    }
-
-	    wsImporter.setGenerateSource(this.isKeepSource());
-	    wsImporter.setOutputDirectory(outputDir);
-	    wsImporter.setSourceDirectory(sourceDir);
-	    if (messageStream != null) {
-		wsImporter.setMessageStream(messageStream);
-	    }
-
-	    if (this.isVerbose()) {
-		wsImporter.setMessageStream(System.out);
-	    }
-	    wsImporter.setAdditionalCompilerClassPath(defineAdditionalCompilerClassPath());
-
-	    if (bindingFiles != null && bindingFiles.size() > 0) {
-		wsImporter.setBindingFiles(bindingFiles);
-	    }
-
-	    if (catelog != null) {
-		wsImporter.setCatalog(catelog);
-	    }
 	    // NEEDED for WISE-36 issue
-
 	    providerChanger.changeProvider();
 	    wsImporter.consume(wsdlURL);
 	} finally {
 	    // NEEDED for WISE-36 issue
 	    providerChanger.restoreDefaultProvider();
-
 	}
-	return this.getClassNames(outputDir, targetPackage);
-
     }
-
-    /*
-     * This is used load libraries required by tests and usually not available
-     * when running out of container.
-     * 
-     * @return A list of paths
-     */
-    /* package */List<String> defineAdditionalCompilerClassPath() throws WiseRuntimeException {
-	List<String> cp = new LinkedList<String>();
-	for (String jar : neededClasses) {
-	    try {
-		cp.add(Thread.currentThread().getContextClassLoader().getResource(jar).getPath().split("!")[0]);
-	    } catch (NullPointerException npe) {
-		Logger.getLogger(this.getClass()).debug("Didnt't find jar needed by wsImport API:" + jar);
-	    }
-
-	}
-	return cp;
+    
+    @Override
+    protected List<String> defineAdditionalCompilerClassPath() throws WiseRuntimeException {
+	return super.defineAdditionalCompilerClassPath();
     }
 
     public class ProviderChanger {
