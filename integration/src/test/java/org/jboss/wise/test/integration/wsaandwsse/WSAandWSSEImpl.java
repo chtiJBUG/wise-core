@@ -30,6 +30,6 @@ import org.jboss.ws.annotation.EndpointConfig;
 @HandlerChain(file = "handlers.xml")
 public class WSAandWSSEImpl implements WSAandWSSE {
 	public String echoUserType(String user) {
-		return "Hello WSAddressingAndWSSecurity";
+		return "Hello WSAddressingAndWSSecurity " + user;
 	}
 }

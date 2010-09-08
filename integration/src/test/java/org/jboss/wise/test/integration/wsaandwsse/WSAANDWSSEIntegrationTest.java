@@ -65,12 +65,12 @@ public class WSAANDWSSEIntegrationTest extends WiseTest {
 	method.getEndpoint().addWSExtension(new WSAddressingEnabler(client));
 	method.getEndpoint().addHandler(new LoggingHandler());
 	HashMap<String, Object> requestMap = new HashMap<String, Object>();
-	requestMap.put("toWhom", "SpiderMan");
+	requestMap.put("user", "SpiderMan");
 	InvocationResult result = method.invoke(requestMap, null);
 	System.out.println(result.getMapRequestAndResult(null, null));
 	Map<String, Object> results = (Map<String, Object>) result.getMapRequestAndResult(null, null).get("results");
 	client.close();
-	Assert.assertEquals("Hello WSAddressingAndWSSecurity", results.get("result"));
+	Assert.assertEquals("Hello WSAddressingAndWSSecurity SpiderMan", results.get("result"));
     }
 
     @After
