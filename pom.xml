@@ -540,6 +540,7 @@
           </activation>
           <modules>
             <module>core-native</module>
+            <module>integration-native</module>
           </modules>
           <dependencies>
           	<dependency>
