@@ -27,14 +27,15 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.jboss.logging.Logger;
-import org.jboss.ws.core.utils.JBossWSEntityResolver;
+import org.jboss.util.xml.JBossEntityResolver;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 /**
  * 
  * @author alessio.soldano@jboss.com
  */
-public class WiseEntityResolver extends JBossWSEntityResolver {
+public class WiseEntityResolver extends JBossEntityResolver {
     // provide logging
     private static final Logger log = Logger.getLogger(WiseEntityResolver.class);
 
@@ -43,6 +44,24 @@ public class WiseEntityResolver extends JBossWSEntityResolver {
     public WiseEntityResolver(Connection connection) {
 	super();
 	this.connection = connection;
+    }
+    
+    @Override
+    public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException
+    {
+       if(log.isTraceEnabled()) log.trace("resolveEntity: [pub=" + publicId + ",sysid=" + systemId + "]");
+       InputSource inputSource = super.resolveEntity(publicId, systemId);
+
+       if (inputSource == null)
+          inputSource = resolveSystemIDAsURL(systemId, log.isTraceEnabled());
+
+       if (inputSource == null)
+       {
+          if (log.isDebugEnabled())
+             log.debug("Cannot resolve entity: [pub=" + publicId + ",sysid=" + systemId + "]");
+       }
+       
+       return inputSource;
     }
 
     /**
@@ -53,7 +72,6 @@ public class WiseEntityResolver extends JBossWSEntityResolver {
      * @param trace
      * @return an InputSource
      */
-    @Override
     protected InputSource resolveSystemIDAsURL(String id, boolean trace) {
 	if (id == null)
 	    return null;
