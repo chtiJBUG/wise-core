@@ -35,3 +35,10 @@ distribution/main/resouces/samples/*/build
 
 #*test.log
 *test.log
+=======
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
